@@ -138,7 +138,7 @@ const Header = () => {
                 </div>
               </div>
             </div>
-            <a href="#about" className="px-4 py-2 font-medium text-gray-700 rounded-lg hover:text-primary-700 hover:bg-primary-50/50">About Us</a>
+            <a href="/About" className="px-4 py-2 font-medium text-gray-700 rounded-lg hover:text-primary-700 hover:bg-primary-50/50">About Us</a>
             <a href="#blog" className="px-4 py-2 font-medium text-gray-700 rounded-lg hover:text-primary-700 hover:bg-primary-50/50">Blog</a>
             <a href="#contact" className="px-4 py-2 font-medium text-gray-700 rounded-lg hover:text-primary-700 hover:bg-primary-50/50">Contact</a>
           </div>
@@ -210,7 +210,7 @@ const Header = () => {
               </div>
 
               <a 
-                href="#about" 
+                href="/About" 
                 onClick={() => setMenuOpen(false)}
                 className="py-2.5 px-4 rounded-lg font-medium text-gray-700 hover:bg-primary-50/50"
               >
