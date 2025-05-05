@@ -31,7 +31,6 @@ function App() {
           <Route path="/" element={
             <main>
               <Slideshow />
-              <About />
               <CategorySection />
               <Certificates />
               <Contact />
@@ -40,6 +39,7 @@ function App() {
           <Route path="/shipping-policy" element={<ShippingPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/About" element={<About />} />
         </Routes>
         <Footer />
       </div>

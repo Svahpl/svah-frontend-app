@@ -1,67 +1,137 @@
 import React from 'react';
-import { Award, Users, Leaf, Globe } from 'lucide-react';
+import { 
+  ShieldCheck, 
+  Award, 
+  Scale, 
+  BarChart2, 
+  Eye, 
+  Gavel, 
+  Crosshair,
+  CheckCircle,
+  Users,
+  Leaf,
+  Globe
+} from 'lucide-react';
 
 const About = () => {
+  const coreValues = [
+    {
+      icon: <ShieldCheck className="w-6 h-6" />,
+      title: "Ethical Commitment",
+      description: "We operate with integrity and transparency in all business dealings."
+    },
+    {
+      icon: <Scale className="w-6 h-6" />,
+      title: "Honesty & Integrity",
+      description: "We uphold the highest standards in all customer interactions."
+    },
+    {
+      icon: <BarChart2 className="w-6 h-6" />,
+      title: "Business Stability",
+      description: "Committed to long-term sustainability and stable business practices."
+    },
+    {
+      icon: <Award className="w-6 h-6" />,
+      title: "Pursuit of Excellence",
+      description: "Continuous improvement in our products and services."
+    },
+    {
+      icon: <Eye className="w-6 h-6" />,
+      title: "Transparency",
+      description: "Clear and open business operations and decisions."
+    },
+    {
+      icon: <Gavel className="w-6 h-6" />,
+      title: "Impartiality",
+      description: "Fair decisions based on merit and objectivity."
+    },
+    {
+      icon: <Crosshair className="w-6 h-6" />,
+      title: "Accuracy",
+      description: "Precision and attention to detail in all we do."
+    }
+  ];
+
   return (
-    <section id="about" className="py-16 bg-neutral-50">
+    <section id="about" className="py-16 bg-gradient-to-b from-neutral-50 to-green-50">
       <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-heading font-bold text-primary-800 mb-6 text-center">About Us</h2>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-primary-800 mb-4 font-serif">About Sri Venkateswara Agros and Herbs</h2>
+            <div className="w-24 h-1 bg-green-600 mx-auto"></div>
+          </div>
           
-          <div className="bg-white shadow-md rounded-lg p-6 md:p-8 mb-8">
-            <p className="mb-4 text-neutral-700 leading-relaxed">
-              Founded in 2021, SRI VENKATESWARA AGROS AND HERBS (SVAH) is dedicated to providing premium quality natural and organic products 
-              sourced directly from farmers and rural artisans across India. We specialize in medicinal plants, traditional herbs, 
-              organic food products, and natural cosmetics.
+          {/* Mission Section */}
+          <div className="bg-white rounded-xl shadow-lg p-8 mb-12 border-l-4 border-green-600">
+            <h3 className="text-2xl font-semibold text-primary-800 mb-4 flex items-center">
+              <CheckCircle className="text-green-600 mr-3" /> Our Mission
+            </h3>
+            <p className="text-neutral-700 leading-relaxed mb-4">
+              As a government-recognized, customer-centric organization, we take full responsibility for delivering exceptional service and quality to our valued customers. We consistently deliver high-quality natural farming products that meet evolving needs while maintaining the highest ethical standards.
             </p>
-            
-            <p className="mb-4 text-neutral-700 leading-relaxed">
-              Our mission is to promote sustainable agriculture and traditional craftsmanship while ensuring fair compensation for producers. 
-              We bridge the gap between rural communities and global markets, bringing authentic, high-quality natural products to consumers worldwide.
-            </p>
-            
-            <p className="mb-4 text-neutral-700 leading-relaxed">
-              At SVAH, we maintain stringent quality control processes to ensure that each product meets international standards. 
-              Our certifications from ISO, APEDA, SPICE BOARD, and FSSAI reflect our commitment to excellence and safety.
-            </p>
-            
             <p className="text-neutral-700 leading-relaxed">
-              Through our plant nursery division, we also promote environmental conservation by supplying a wide variety of indigenous plants 
-              and offering guidance on sustainable gardening practices.
+              Through sustainable agriculture and traditional practices, we bridge the gap between rural communities and global markets, bringing authentic, healthy products to consumers worldwide.
             </p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-md transform hover:scale-105 transition-transform">
+          
+          {/* Core Values */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-semibold text-center text-primary-800 mb-8">Our Core Values</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {coreValues.slice(0, 4).map((value, index) => (
+                <div key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow border-t-4 border-green-600">
+                  <div className="text-green-600 mb-4">{value.icon}</div>
+                  <h4 className="text-xl font-semibold mb-2 text-primary-800">{value.title}</h4>
+                  <p className="text-neutral-700">{value.description}</p>
+                </div>
+              ))}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+              {coreValues.slice(4).map((value, index) => (
+                <div key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow border-t-4 border-green-600">
+                  <div className="text-green-600 mb-4">{value.icon}</div>
+                  <h4 className="text-xl font-semibold mb-2 text-primary-800">{value.title}</h4>
+                  <p className="text-neutral-700">{value.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Compliance & Operations */}
+          <div className="bg-green-800 text-white rounded-xl p-8 mb-12">
+            <h3 className="text-2xl font-semibold mb-4">Compliance & Ethics</h3>
+            <p className="mb-4 leading-relaxed">
+              We operate in full compliance with all applicable laws and regulations. Our commitment to ethical business practices is reflected in our certifications from ISO, APEDA, SPICE BOARD, and FSSAI.
+            </p>
+            <p className="leading-relaxed">
+              Every product undergoes rigorous testing to ensure it meets international standards of purity, safety, and effectiveness.
+            </p>
+          </div>
+          
+          {/* Impact Highlights */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-lg shadow-lg transform hover:scale-[1.02] transition-transform">
               <div className="flex items-center mb-4">
-                <Award className="text-primary-600 w-8 h-8 mr-3" />
-                <h3 className="text-xl font-heading font-semibold text-primary-800">Quality Assurance</h3>
+                <Users className="text-green-600 w-8 h-8 mr-3" />
+                <h3 className="text-xl font-semibold text-primary-800">Community Impact</h3>
               </div>
-              <p className="text-neutral-700">Every product undergoes rigorous testing and quality checks before reaching our customers, ensuring the highest standards of purity and effectiveness.</p>
+              <p className="text-neutral-700">Working directly with farmers and artisans, providing fair trade opportunities and supporting sustainable rural development.</p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-md transform hover:scale-105 transition-transform">
+            <div className="bg-white p-6 rounded-lg shadow-lg transform hover:scale-[1.02] transition-transform">
               <div className="flex items-center mb-4">
-                <Users className="text-primary-600 w-8 h-8 mr-3" />
-                <h3 className="text-xl font-heading font-semibold text-primary-800">Community Impact</h3>
+                <Leaf className="text-green-600 w-8 h-8 mr-3" />
+                <h3 className="text-xl font-semibold text-primary-800">Sustainability</h3>
               </div>
-              <p className="text-neutral-700">We work directly with over 500 farmers and artisans, providing fair trade opportunities and supporting sustainable rural development.</p>
+              <p className="text-neutral-700">Eco-friendly practices and packaging that minimize environmental impact while maximizing product quality.</p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-md transform hover:scale-105 transition-transform">
+            <div className="bg-white p-6 rounded-lg shadow-lg transform hover:scale-[1.02] transition-transform">
               <div className="flex items-center mb-4">
-                <Leaf className="text-primary-600 w-8 h-8 mr-3" />
-                <h3 className="text-xl font-heading font-semibold text-primary-800">Sustainability</h3>
+                <Globe className="text-green-600 w-8 h-8 mr-3" />
+                <h3 className="text-xl font-semibold text-primary-800">Global Reach</h3>
               </div>
-              <p className="text-neutral-700">Our eco-friendly practices and packaging solutions minimize environmental impact while maximizing product freshness and quality.</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-md transform hover:scale-105 transition-transform">
-              <div className="flex items-center mb-4">
-                <Globe className="text-primary-600 w-8 h-8 mr-3" />
-                <h3 className="text-xl font-heading font-semibold text-primary-800">Global Reach</h3>
-              </div>
-              <p className="text-neutral-700">We export to over 20 countries, bringing India's natural treasures to health-conscious consumers worldwide.</p>
+              <p className="text-neutral-700">Bringing India's natural agricultural treasures to health-conscious consumers worldwide.</p>
             </div>
           </div>
         </div>
