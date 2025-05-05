@@ -51,7 +51,7 @@ const Header = () => {
             <div>
               <h1 className="text-lg md:text-xl font-bold text-primary-900 leading-tight">
                 <span className="font-serif">SRI VENKATESWARA</span><br />
-                <span className="text-primary-700">AGROS & HERBS</span>
+                <span className="text-primary-700">AGROS AND HERBS</span>
               </h1>
               <p className="text-xs text-gray-500 italic hidden md:block">Pure Nature, Pure Wellness</p>
             </div>
