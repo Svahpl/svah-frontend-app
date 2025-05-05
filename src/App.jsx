@@ -22,24 +22,27 @@ function App() {
     }
   }, []);
 
+  // Home component moved inside App to avoid separate file
+  const Home = () => (
+    <>
+      <Slideshow />
+      <CategorySection />
+      <Certificates />
+      <Contact />
+    </>
+  );
+
   return (
     <Router>
       <div className="min-h-screen bg-white font-sans">
         <CyberCrimeWarning />
         <Header />
         <Routes>
-          <Route path="/" element={
-            <main>
-              <Slideshow />
-              <CategorySection />
-              <Certificates />
-              <Contact />
-            </main>
-          } />
+          <Route path="/" element={<Home />} />
           <Route path="/shipping-policy" element={<ShippingPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/About" element={<About />} />
+          <Route path="/about" element={<About />} />
         </Routes>
         <Footer />
       </div>
