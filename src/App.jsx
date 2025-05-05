@@ -22,7 +22,6 @@ function App() {
     }
   }, []);
 
-  // Home component moved inside App to avoid separate file
   const Home = () => (
     <>
       <Slideshow />
