@@ -3,21 +3,21 @@ export const productCategories = [
     id: 1,
     name: 'MEDICINAL PLANT PRODUCTS',
     subcategories: [
-      { id: 101, name: 'BOTANICAL RAW PRODUCTS', image: '/images/BOTANICALRAWPRODUCTS.jpg' },
-      { id: 102, name: 'BOTANICAL POWDERS', image: '/images/BOTANICALPOWDERS.jpg' },
-      { id: 103, name: 'HERBAL RAW PRODUCTS', image: '/images/HERBALRAWPRODUCTS.webp' },
-      { id: 104, name: 'HERBAL POWDERS', image: '/images/HERBALPOWDERS.webp' }
+      { id: 101, name: 'BOTANICAL RAW PRODUCTS', image: '/images/BRP.jpg' },
+      { id: 102, name: 'BOTANICAL POWDERS', image: '/images/BP.jpg' },
+      { id: 103, name: 'HERBAL RAW PRODUCTS', image: '/images/HRP.jpg' },
+      { id: 104, name: 'HERBAL POWDERS', image: '/images/HP.jpg' }
     ]
   },
   {
     id: 2,
     name: 'FOOD PRODUCTS',
     subcategories: [
-      { id: 201, name: 'HERBAL TEAS', image: '/images/HERBALTEAS.webp' },
-      { id: 202, name: 'SPICES', image: '/images/SPICES.jpg' },
-      { id: 203, name: 'NUTS', image: '/images/NUTS.webp' },
+      { id: 201, name: 'HERBAL TEAS', image: '/images/HTea.jpg' },
+      { id: 202, name: 'SPICES', image: '/images/spices.jpg' },
+      { id: 203, name: 'NUTS', image: '/images/nuts.jpg' },
       { id: 204, name: 'CEREALS AND PULSES', image: '/images/CEREALSANDPULSES.jpg' },
-      { id: 205, name: 'OILS AND OIL SEEDS', image: '/images/OILSANDOILSEEDS.jpg' },
+      { id: 205, name: 'OILS AND OIL SEEDS', image: '/images/oil.jpg' },
       { id: 206, name: 'FRUITS', image: '/images/FRUITS.jpg' },
       { id: 207, name: 'VEGETABLES', image: '/images/VEGETABLES.webp' },
       { id: 208, name: 'COFFEE AND TEA PRODUCTS', image: '/images/COFFEEANDTEAPRODUCTS.jpg' },

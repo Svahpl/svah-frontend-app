@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, AlertTriangle } from 'lucide-react';
 
 const CyberCrimeWarning = () => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 2000); // Show after 2 seconds
+
+    return () => clearTimeout(timer); // Cleanup on unmount
+  }, []);
 
   if (!isVisible) return null;
 
   return (
-    
-    <div className="fixed inset-5 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-      <br/>
-        <br/>
-        <br/>
+    <div className="fixed inset-5 bg-white bg-opacity-10 flex items-center justify-center z-50 p-4">
       <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-2xl max-w-md w-full relative overflow-hidden animate-fade-in-up">
-        <br/>
-        <br/>
-        <br/>
-        <br/>
         {/* Decorative elements */}
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-warning-500 to-danger-500"></div>
         <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-warning-100 opacity-30"></div>
         <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-danger-100 opacity-30"></div>
-        
+
         <div className="relative p-6 text-center">
           {/* Header with icon */}
           <div className="flex justify-center mb-4">
@@ -29,19 +29,19 @@ const CyberCrimeWarning = () => {
               <AlertTriangle className="text-warning-600 w-8 h-8" strokeWidth={2} />
             </div>
           </div>
-          
+
           <h3 className="text-2xl font-bold text-gray-800 mb-3">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-warning-600 to-danger-600">
               Security Alert!
             </span>
           </h3>
-          
+
           {/* Content */}
           <div className="space-y-4 mb-6">
             <p className="text-gray-600 leading-relaxed">
               <span className="font-semibold text-gray-700">Sri Venkateshwara Agros & Herbs</span> will never ask for money in exchange for employment or investment opportunities.
             </p>
-            
+
             <div className="bg-warning-50 border-l-4 border-warning-500 p-3 rounded-r text-left">
               <p className="text-sm text-warning-700 font-medium">
                 If you receive suspicious requests, please report immediately at:
@@ -59,7 +59,7 @@ const CyberCrimeWarning = () => {
               </a>
             </div>
           </div>
-          
+
           {/* Action buttons */}
           <div className="flex justify-center">
             <button
@@ -70,7 +70,7 @@ const CyberCrimeWarning = () => {
             </button>
           </div>
         </div>
-        
+
         {/* Close button */}
         <button 
           onClick={() => setIsVisible(false)}
