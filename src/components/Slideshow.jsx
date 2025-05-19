@@ -1,5 +1,3 @@
-// Slideshow.jsx
-
 import React from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -8,266 +6,467 @@ import { motion, AnimatePresence } from 'framer-motion';
 // Slideshow Data
 const slideshowData = [
   {
-    id: 1,
-    image: '/images/slide1.jpg',
-    title: 'Natural Cosmetic Products',
-    description: `Harnessing the potency of nature to nourish and rejuvenate your skin, hair, and overall well-being.
+  id: 1,
+  image: '/images/slide1.jpg',
+  title: 'Natural Cosmetic Products',
+  description: `NATURAL COSMETIC PRODUCTS
+----------------------------
+Harnessing the potency of nature to nourish and rejuvenate your skin, hair, and overall well-being.
 
 KEY INGREDIENTS
-• Herbal Extracts
-• Essential Oils
-• Natural Moisturizers
+------------------------------
+* Herbal Extracts
+- Essential Oils
+- Natural Moisturizers
 
-BENEFITS OF NATURAL COSMETIC PRODUCTS
-• Gentle and Non-Irritating – Less likely to cause skin irritation and allergic reactions
-• Nourishing and Rejuvenating – Locks in moisture, promotes healthy skin and hair
-• Environmentally Friendly – Biodegradable and sustainable, reducing environmental impact
-• Effective and Potent – Centuries-old use in addressing various skin and hair concerns
+Benefits of Natural Cosmetic Products
+------------------------------
+- Gentle and Non-Irritating: Less likely to cause skin irritation and allergic reactions
+- Nourishing and Rejuvenating: Locks in moisture, promotes healthy skin and hair
+- Environmentally Friendly: Biodegradable and sustainable, reducing environmental impact
+- Effective and Potent: Centuries-old use in addressing various skin and hair concerns
 
-Experience the Power of Nature in Beauty.
+Experience the Power of Nature in Beauty
 Discover the benefits of natural cosmetic products and start your journey to healthier, more radiant skin and hair.`,
-  },
+},
   {
-    id: 2,
-    image: '/images/slide2.jpg',
-    title: 'Celebrate Holi with Nature Vibrance',
-    description: `Introducing our Natural Holi Colors, carefully crafted from flowers, seeds, and tubers. Our colors offer a safe, eco-friendly, and vibrant alternative to synthetic dyes.
+  id: 2,
+  image: '/images/slide2.jpg',
+  title: 'Celebrate Holi with Nature\'s Vibrance',
+  description: `Celebrate Holi with Nature's Vibrance
+-------------------------------------
+Introducing our Natural Holi Colors, carefully crafted from flowers, seeds, and tubers. Our colors offer a safe, eco-friendly, and vibrant alternative to synthetic dyes.
 
-WHY CHOOSE NATURAL HOLI COLORS?
-• Safe and Gentle: Made from natural ingredients, reducing the risk of skin irritation and allergic reactions
-• Eco-Friendly: Biodegradable and sustainable, minimizing environmental harm
-• Vibrant and Long-Lasting: Our natural colors provide a rich and festive experience
+Why Choose Natural Holi Colors?
+- Safe and Gentle: Made from natural ingredients, reducing the risk of skin irritation and allergic reactions.
+- Eco-Friendly: Biodegradable and sustainable, minimizing environmental harm.
+- Vibrant and Long-Lasting: Our natural colors provide a rich and festive experience.
 
-JOIN THE MOVEMENT
+Join the Movement
 Celebrate Holi with peace of mind, knowing you're choosing a more sustainable and skin-friendly option. Switch to our NATURAL Holi Colors and experience the joy of a vibrant and eco-friendly celebration.`,
-  },
+},
   {
-    id: 3,
-    image: '/images/slide3.jpg',
-    title: 'Natural Farming Food Products',
-    description: `Nourishing Your Body
+  id: 3,
+  image: '/images/slide3.jpg',
+  title: 'Natural Farming Food Products',
+  description: `NATURAL FARMING FOOD PRODUCTS
+----------------------------------------
+Nourishing Your Body
 
 We're passionate about bringing you the best of nature's bounty. Our natural farming food products are carefully crafted to provide wholesome nutrition, while promoting sustainable agriculture and reducing environmental impact.
 
-BENEFITS OF NATURAL FARMING
-• Chemical-Free: Our products are free from synthetic pesticides, herbicides, and fertilizers
-• Nutrient-Rich: Our natural farming practices preserve the natural nutrients and flavors of our crops
-• Sustainable: We believe in farming practices that promote soil health, biodiversity, and efficient water use
+Benefits of Natural Farming
+--------------------------------------------
 
-JOIN THE MOVEMENT
+- Chemical-Free: Our products are free from synthetic pesticides, herbicides, and fertilizers.
+- Nutrient-Rich: Our natural farming practices preserve the natural nutrients and flavors of our crops.
+- Sustainable: We believe in farming practices that promote soil health, biodiversity, and efficient water use.
+
+Join the Movement
+
 Choose our natural farming food products and experience the difference for yourself. Taste the freshness, feel the goodness.`,
-  },
+},
   {
-    id: 4,
-    image: '/images/slide4.jpg',
-    title: 'Natural Farming Medicinal Plant Products',
-    description: `Harnessing Nature's Healing Power
+  id: 4,
+  image: '/images/slide4.jpg',
+  title: 'Natural Farming Medicinal Plant Products',
+  description: `Natural Farming Medicinal Plant Products
+----------------------------------------
+Harnessing Nature's Healing Power
 
-OUR PRODUCT RANGE
-• Herbal Extracts: Concentrated plant extracts for various health benefits
-• Botanical Powders: High-quality plant powders for pharmaceutical applications
-• Herbal Oils: Natural oils extracted from medicinal plants for therapeutic use
+Our Product Range
+------------------------------
+- Herbal Extracts: Concentrated plant extracts for various health benefits
+- Botanical Powders: High-quality plant powders for pharmaceutical applications
+- Herbal Oils: Natural oils extracted from medicinal plants for therapeutic use
 
-KEY BENEFITS
-• Chemical-Free: Our products are free from synthetic pesticides, herbicides, and fertilizers
-• Potent and Effective: Our natural farming practices preserve the natural potency and effectiveness of our medicinal plants
-• Sustainable: We believe in farming practices that promote soil health, biodiversity, and efficient water use
+Key Benefits
+--------------------
+- Chemical-Free: Our products are free from synthetic pesticides, herbicides, and fertilizers
+- Potent and Effective: Our natural farming practices preserve the natural potency and effectiveness of our medicinal plants
+- Sustainable: We believe in farming practices that promote soil health, biodiversity, and efficient water use
 
-OUR MISSION
+Our Mission
+--------------------
 We're dedicated to cultivating high-quality medicinal plant products using natural farming practices. Our products are carefully crafted to promote health and wellness, while respecting the environment and promoting sustainability.`,
-  },
+},
   {
-    id: 5,
-    image: '/images/slide5.jpg',
-    title: 'Herbal Teas',
-    description: `Savor the Flavor of Nature’s Remedies
-  
-  Our herbal teas offer a caffeine-free, soothing experience crafted from nature's finest ingredients.
-  
-  KEY BENEFITS
-  • Natural and Caffeine-Free – A healthy alternative for everyday refreshment  
-  • Soothing and Calming – Reduces stress and anxiety  
-  • Promotes Better Sleep – Supports restful nights  
-  • Overall Wellness – Aids digestion, supports immunity, enhances memory, detoxifies liver, and more
-  
-  Discover your perfect blend and embrace the healing power of nature’s infusions.`,
-  },
+  id: 5,
+  image: '/images/slide5.jpg',
+  title: 'Herbal Teas',
+  description: `Herbal Teas
+____________
+
+Benefits of Herbal Teas
+
+- Natural and Caffeine-Free: Perfect for those seeking a healthy alternative
+- Soothing and Calming: Reduces stress and anxiety
+- Promotes Better Sleep: Improves sleep quality
+- Supports Overall Health: Provides various health benefits, including:
+    - Digestive aid
+    - Immune system support
+    - Weight loss
+    - Improved digestion
+    - Memory enhancement
+    - Liver detox
+    - Prevention of diabetes
+    - Prevention of kidney disorders
+    - Anti-stress
+    - Anti-cancer properties
+
+Enjoy the Benefits
+Explore our selection of herbal teas and discover the perfect blend for your needs. Savor the flavor and reap the rewards of nature's soothing remedies.`,
+},
   {
-    id: 6,
-    image: '/images/slide6.jpg',
-    title: 'Nutritional Food Products',
-    description: `Wholesome and Delicious
-  
-  Enjoy our nutritious blend of honey, dried fruits, mixed nuts, and seeds – nature’s perfect snack.
-  
-  KEY INGREDIENTS
-  • Honey, Almonds, Walnuts, Pecans, Raisins, Cranberries, Apricots, Sunflower Seeds
-  
-  BENEFITS
-  • Energy Boost – Ideal for active lifestyles  
-  • Rich in Fiber – Supports digestion  
-  • Antioxidant-Rich – Protects against oxidative stress  
-  • Heart Health – May lower cholesterol and blood pressure
-  
-  Snack smart with our delicious and nourishing blend.`,
-  },
+  id: 6,
+  image: '/images/slide6.jpg',
+  title: 'Nutritional Food Products',
+  description: `NUTRITIONAL FOOD PRODUCTS
+_____________________
+
+A Delicious and Nutritious Snack
+
+Our Blend
+- Honey: Rich in antioxidants and natural sweetness
+- Mixed Nuts: Almonds, walnuts, pecans, and more, providing crunch and nutrition
+- Dried Fruits: Cranberries, raisins, apricot, and more, offering natural sweetness and chewiness
+- Seeds: Adding extra nutrition and crunch
+
+Nutritional Benefits
+- Energy Boost: A perfect snack to fuel your day
+- Rich in Fiber: Supports healthy digestion and satiety
+- Antioxidant-Rich: Protects against cell damage and oxidative stress
+- Supports Heart Health: May help lower cholesterol and blood pressure
+
+Enjoy the Delicious Taste and Nutrition
+Try our Honey Mixed Nuts and Dried Fruits blend today and experience the perfect combination of taste and nutrition!`,
+},
   {
-    id: 7,
-    image: '/images/slide7.jpg',
-    title: 'Natural Farming Millets',
-    description: `Healthy Grains for a Better Tomorrow
-  
-  Our millets are grown with care using natural farming practices to ensure purity and nutrition.
-  
-  BENEFITS
-  • Sustainably Grown – No chemicals or artificial fertilizers  
-  • Nutrient-Rich – High in fiber, protein, and minerals  
-  • Gluten-Free – Ideal for sensitive diets  
-  • Supports Digestion and Heart Health
-  
-  Rediscover traditional grains with our naturally grown millets.`,
-  },
+  id: 7,
+  image: '/images/slide7.jpg',
+  title: 'Natural Farming Millets',
+  description: `NATURAL FARMING MILLETS
+______________________
+
+Our Millet Rice
+
+- Sustainably Grown: Free from chemicals and artificial fertilizers
+- Nutrient-Rich: High in fiber, protein, and essential minerals
+- Diverse Varieties: Offering a range of millets to suit your needs
+
+Benefits of Natural Farming Millets
+
+- Gluten-Free: Suitable for those with gluten intolerance or sensitivity
+- High in Antioxidants: Protects against cell damage and oxidative stress
+- Supports Healthy Digestion: Rich in fiber and prebiotics
+- May Help Lower Cholesterol: Supports heart health and well-being
+
+Why Choose Our Millets?
+
+- Natural and Organic: Grown with care and respect for the environment
+- High-Quality Grains: Ensuring maximum nutritional benefit
+- Sustainable Farming Practices: Supporting eco-friendly agriculture
+
+Explore Our Natural Farming Millets
+
+Discover the benefits of natural farming millets and nourish your body with wholesome goodness. Perfect for health-conscious individuals and environmentally aware consumers.`,
+},
   {
-    id: 8,
-    image: '/images/slide8.jpg',
-    title: 'Mixed Millet Powder',
-    description: `The Power of Millets Combined
-  
-  Our multi-millet blend brings together the best of nature’s grains for a wholesome dietary boost.
-  
-  KEY FEATURES
-  • Multi-Grain Mix – Rich in fiber and essential nutrients  
-  • Easy to Digest – Gentle on the stomach  
-  • Energy Boost – Sustained vitality throughout the day  
-  • Uses – Perfect for porridge, java, ambali, and roti
-  
-  Start your day with our nourishing mixed millet powder.`,
-  },
+  id: 8,
+  image: '/images/slide8.jpg',
+  title: 'Mixed Millet Powder',
+  description: `MIXED MILLET POWDER
+_________________________
+
+Nourishing Your Body with Wholesome Goodness
+
+Our Blend
+
+- Multi-Grain Mix: Combining the benefits of various millets
+- Nutrient-Rich: High in fiber, protein, and essential minerals
+- Easy to Digest: Perfect for those with sensitive stomachs
+
+Benefits of Mixed Millet Powder Food
+- Boosts Energy: Provides sustained energy throughout the day
+- Supports Healthy Digestion: Rich in fiber and prebiotics
+- May Help Lower Cholesterol: Supports heart health and well-being
+- Gluten-Free: Suitable for those with gluten intolerance or sensitivity
+
+Uses
+- Breakfast Porridge: Java and Ambali and Roti.
+
+Why Choose Our Mixed Millet Powder Food?
+
+- Natural and Organic: Free from artificial additives and preservatives
+- High-Quality Ingredients: Ensuring maximum nutritional benefit
+- Sustainable Sourcing: Supporting eco-friendly agriculture
+
+Explore Our Mixed Millet Powder Food
+
+Discover the benefits of our mixed millet powder food and nourish your body with wholesome goodness. Perfect for health-conscious individuals and environmentally aware consumers.`,
+},
   {
-    id: 9,
-    image: '/images/slide9.jpg',
-    title: 'Dried Tuber Vegetable Food',
-    description: `Wholesome Goodness in Every Slice
-  
-  Our dried tuber vegetables offer a shelf-stable, nutrient-packed way to enjoy traditional roots.
-  
-  INGREDIENTS
-  • Carrot, Beetroot, Radish, Taro Root, Tapioca, Sweet Potato
-  
-  BENEFITS
-  • Convenient and Long-Lasting  
-  • Rich in Vitamins and Fiber  
-  • Versatile for Snacks and Meals
-  
-  Taste the earthy flavors of our dried tuber vegetable slices.`,
-  },
+  id: 9,
+  image: '/images/slide9.jpg',
+  title: 'Dried Tuber Vegetable Food',
+  description: `DRIED TUBER VEGETABLE FOOD
+____________________
+
+Nourishing Your Body with Wholesome Goodness
+
+Our Products
+
+- Dried Carrot Slices: Rich in vitamin A and fiber
+- Dried Beetroot Slices: High in antioxidants and nitrates
+- Dried Radish Slices: Packed with vitamin C and minerals
+- Dried Taro Root Slices: Rich in fiber and essential minerals
+- Dried Tapioca Slices: Gluten-free and easily digestible
+- Dried Sweet Potato Slices: Packed with vitamin A and minerals
+
+Benefits of Dried Tuber Vegetables
+
+- Convenient and Shelf-Stable: Easy to store and transport
+- Nutrient-Rich: Retains essential vitamins and minerals
+- Versatile: Perfect for snacking, cooking, or adding to recipes
+- Supports Healthy Digestion: High in fiber and antioxidants
+
+Uses
+
+- Snacking: Enjoy as a healthy and crunchy snack
+- Cooking: Add to soups, Curries, stews, or stir-fries for extra nutrition
+- Baking: Use in baked goods, such as cakes and muffins
+
+Why Choose Our Dried Tuber Vegetables?
+- Natural and Organic: Free from artificial additives and preservatives
+- High-Quality Ingredients: Ensuring maximum nutritional benefit
+- Sustainable Sourcing: Supporting eco-friendly agriculture
+
+Explore Our Dried Tuber Vegetable Food
+
+Discover the benefits of our dried tuber vegetable food and nourish your body with wholesome goodness. Perfect for health-conscious individuals and environmentally aware consumers.`,
+},
+{
+  id: 10,
+  image: '/images/slide10.jpg',
+  title: 'Dried Fruit Slices',
+  description: `DRIED FRUIT SLICES
+_____________________
+
+Nature's Candy, Preserved for Your Enjoyment
+
+Benefits
+- Convenient and Shelf-Stable: Easy to store and transport
+- Nutrient-Rich: Retains essential vitamins and minerals
+- Versatile: Perfect for snacking, baking, or adding to recipes
+- Supports Healthy Digestion: High in fiber and antioxidants
+
+Uses
+- Snacking: Enjoy as a healthy and convenient snack
+- Baking: Add to baked goods, such as cakes, muffins, and cookies
+- Cooking: Use in savory dishes, such as stews and curries
+- Trail Mix: Mix with nuts and seeds for a healthy and tasty snack
+
+Why Choose Us?
+- Natural and Organic: Free from artificial additives and preservatives
+- High-Quality Ingredients: Ensuring maximum nutritional benefit
+- Sustainable Sourcing: Supporting eco-friendly agriculture
+
+Explore Our Dried Fruits Food
+
+Discover the benefits of our dried fruits food and enjoy nature's candy, preserved for your enjoyment.`,
+},
+{
+  id: 11,
+  image: '/images/slide11.jpg',
+  title: 'Dried Leafy Vegetables',
+  description: `DRIED LEAFY VEGETABLES
+______________
+
+Nourishing Your Body with Wholesome Goodness
+
+Our Products
+
+- Dried Spinach: Rich in iron and antioxidants
+- Dried Kale: Packed with vitamins A, C, and K
+- Dried Collard Greens: High in fiber and essential minerals
+- Dried Amaranth: Rich in protein and antioxidants
+- Other Leafy Greens: Explore our variety of dried leafy vegetables
+
+Benefits
+
+- Convenient and Nutrient-Rich: Easy to add to smoothies, soups, and recipes
+- Supports Healthy Digestion: High in fiber and antioxidants
+- May Help Boost Energy: Rich in essential vitamins and minerals
+- Supports Healthy Skin and Hair: Antioxidant-rich and nutrient-dense
+
+Uses
+- Smoothies and Juices: Add to your favorite recipes for an extra nutritional boost
+- Soups and Stews: Use as a natural flavor enhancer and thickening agent
+- Baking and Cooking: Add to baked goods, sauces, and marinades for extra nutrition
+
+Why Choose Us?
+- Natural and Organic: Free from artificial additives and preservatives
+- High-Quality Ingredients: Ensuring maximum nutritional benefit
+- Sustainable Sourcing: Supporting eco-friendly agriculture and practices
+
+Explore Our Dried Leafy Vegetables
+
+Discover the benefits of our dried leafy vegetables and nourish your body with wholesome goodness.`,
+},
   {
-    id: 10,
-    image: '/images/slide10.jpg',
-    title: 'Dried Fruit Slices',
-    description: `Nature’s Candy, Naturally Preserved
-  
-  Our dried fruit slices are delicious, healthy snacks made from carefully selected fruits.
-  
-  BENEFITS
-  • Shelf-Stable and Ready-to-Eat  
-  • Rich in Nutrients and Antioxidants  
-  • Uses – Ideal for snacking, baking, cooking, or trail mix
-  
-  Enjoy guilt-free indulgence with our dried fruit slices.`,
-  },
+  id: 12,
+  image: '/images/slide12.jpg',
+  title: 'Leafy Vegetable Powders',
+  description: `LEAFY VEGETABLE POWDERS
+______________________________
+
+Nourishing Your Body with Wholesome Goodness
+
+Our Products
+- Spinach Powder: Rich in iron and antioxidants
+- Kale Powder: Packed with vitamins A, C, and K
+- Collard Greens Powder: High in fiber and essential minerals
+- Amaranth Powder: Rich in protein and antioxidants
+- Sorrel Powder: Rich in vitamin A, C, K and calcium, iron, and potassium
+- Other Leafy Greens: Explore our variety of leafy green powders
+
+Benefits
+- Convenient and Nutrient-Rich: Easy to add to smoothies, soups, and recipes
+- Supports Healthy Digestion: High in fiber and antioxidants
+- May Help Boost Energy: Rich in essential vitamins and minerals
+- Supports Healthy Skin and Hair: Antioxidant-rich and nutrient-dense
+
+Uses
+- Smoothies and Juices: Add to your favorite recipes for an extra nutritional boost
+- Soups and Stews: Use as a natural thickening agent and flavor enhancer
+- Baking and Cooking: Add to baked goods, sauces, and marinades for extra nutrition
+
+Why Choose Us?
+- Natural and Organic: Free from artificial additives and preservatives
+- High-Quality Ingredients: Ensuring maximum nutritional benefit
+- Sustainable Sourcing: Supporting eco-friendly agriculture
+
+Explore Our Natural Farming Leafy Vegetable Powders
+
+Discover the benefits of our natural farming leafy vegetable powders and nourish your body with wholesome goodness.`,
+},
   {
-    id: 11,
-    image: '/images/slide11.jpg',
-    title: 'Dried Leafy Vegetables',
-    description: `Green Goodness, Preserved Naturally
-  
-  Our dried leafy greens retain their nutrition and flavor while offering convenient usage.
-  
-  INGREDIENTS
-  • Spinach, Kale, Collard Greens, Amaranth, and more
-  
-  BENEFITS
-  • Nutrient-Dense and Easy to Store  
-  • Supports Energy, Skin, and Digestion  
-  • Uses – Perfect for smoothies, soups, and baking
-  
-  Bring nature’s greens into your kitchen, any time of the year.`,
-  },
+  id: 13,
+  image: '/images/slide13.jpg',
+  title: 'Nuts',
+  description: `NUTS
+______
+
+Nature's Perfect Snack, Packed with Nutrition
+
+Our Products
+- Almonds: Rich in vitamin E and healthy fats
+- Walnuts: High in omega-3 fatty acids and antioxidants
+- Pecans: Packed with antioxidants and essential minerals
+- Cashews: Rich in magnesium and copper
+- Other Nuts: Explore our variety of nuts
+
+Benefits
+- Supports Heart Health: Rich in healthy fats and antioxidants
+- May Help with Weight Management: High in fiber and protein
+- Supports Brain Function: Rich in omega-3 fatty acids and antioxidants
+- May Help Lower Cholesterol: Soluble fiber and healthy fats
+
+Uses
+- Snacking: Enjoy as a healthy and convenient snack
+- Baking and Cooking: Add to baked goods, sauces, and marinades for extra nutrition
+- Trail Mix: Mix with dried fruits and seeds for a healthy and tasty snack
+
+Why Choose Us?
+- High-Quality Ingredients: Ensuring maximum nutritional benefit
+- Sustainable Sourcing: Supporting eco-friendly agriculture and practices
+- Natural and Organic: Free from artificial additives and preservatives
+
+Explore Our Nuts
+Discover the benefits of our nuts and enjoy nature's perfect snack, packed with nutrition.`,
+},
   {
-    id: 12,
-    image: '/images/slide12.jpg',
-    title: 'Leafy Vegetable Powders',
-    description: `Concentrated Plant Nutrition
-  
-  Our powders provide a simple and powerful way to boost your meals with natural green nutrition.
-  
-  INGREDIENTS
-  • Spinach, Kale, Amaranth, Sorrel, Collard Greens
-  
-  BENEFITS
-  • Convenient and Nutrient-Packed  
-  • Supports Energy and Skin Health  
-  • Uses – Great for smoothies, soups, and baking
-  
-  Add a scoop of nature to your diet with our leafy vegetable powders.`,
-  },
+  id: 14,
+  image: '/images/slide14.jpg',
+  title: 'Natural Food Colours',
+  description: `NATURAL FOOD COLOURS
+_________________________
+Vibrant and Safe Colors for Your Food
+
+Our Range
+__________
+
+ Plant-Based Colors: Derived from fruits, vegetables, Flowers, seeds
+- Natural Dyes: Made from natural sources
+- Herbal Extracts: Infused with herbs and botanicals for unique colors
+
+Benefits of Natural Food Colors
+_________________________
+
+- Safe and Non-Toxic: Free from artificial chemicals and additives
+- Vibrant and Consistent Colors: Adds visual appeal to food products
+- Increased Consumer Appeal: Meets growing demand for natural and organic products
+- Supports Sustainable Food Systems: Aligns with eco-friendly and environmentally responsible practices
+
+Applications
+_____________
+
+- Food and Beverages: Perfect for coloring food products, such as candies, baked goods, and beverages
+- Cosmetics and Personal Care: Suitable for use in natural cosmetics and personal care products
+
+Why Choose Natural Food Colors?
+
+- Clean Label: Supports clean label initiatives and transparency
+- Natural and Sustainable: Aligns with consumer demand for natural and eco-friendly products
+- High-Quality Colors: Provides vibrant and consistent colors for food products
+Explore Our Natural Food Colors
+Discover our range of natural food colors and add a pop of color to your food products. Perfect for food manufacturers, bakers, and crafters.`,
+},
   {
-    id: 13,
-    image: '/images/slide13.jpg',
-    title: 'Nuts',
-    description: `Wholesome Crunch, Packed with Nutrition
-  
-  Our nuts are carefully selected to provide optimal health benefits and irresistible taste.
-  
-  INGREDIENTS
-  • Almonds, Walnuts, Cashews, Pecans, and more
-  
-  BENEFITS
-  • Heart-Healthy Fats  
-  • Supports Brain Function and Weight Management  
-  • Uses – Ideal for snacking, baking, and trail mixes
-  
-  Enjoy the goodness of nature’s finest snack – our premium nuts.`,
-  },
+  id: 15,
+  image: '/images/slide15.jpg',
+  title: 'Clay Products',
+  description: `CLAY PRODUCTS
+__________________
+
+Handcrafted with Love, Nourishing Your Body and Soul
+
+Our Products
+- Clay Bowls: Perfect for serving and enjoying your favorite dishes
+- Clay Pots: Ideal for cooking and storing food
+- Clay Glasses: Unique and eco-friendly drinking vessels
+- Clay Plates: Handcrafted and perfect for serving meals
+- Clay Spoons: Natural and sustainable utensils
+- Clay Diyas: Beautiful and traditional Indian lamps
+
+Benefits
+- Natural and Sustainable: Free from artificial additives and chemicals
+- Eco-Friendly: Biodegradable and non-toxic
+- Handcrafted: Each piece is unique and made with love
+- Supports Local Artisans: Promoting traditional craftsmanship and community development
+
+Uses
+- Home Decor: Add a touch of natural beauty to your home
+- Cooking and Serving: Use our clay pots and bowls for healthy and flavorful meals
+- Special Occasions: Perfect for festivals, ceremonies, and special events
+- Gift Ideas: Unique and thoughtful gifts for friends and family
+
+Why Choose Us?
+- High-Quality Products: Ensuring durability and longevity
+- Sustainable Practices: Supporting eco-friendly agriculture and community development
+- Unique and Handcrafted: Each piece is a work of art and craftsmanship
+
+Explore Our Clay Products
+
+Discover the beauty and benefits of our clay products and nourish your body and soul with wholesome goodness.`,
+},
   {
-    id: 14,
-    image: '/images/slide14.jpg',
-    title: 'Natural Food Colours',
-    description: `Vibrant, Safe, and Plant-Based
-  
-  Our natural food colors are made from herbal extracts and plants, offering a safe alternative to synthetic dyes.
-  
-  BENEFITS
-  • Non-Toxic and Safe for All Ages  
-  • Vibrant, Long-Lasting Colors  
-  • Uses – Perfect for food, beverages, and cosmetics
-  
-  Add nature’s palette to your products with our food-safe colors.`,
-  },
-  {
-    id: 15,
-    image: '/images/slide15.jpg',
-    title: 'Clay Products',
-    description: `Crafted by Nature, Shaped by Hand
-  
-  Our eco-friendly clay products are handmade with love and sustainability in mind.
-  
-  PRODUCT RANGE
-  • Clay Bowls, Pots, Glasses, Plates, Spoons, Diyas
-  
-  BENEFITS
-  • Natural, Biodegradable, and Chemical-Free  
-  • Crafted by Local Artisans  
-  • Uses – Ideal for cooking, serving, decor, and gifting
-  
-  Bring home tradition and wellness with our handcrafted clayware.`,
-  },
-  {
-    id: 16,
-    image: '/images/slide16.jpg',
-    title: 'LEAF PRODUCTS ',
-    description: `
+  id: 16,
+  image: '/images/slide16.jpg',
+  title: 'Leaf Products',
+  description: `LEAF PRODUCTS
+_________________
+
 Nature's Gift, Sustainable and Eco-Friendly
 
 Our Products
@@ -293,13 +492,16 @@ Why Choose Us?
 - Unique and Handcrafted: Each piece is a work of art and craftsmanship
 
 Explore Our Leaf Products
-Discover the benefits of our leaf products and experience the beauty of nature's gift, sustainable and eco-friendly.`,
-  },
+Discover the benefits of our leaf products and experience the beauty of nature's gift, sustainable and eco-friendly.`,
+},
   {
-    id: 17,
-    image: '/images/slide17.jpg',
-    title: 'PAPER BAGS',
-    description: `Eco-Friendly and Sustainable Packaging Solutions
+  id: 17,
+  image: '/images/slide17.jpg',
+  title: 'PAPER BAGS',
+  description: `PAPER BAGS
+_____________
+
+Eco-Friendly and Sustainable Packaging Solutions
 
 Our Products
 
@@ -325,13 +527,15 @@ Why Choose Us?
 
 Explore Our Paper Bags
 
-Discover the benefits of our paper bags and experience the convenience of eco-friendly and sustainable packaging solutions.`,
-  },
+Discover the benefits of our paper bags and experience the convenience of eco-friendly and sustainable packaging solutions.`,
+},
   {
     id: 18,
     image: '/images/slide18.jpg',
     title: 'BAMBOO PRODUCTS ',
-    description: `Sustainable, Eco-Friendly, and  Innovative Solutions
+    description: `______________________
+
+Sustainable, Eco-Friendly, and  Innovative Solutions
 
 Our Products
 
@@ -365,14 +569,15 @@ Why Choose Us?
 - Unique and Innovative: Constantly developing new and innovative bamboo products
 
 Explore Our Bamboo Products
-
-Discover the benefits of our bamboo products and experience the convenience of sustainable, eco-friendly, and durable solutions.`,
-  },
+Discover the benefits of our bamboo products and experience the convenience of sustainable, eco-friendly, and durable solutions.`,
+},
   {
     id: 19,
     image: '/images/slide19.jpg',
     title: 'WOOD PRODUCTS',
-    description: `Handcrafted with Love, Sustainable and Eco-Friendly
+    description: `___________________
+
+Handcrafted with Love, Sustainable and Eco-Friendly
 
 Our Products
 
@@ -382,6 +587,7 @@ Our Products
 - Wooden Cups: Natural and stylish cups for hot and cold beverages
 - Wooden Plates: Handcrafted and eco-friendly dinnerware
 - Other Wood Products: Explore our variety of wooden products
+
 Benefits
 
 - Sustainable and Eco-Friendly: Wood is a natural and renewable resource
@@ -404,14 +610,16 @@ Why Choose Us?
 
 Explore Our Wood Products
 
-Discover the benefits of our wood products and experience the beauty of natural, sustainable, and eco-friendly solutions.`,
-  }
+Discover the benefits of our wood products and experience the beauty of natural, sustainable, and eco-friendly solutions.`,
+}
   ,
   {
     id: 20,
     image: '/images/slide20.jpg',
-    title: 'NATURAL INSECT CONTROL PRODUCTS ',
-    description: `Eco-Friendly and Sustainable Solutions for Pest Management
+    title: 'NATURAL INSECT CONTROL PRODUCTS',
+    description: `_________________________
+
+Eco-Friendly and Sustainable Solutions for Pest Management
 
 Our Products
 
@@ -439,8 +647,8 @@ Why Choose Us?
 
 Explore Our Natural Insect Control Products
 
-Discover the benefits of our natural insect control products and experience the effectiveness of eco-friendly and sustainable solutions for pest management.`,
-  },
+Discover the benefits of our natural insect control products and experience the effectiveness of eco-friendly and sustainable solutions for pest management`,
+},
   
 ];
 
@@ -516,14 +724,14 @@ const Slideshow = () => {
             >
               {/* Image */}
               <motion.div
-                className="w-full md:w-1/2 h-48 sm:h-64 md:h-[32rem] relative overflow-hidden rounded-lg sm:rounded-xl shadow-md sm:shadow-lg"
+                className="w-full md:w-1/2 relative overflow-hidden rounded-lg sm:rounded-xl shadow-md sm:shadow-lg"
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
                 <img
                   src={slide.image}
                   alt={slide.title}
-                  className="object-cover w-full h-full transition-transform duration-700 hover:scale-110"
+                  className="object-contain w-full h-auto max-h-[32rem] transition-transform duration-700 hover:scale-110"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
@@ -547,14 +755,6 @@ const Slideshow = () => {
                 >
                   {formatDescription(slide.description)}
                 </motion.div>
-                <motion.a
-                  href="#shop"
-                  className="mt-4 sm:mt-6 inline-block bg-green-600 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-md sm:rounded-lg font-medium sm:font-semibold hover:bg-green-700 transition-colors duration-300 shadow-sm sm:shadow-md text-sm sm:text-base"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Explore Now
-                </motion.a>
               </div>
             </motion.div>
           </AnimatePresence>

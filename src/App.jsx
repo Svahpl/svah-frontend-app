@@ -27,7 +27,6 @@ function App() {
       <Slideshow />
       <CategorySection />
       <Certificates />
-      <Contact />
     </>
   );
 
@@ -42,6 +41,7 @@ function App() {
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/about" element={<About />} />
+          <Route path="/Contact" element={<Contact/>}/>
         </Routes>
         <Footer />
       </div>

@@ -27,15 +27,7 @@ const Footer = () => {
                 <li><a href="#contact" className="text-neutral-200 hover:text-white transition-colors">Contact</a></li>
               </ul>
             </div>
-            
-            <div>
-              <h4 className="font-semibold text-white mb-3">Products</h4>
-              <ul className="space-y-2">
-                <li><a href="#category-1" className="text-neutral-200 hover:text-white transition-colors">Medicinal Plants</a></li>
-                <li><a href="#category-2" className="text-neutral-200 hover:text-white transition-colors">Food Products</a></li>
-                <li><a href="#category-11" className="text-neutral-200 hover:text-white transition-colors">Plant Nursery</a></li>
-              </ul>
-            </div>
+
             
             <div>
               <h4 className="font-semibold text-white mb-3">Legal</h4>

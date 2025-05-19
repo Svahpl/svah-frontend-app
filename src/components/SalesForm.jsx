@@ -13,53 +13,25 @@ const productConditions = [
   { value: 'dried', label: 'Dried' }
 ];
 
-const states = [
-  { value: 'telangana', label: 'Telangana' },
-  { value: 'andhra-pradesh', label: 'Andhra Pradesh' }
-];
-
-// Placeholder data - in a real app, these would be fetched based on state selection
-const mandals = [
-  { value: 'venkatapuram', label: 'Venkatapuram' },
-  { value: 'mulugu', label: 'Mulugu' }
-];
-
-// Placeholder data - in a real app, these would be fetched based on mandal selection
-const villages = [
-  { value: 'veerabhadravaram', label: 'Veerabhadravaram' },
-  { value: 'eturnagaram', label: 'Eturnagaram' }
-];
-
 const SalesForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [selectedState, setSelectedState] = useState(null);
-  const [selectedMandal, setSelectedMandal] = useState(null);
-  const [selectedVillage, setSelectedVillage] = useState(null);
   const [selectedFarmingMethod, setSelectedFarmingMethod] = useState(null);
   const [selectedProductCondition, setSelectedProductCondition] = useState(null);
   
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
   
   const onSubmit = (data) => {
-    // In a real application, submit this data to your backend
     console.log({ 
-      ...data, 
-      state: selectedState?.value,
-      mandal: selectedMandal?.value,
-      village: selectedVillage?.value,
+      ...data,
       farmingMethod: selectedFarmingMethod?.value,
       productCondition: selectedProductCondition?.value
     });
     
     setIsSubmitted(true);
     reset();
-    setSelectedState(null);
-    setSelectedMandal(null);
-    setSelectedVillage(null);
     setSelectedFarmingMethod(null);
     setSelectedProductCondition(null);
     
-    // Reset the success message after 5 seconds
     setTimeout(() => {
       setIsSubmitted(false);
     }, 5000);
@@ -67,7 +39,7 @@ const SalesForm = () => {
   
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-xl font-heading font-semibold text-primary-800 mb-4">Drop Us a Message - Sales</h3>
+      <h3 className="text-xl font-heading font-semibold text-primary-800 mb-4">Drop Us a Message - Sale</h3>
       
       {isSubmitted ? (
         <div className="bg-success-50 border border-success-200 text-success-800 rounded-md p-4 mb-4 animate-fade-in">
@@ -76,6 +48,7 @@ const SalesForm = () => {
       ) : null}
       
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {/* Farmer Name */}
         <div>
           <label htmlFor="farmerName" className="block text-sm font-medium text-neutral-700 mb-1">Farmer Name</label>
           <input
@@ -88,6 +61,7 @@ const SalesForm = () => {
           {errors.farmerName && <p className="mt-1 text-sm text-error-600">{errors.farmerName.message}</p>}
         </div>
         
+        {/* Patta Number */}
         <div>
           <label htmlFor="pattaNumber" className="block text-sm font-medium text-neutral-700 mb-1">PPB/ROFR Patta Number</label>
           <input
@@ -100,56 +74,46 @@ const SalesForm = () => {
           {errors.pattaNumber && <p className="mt-1 text-sm text-error-600">{errors.pattaNumber.message}</p>}
         </div>
         
+        {/* State (now a text input) */}
         <div>
           <label htmlFor="state" className="block text-sm font-medium text-neutral-700 mb-1">State</label>
-          <Select
+          <input
             id="state"
-            options={states}
-            value={selectedState}
-            onChange={setSelectedState}
-            placeholder="Select your state"
-            className="text-base"
-            classNames={{
-              control: (state) => 
-                `!border ${state.isFocused ? '!border-primary-500 !shadow-md !ring-2 !ring-primary-200' : '!border-neutral-300'} !rounded-md !bg-white`,
-            }}
+            type="text"
+            className={`w-full px-3 py-2 border ${errors.state ? 'border-error-500' : 'border-neutral-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
+            placeholder="Enter your state"
+            {...register('state', { required: 'State is required' })}
           />
+          {errors.state && <p className="mt-1 text-sm text-error-600">{errors.state.message}</p>}
         </div>
         
+        {/* Mandal (now a text input) */}
         <div>
           <label htmlFor="mandal" className="block text-sm font-medium text-neutral-700 mb-1">Mandal</label>
-          <Select
+          <input
             id="mandal"
-            options={mandals}
-            value={selectedMandal}
-            onChange={setSelectedMandal}
-            placeholder="Select your mandal"
-            isDisabled={!selectedState}
-            className="text-base"
-            classNames={{
-              control: (state) => 
-                `!border ${state.isFocused ? '!border-primary-500 !shadow-md !ring-2 !ring-primary-200' : '!border-neutral-300'} !rounded-md !bg-white`,
-            }}
+            type="text"
+            className={`w-full px-3 py-2 border ${errors.mandal ? 'border-error-500' : 'border-neutral-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
+            placeholder="Enter your mandal"
+            {...register('mandal', { required: 'Mandal is required' })}
           />
+          {errors.mandal && <p className="mt-1 text-sm text-error-600">{errors.mandal.message}</p>}
         </div>
         
+        {/* Village (now a text input) */}
         <div>
           <label htmlFor="village" className="block text-sm font-medium text-neutral-700 mb-1">Revenue Village</label>
-          <Select
+          <input
             id="village"
-            options={villages}
-            value={selectedVillage}
-            onChange={setSelectedVillage}
-            placeholder="Select your village"
-            isDisabled={!selectedMandal}
-            className="text-base"
-            classNames={{
-              control: (state) => 
-                `!border ${state.isFocused ? '!border-primary-500 !shadow-md !ring-2 !ring-primary-200' : '!border-neutral-300'} !rounded-md !bg-white`,
-            }}
+            type="text"
+            className={`w-full px-3 py-2 border ${errors.village ? 'border-error-500' : 'border-neutral-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
+            placeholder="Enter your village"
+            {...register('village', { required: 'Village is required' })}
           />
+          {errors.village && <p className="mt-1 text-sm text-error-600">{errors.village.message}</p>}
         </div>
         
+        {/* Pincode */}
         <div>
           <label htmlFor="pincode" className="block text-sm font-medium text-neutral-700 mb-1">Pincode</label>
           <input
@@ -157,11 +121,18 @@ const SalesForm = () => {
             type="text"
             className={`w-full px-3 py-2 border ${errors.pincode ? 'border-error-500' : 'border-neutral-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
             placeholder="Your pincode"
-            {...register('pincode', { required: 'Pincode is required' })}
+            {...register('pincode', { 
+              required: 'Pincode is required',
+              pattern: {
+                value: /^[0-9]{6}$/,
+                message: 'Please enter a valid 6-digit pincode'
+              }
+            })}
           />
           {errors.pincode && <p className="mt-1 text-sm text-error-600">{errors.pincode.message}</p>}
         </div>
         
+        {/* Mobile Number */}
         <div>
           <label htmlFor="mobileNumber" className="block text-sm font-medium text-neutral-700 mb-1">Mobile Number</label>
           <input
@@ -169,11 +140,18 @@ const SalesForm = () => {
             type="tel"
             className={`w-full px-3 py-2 border ${errors.mobileNumber ? 'border-error-500' : 'border-neutral-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
             placeholder="Your mobile number"
-            {...register('mobileNumber', { required: 'Mobile number is required' })}
+            {...register('mobileNumber', { 
+              required: 'Mobile number is required',
+              pattern: {
+                value: /^[0-9]{10}$/,
+                message: 'Please enter a valid 10-digit mobile number'
+              }
+            })}
           />
           {errors.mobileNumber && <p className="mt-1 text-sm text-error-600">{errors.mobileNumber.message}</p>}
         </div>
         
+        {/* Crop Name */}
         <div>
           <label htmlFor="cropName" className="block text-sm font-medium text-neutral-700 mb-1">Crop Name</label>
           <input
@@ -186,6 +164,7 @@ const SalesForm = () => {
           {errors.cropName && <p className="mt-1 text-sm text-error-600">{errors.cropName.message}</p>}
         </div>
         
+        {/* Farming Method (still a dropdown) */}
         <div>
           <label htmlFor="farmingMethod" className="block text-sm font-medium text-neutral-700 mb-1">Farming Method</label>
           <Select
@@ -202,6 +181,7 @@ const SalesForm = () => {
           />
         </div>
         
+        {/* Product Name */}
         <div>
           <label htmlFor="productName" className="block text-sm font-medium text-neutral-700 mb-1">Product Name</label>
           <input
@@ -214,6 +194,7 @@ const SalesForm = () => {
           {errors.productName && <p className="mt-1 text-sm text-error-600">{errors.productName.message}</p>}
         </div>
         
+        {/* Product Form */}
         <div>
           <label htmlFor="productForm" className="block text-sm font-medium text-neutral-700 mb-1">Product Form</label>
           <input
@@ -226,6 +207,7 @@ const SalesForm = () => {
           {errors.productForm && <p className="mt-1 text-sm text-error-600">{errors.productForm.message}</p>}
         </div>
         
+        {/* Product Condition (still a dropdown) */}
         <div>
           <label htmlFor="productCondition" className="block text-sm font-medium text-neutral-700 mb-1">Product Condition</label>
           <Select
@@ -242,30 +224,47 @@ const SalesForm = () => {
           />
         </div>
         
+        {/* Quantity */}
         <div>
-          <label htmlFor="quantity" className="block text-sm font-medium text-neutral-700 mb-1">Quantity (kg/MT)</label>
+          <label htmlFor="quantity" className="block text-sm font-medium text-neutral-700 mb-1">Quantity (MT)</label>
           <input
             id="quantity"
-            type="text"
+            type="number"
+            step="0.01"
             className={`w-full px-3 py-2 border ${errors.quantity ? 'border-error-500' : 'border-neutral-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
             placeholder="Quantity available"
-            {...register('quantity', { required: 'Quantity is required' })}
+            {...register('quantity', { 
+              required: 'Quantity is required',
+              min: {
+                value: 0.01,
+                message: 'Quantity must be greater than 0'
+              }
+            })}
           />
           {errors.quantity && <p className="mt-1 text-sm text-error-600">{errors.quantity.message}</p>}
         </div>
         
+        {/* Price */}
         <div>
           <label htmlFor="price" className="block text-sm font-medium text-neutral-700 mb-1">Price (per kg)</label>
           <input
             id="price"
-            type="text"
+            type="number"
+            step="0.01"
             className={`w-full px-3 py-2 border ${errors.price ? 'border-error-500' : 'border-neutral-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
             placeholder="Price per kg"
-            {...register('price', { required: 'Price is required' })}
+            {...register('price', { 
+              required: 'Price is required',
+              min: {
+                value: 0.01,
+                message: 'Price must be greater than 0'
+              }
+            })}
           />
           {errors.price && <p className="mt-1 text-sm text-error-600">{errors.price.message}</p>}
         </div>
         
+        {/* Message */}
         <div>
           <label htmlFor="message" className="block text-sm font-medium text-neutral-700 mb-1">Message</label>
           <textarea
@@ -277,6 +276,7 @@ const SalesForm = () => {
           />
         </div>
         
+        {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-primary-600 text-white font-medium py-2 px-4 rounded-md hover:bg-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
