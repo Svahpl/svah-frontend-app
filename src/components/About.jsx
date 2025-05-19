@@ -17,38 +17,38 @@ const About = () => {
   const coreValues = [
     {
       icon: <ShieldCheck className="w-6 h-6" />,
-      title: "Ethical Commitment",
-      description: "We operate with integrity and transparency in all business dealings."
+      title: "Unwavering Commitment to Ethics",
+      description: "We operate with integrity and transparency in all our business dealings."
     },
     {
       icon: <Scale className="w-6 h-6" />,
-      title: "Honesty & Integrity",
-      description: "We uphold the highest standards in all customer interactions."
+      title: "Unshakeable Honesty and Integrity",
+      description: "We uphold the highest standards of honesty and integrity in our interactions with customers."
     },
     {
       icon: <BarChart2 className="w-6 h-6" />,
-      title: "Business Stability",
-      description: "Committed to long-term sustainability and stable business practices."
+      title: "Rock-Solid Stability",
+      description: "We're committed to long-term sustainability and stability in our business practices."
     },
     {
       icon: <Award className="w-6 h-6" />,
-      title: "Pursuit of Excellence",
-      description: "Continuous improvement in our products and services."
+      title: "Unrelenting Pursuit of Excellence",
+      description: "We strive for continuous improvement and excellence in our products and services."
     },
     {
       icon: <Eye className="w-6 h-6" />,
-      title: "Transparency",
-      description: "Clear and open business operations and decisions."
+      title: "Transparent Business Practices",
+      description: "We maintain transparency in our business operations and decision-making processes."
     },
     {
       icon: <Gavel className="w-6 h-6" />,
-      title: "Impartiality",
-      description: "Fair decisions based on merit and objectivity."
+      title: "Impartial Decision-Making",
+      description: "We make decisions based on fairness, impartiality, and merit."
     },
     {
       icon: <Crosshair className="w-6 h-6" />,
-      title: "Accuracy",
-      description: "Precision and attention to detail in all we do."
+      title: "Meticulous Attention to Accuracy",
+      description: "We're committed to accuracy and precision in our products and services."
     }
   ];
 
@@ -61,16 +61,20 @@ const About = () => {
             <div className="w-24 h-1 bg-green-600 mx-auto"></div>
           </div>
           
+          {/* Welcome Section */}
+          <div className="bg-white rounded-xl shadow-lg p-8 mb-8 border-l-4 border-green-600">
+            <p className="text-neutral-700 leading-relaxed mb-4">
+              Welcome to Sri Venkateswara Agros and Herbs Company, a government-recognized organization dedicated to providing high-quality, healthy, and natural farming products. Our mission is built on a strong foundation of ethics, values, and principles that guide our actions and decisions.
+            </p>
+          </div>
+          
           {/* Mission Section */}
           <div className="bg-white rounded-xl shadow-lg p-8 mb-12 border-l-4 border-green-600">
             <h3 className="text-2xl font-semibold text-primary-800 mb-4 flex items-center">
               <CheckCircle className="text-green-600 mr-3" /> Our Mission
             </h3>
             <p className="text-neutral-700 leading-relaxed mb-4">
-              As a government-recognized, customer-centric organization, we take full responsibility for delivering exceptional service and quality to our valued customers. We consistently deliver high-quality natural farming products that meet evolving needs while maintaining the highest ethical standards.
-            </p>
-            <p className="text-neutral-700 leading-relaxed">
-              Through sustainable agriculture and traditional practices, we bridge the gap between rural communities and global markets, bringing authentic, healthy products to consumers worldwide.
+              As a customer-centric organization, we take full responsibility for delivering exceptional service and quality to our valued customers. We acknowledge our responsibility and accountability to our customers and consistently deliver high-quality products and services that meet their evolving needs.
             </p>
           </div>
           
@@ -101,10 +105,7 @@ const About = () => {
           <div className="bg-green-800 text-white rounded-xl p-8 mb-12">
             <h3 className="text-2xl font-semibold mb-4">Compliance & Ethics</h3>
             <p className="mb-4 leading-relaxed">
-              We operate in full compliance with all applicable laws and regulations. Our commitment to ethical business practices is reflected in our certifications from ISO, APEDA, SPICE BOARD, and FSSAI.
-            </p>
-            <p className="leading-relaxed">
-              Every product undergoes rigorous testing to ensure it meets international standards of purity, safety, and effectiveness.
+              We operate in full compliance with applicable laws and regulations. We're committed to upholding the highest standards of ethics and compliance, delivering exceptional quality products that meet and exceed industry standards.
             </p>
           </div>
           

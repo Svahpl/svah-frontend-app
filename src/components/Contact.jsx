@@ -2,7 +2,6 @@ import React from 'react';
 import { Phone, Mail, Youtube, Instagram, MapPin, Clock, Truck, Shield } from 'lucide-react';
 import RequirementForm from './RequirementForm';
 import SalesForm from './SalesForm';
-import { adminContacts } from '../data/adminContacts';
 
 const Contact = () => {
   return (
@@ -83,29 +82,6 @@ const Contact = () => {
               </div>
             </div>
             
-            <div>
-              <h3 className="text-xl font-heading font-semibold text-primary-800 mb-4">Admin Contact</h3>
-              
-              <div className="space-y-4">
-                {adminContacts.map((contact, index) => (
-                  <div key={index} className="flex items-center">
-                    <Phone className="text-primary-600 mr-3" size={20} />
-                    <div>
-                      <p className="font-medium text-neutral-800">{contact.name}</p>
-                      <a href={`tel:${contact.phone.replace(/\s/g, '')}`} className="text-primary-700 hover:text-primary-900 transition-colors">
-                        {contact.phone}
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="mt-8">
-                <h4 className="font-medium text-lg text-primary-800 mb-2">Business Hours</h4>
-                <p className="text-neutral-700">Monday - Saturday: 9:00 AM - 6:00 PM</p>
-                <p className="text-neutral-700">Sunday: Closed</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

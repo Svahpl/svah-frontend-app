@@ -24,7 +24,7 @@ const RequirementForm = () => {
   
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-xl font-heading font-semibold text-primary-800 mb-4">Drop Us a Message - Requirements</h3>
+      <h3 className="text-xl font-heading font-semibold text-primary-800 mb-4">Drop Us a Message - Requirement</h3>
       
       {isSubmitted ? (
         <div className="bg-success-50 border border-success-200 text-success-800 rounded-md p-4 mb-4 animate-fade-in">
@@ -39,7 +39,7 @@ const RequirementForm = () => {
             id="fullName"
             type="text"
             className={`w-full px-3 py-2 border ${errors.fullName ? 'border-error-500' : 'border-neutral-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-            placeholder="Your full name"
+            placeholder="full name"
             {...register('fullName', { required: 'Full name is required' })}
           />
           {errors.fullName && <p className="mt-1 text-sm text-error-600">{errors.fullName.message}</p>}
@@ -51,7 +51,7 @@ const RequirementForm = () => {
             id="companyName"
             type="text"
             className={`w-full px-3 py-2 border ${errors.companyName ? 'border-error-500' : 'border-neutral-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-            placeholder="Your company name"
+            placeholder="company name"
             {...register('companyName', { required: 'Company name is required' })}
           />
           {errors.companyName && <p className="mt-1 text-sm text-error-600">{errors.companyName.message}</p>}
@@ -63,7 +63,7 @@ const RequirementForm = () => {
             id="companyEmail"
             type="email"
             className={`w-full px-3 py-2 border ${errors.companyEmail ? 'border-error-500' : 'border-neutral-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-            placeholder="your-company@example.com"
+            placeholder="company email"
             {...register('companyEmail', { 
               required: 'Email is required',
               pattern: { 
@@ -109,7 +109,7 @@ const RequirementForm = () => {
             id="websiteLink"
             type="url"
             className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-            placeholder="https://example.com"
+            placeholder="https://svahpl.com"
             {...register('websiteLink')}
           />
         </div>
@@ -120,7 +120,7 @@ const RequirementForm = () => {
             id="mobileNumber"
             type="tel"
             className={`w-full px-3 py-2 border ${errors.mobileNumber ? 'border-error-500' : 'border-neutral-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-            placeholder="Your mobile number"
+            placeholder="mobile number"
             {...register('mobileNumber', { required: 'Mobile number is required' })}
           />
           {errors.mobileNumber && <p className="mt-1 text-sm text-error-600">{errors.mobileNumber.message}</p>}
@@ -132,7 +132,7 @@ const RequirementForm = () => {
             id="requirements"
             rows={3}
             className={`w-full px-3 py-2 border ${errors.requirements ? 'border-error-500' : 'border-neutral-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-            placeholder="Describe your requirements"
+            placeholder="Describe  requirements"
             {...register('requirements', { required: 'Requirements description is required' })}
           />
           {errors.requirements && <p className="mt-1 text-sm text-error-600">{errors.requirements.message}</p>}
