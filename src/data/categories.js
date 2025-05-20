@@ -14,7 +14,7 @@ export const productCategories = [
     name: 'FOOD PRODUCTS',
     subcategories: [
       { id: 201, name: 'HERBAL TEAS', image: '/images/HTea.jpg' },
-      { id: 202, name: 'SPICES', image: '/images/spices.jpg' },
+      { id: 202, name: 'SPICES', image: '/images/SPICES.jpg' },
       { id: 203, name: 'NUTS', image: '/images/nuts.jpg' },
       { id: 204, name: 'CEREALS AND PULSES', image: '/images/CEREALSANDPULSES.jpg' },
       { id: 205, name: 'OILS AND OIL SEEDS', image: '/images/oil.jpg' },
