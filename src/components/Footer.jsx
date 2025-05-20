@@ -22,9 +22,9 @@ const Footer = () => {
             <div>
               <h4 className="font-semibold text-white mb-3">Quick Links</h4>
               <ul className="space-y-2">
-                <li><a href="#" className="text-neutral-200 hover:text-white transition-colors">Home</a></li>
-                <li><a href="#about" className="text-neutral-200 hover:text-white transition-colors">About Us</a></li>
-                <li><a href="#contact" className="text-neutral-200 hover:text-white transition-colors">Contact</a></li>
+                <li><a href="/" className="text-neutral-200 hover:text-white transition-colors">Home</a></li>
+                <li><a href="/About" className="text-neutral-200 hover:text-white transition-colors">About Us</a></li>
+                <li><a href="/contact" className="text-neutral-200 hover:text-white transition-colors">Contact</a></li>
               </ul>
             </div>
 
@@ -32,9 +32,9 @@ const Footer = () => {
             <div>
               <h4 className="font-semibold text-white mb-3">Legal</h4>
               <ul className="space-y-2">
-                <li><a href="#" className="text-neutral-200 hover:text-white transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="text-neutral-200 hover:text-white transition-colors">Terms of Service</a></li>
-                <li><a href="#" className="text-neutral-200 hover:text-white transition-colors">Shipping Policy</a></li>
+                <li><a href="/privacy-policy" className="text-neutral-200 hover:text-white transition-colors">Privacy Policy</a></li>
+                <li><a href="/terms-of-service" className="text-neutral-200 hover:text-white transition-colors">Terms of Service</a></li>
+                <li><a href="/shipping-policy" className="text-neutral-200 hover:text-white transition-colors">Shipping Policy</a></li>
               </ul>
             </div>
           </div>

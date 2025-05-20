@@ -56,7 +56,7 @@ const PrivacyPolicy = () => {
                 <br />
                 Email: <a href="mailto:srivenkateswaraagrosandherbs@gmail.com" className="text-primary-600 hover:text-primary-800">srivenkateswaraagrosandherbs@gmail.com</a>
                 <br />
-                Phone: <a href="tel:+919959020089" className="text-primary-600 hover:text-primary-800">+91 99590 20089</a>
+                
               </p>
             </section>
           </div>

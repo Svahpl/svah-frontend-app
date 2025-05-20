@@ -15,7 +15,8 @@ const CyberCrimeWarning = () => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-5 bg-white bg-opacity-10 flex items-center justify-center z-50 p-4">
+    <div className="fixed top-[27%] left-0 right-0 bg-white bg-opacity-10 flex items-center justify-center z-50 p-4">
+
       <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-2xl max-w-md w-full relative overflow-hidden animate-fade-in-up">
         {/* Decorative elements */}
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-warning-500 to-danger-500"></div>
