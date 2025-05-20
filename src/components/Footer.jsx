@@ -1,5 +1,5 @@
 import React from 'react';
-import { Leaf } from 'lucide-react';
+import { Leaf, Mail } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -28,7 +28,6 @@ const Footer = () => {
               </ul>
             </div>
 
-            
             <div>
               <h4 className="font-semibold text-white mb-3">Legal</h4>
               <ul className="space-y-2">
@@ -37,12 +36,44 @@ const Footer = () => {
                 <li><a href="/shipping-policy" className="text-neutral-200 hover:text-white transition-colors">Shipping Policy</a></li>
               </ul>
             </div>
+
+            <div>
+              <h4 className="font-semibold text-white mb-3">Contact Information</h4>
+              <ul className="space-y">
+                <li>
+                  <div className="flex items-center">
+                    <Mail className="text-neutral-200 mr-1" size={10} />
+                    <a href="mailto:srivenkateswaraagrosandherbs@gmail.com" className="text-neutral-200 hover:text-white transition-colors">
+                      Official: 
+                      srivenkateswaraagrosandherbs@gmail.com
+                    </a>
+                  </div>
+                </li>
+                <li>
+                  <div className="flex items-center">
+                    <Mail className="text-neutral-200 mr-1" size={10} />
+                    <a href="mailto:Svahpl1@gmail.com" className="text-neutral-200 hover:text-white transition-colors">
+                      Requirements: 
+                      Svahpl1@gmail.com
+                    </a>
+                  </div>
+                </li>
+                <li>
+                  <div className="flex items-center">
+                    <Mail className="text-neutral-200 mr-1" size={10} />
+                    <a href="mailto:svaherbs@gmail.com" className="text-neutral-200 hover:text-white transition-colors">
+                      Sales: svaherbs@gmail.com
+                    </a>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         
         <div className="border-t border-primary-700 pt-6 mt-6">
           <p className="text-center text-neutral-300">
-            &copy; {currentYear} SRI VENKATESWARA AGROS AND HERBS. All rights reserved.
+            © {currentYear} SRI VENKATESWARA AGROS AND HERBS. All rights reserved.
           </p>
         </div>
       </div>
