@@ -26,6 +26,7 @@ function App() {
     <>
       <Slideshow />
       <CategorySection />
+      <Contact/>
       <Certificates />
     </>
   );

@@ -40,7 +40,8 @@ const Header = () => {
               <div>
                 <h1 className="text-lg font-bold text-primary-900 leading-tight">
                   <span className="font-serif tracking-wide">SRI VENKATESWARA</span><br />
-                  <span className="text-primary-700 text-sm sm:text-base">AGROS AND HERBS</span>
+                  <span className="font-serif tracking-wide">AGROS AND HERBS</span><br />
+                  <span className="text-primary-700 text-sm sm:text-base">SINCE 2021</span>
                 </h1>
               </div>
             </a>

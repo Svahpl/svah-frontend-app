@@ -1,22 +1,22 @@
 export const certificates = [
   {
     id: 1,
-    name: 'ISO ',
+    name: '',
     image: '/images/ISO.jpg'
   },
   {
     id: 2,
-    name: 'APEDA ',
+    name: '',
     image: '/images/APEDA.jpg'
   },
   {
     id: 3,
-    name: 'SPICE BOARD ',
+    name: '',
     image: '/images/SPICEBOARD.jpg'
   },
   {
     id: 4,
-    name: 'FSSAI',
+    name: '',
     image: '/images/FSSAI.jpg'
   }
 ];

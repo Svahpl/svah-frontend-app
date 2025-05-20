@@ -5,18 +5,26 @@ const CyberCrimeWarning = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 2000); // Show after 2 seconds
+    const dismissed = localStorage.getItem('cyberCrimeWarningDismissed');
 
-    return () => clearTimeout(timer); // Cleanup on unmount
+    if (!dismissed) {
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 2000); // Show after 2 seconds
+
+      return () => clearTimeout(timer); // Cleanup on unmount
+    }
   }, []);
+
+  const handleClose = () => {
+    setIsVisible(false);
+    localStorage.setItem('cyberCrimeWarningDismissed', 'true');
+  };
 
   if (!isVisible) return null;
 
   return (
     <div className="fixed top-[27%] left-0 right-0 bg-white bg-opacity-10 flex items-center justify-center z-50 p-4">
-
       <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-2xl max-w-md w-full relative overflow-hidden animate-fade-in-up">
         {/* Decorative elements */}
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-warning-500 to-danger-500"></div>
@@ -40,7 +48,7 @@ const CyberCrimeWarning = () => {
           {/* Content */}
           <div className="space-y-4 mb-6">
             <p className="text-gray-600 leading-relaxed">
-              <span className="font-semibold text-gray-700">Sri Venkateshwara Agros & Herbs</span> will never ask for money in exchange for employment or investment opportunities.
+              <span className="font-semibold text-gray-700">Sri Venkateshwara Agros And Herbs</span> will never ask for money in exchange for employment or investment opportunities.
             </p>
 
             <div className="bg-warning-50 border-l-4 border-warning-500 p-3 rounded-r text-left">
@@ -64,7 +72,7 @@ const CyberCrimeWarning = () => {
           {/* Action buttons */}
           <div className="flex justify-center">
             <button
-              onClick={() => setIsVisible(false)}
+              onClick={handleClose}
               className="bg-gradient-to-r from-warning-500 to-danger-500 text-white px-6 py-2 rounded-lg font-medium shadow-md hover:shadow-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-warning-400 focus:ring-offset-2"
             >
               I Understand
@@ -74,7 +82,7 @@ const CyberCrimeWarning = () => {
 
         {/* Close button */}
         <button 
-          onClick={() => setIsVisible(false)}
+          onClick={handleClose}
           className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700"
           aria-label="Close warning"
         >
