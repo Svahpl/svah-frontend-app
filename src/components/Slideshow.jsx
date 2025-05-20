@@ -535,33 +535,34 @@ const Slideshow = () => {
         className="relative"
         showArrows={true}
         emulateTouch={true}
-        renderArrowPrev={(onClickHandler, hasPrev) =>
-          hasPrev && (
-            <button
-              onClick={onClickHandler}
-              className="absolute left-1 sm:left-2 top-1/2 transform -translate-y-1/2 z-10 bg-white/80 p-2 sm:p-3 rounded-full shadow-lg hover:bg-white transition-all duration-300"
-              aria-label="Previous slide"
-            >
-              <svg className="w-4 h-4 sm:w-6 sm:h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-          )
-        }
-        renderArrowNext={(onClickHandler, hasNext) =>
-          hasNext && (
-            <button
-              onClick={onClickHandler}
-              className="absolute right-1 sm:right-2 top-1/2 transform -translate-y-1/2 z-10 bg-white/80 p-2 sm:p-3 rounded-full shadow-lg hover:bg-white transition-all duration-300"
-              aria-label="Next slide"
-            >
-              <svg className="w-4 h-4 sm:w-6 sm:h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          )
-        }
-      >
+       renderArrowPrev={(onClickHandler, hasPrev) =>
+  hasPrev && (
+    <button
+      onClick={onClickHandler}
+      className="absolute left-1 sm:left-2 top-[20%] sm:top-1/2 transform -translate-y-1/2 z-10 bg-white/80 p-2 sm:p-3 rounded-full shadow-lg hover:bg-white transition-all duration-300"
+      aria-label="Previous slide"
+    >
+      <svg className="w-4 h-4 sm:w-6 sm:h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+  )
+}
+
+       renderArrowNext={(onClickHandler, hasNext) =>
+  hasNext && (
+    <button
+      onClick={onClickHandler}
+      className="absolute right-1 sm:right-2 top-[20%] sm:top-1/2 transform -translate-y-1/2 z-10 bg-white/80 p-2 sm:p-3 rounded-full shadow-lg hover:bg-white transition-all duration-300"
+      aria-label="Next slide"
+    >
+      <svg className="w-4 h-4 sm:w-6 sm:h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  )
+}
+>
         {slideshowData.map((slide, index) => (
           <AnimatePresence key={slide.id}>
             <motion.div
