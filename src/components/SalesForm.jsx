@@ -133,23 +133,57 @@ const SalesForm = () => {
         </div>
         
         {/* Mobile Number */}
-        <div>
-          <label htmlFor="mobileNumber" className="block text-sm font-medium text-neutral-700 mb-1">Mobile Number</label>
-          <input
-            id="mobileNumber"
-            type="tel"
-            className={`w-full px-3 py-2 border ${errors.mobileNumber ? 'border-error-500' : 'border-neutral-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-            placeholder="Your mobile number"
-            {...register('mobileNumber', { 
-              required: 'Mobile number is required',
-              pattern: {
-                value: /^[0-9]{10}$/,
-                message: 'Please enter a valid 10-digit mobile number'
-              }
-            })}
-          />
-          {errors.mobileNumber && <p className="mt-1 text-sm text-error-600">{errors.mobileNumber.message}</p>}
-        </div>
+<div className="flex flex-col space-y-2">
+  <label htmlFor="countryCode" className="block text-sm font-medium text-neutral-700 mb-1">Country Code</label>
+  <div className="flex items-center space-x-2">
+    <select
+      id="countryCode"
+      className={`w-24 px-3 py-2 border ${
+        errors.countryCode ? 'border-error-500' : 'border-neutral-300'
+      } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm`}
+      {...register('countryCode', {
+        required: 'Country code is required',
+      })}
+    >
+      <option value="">Select</option>
+      <option value="+1">+1 (US)</option>
+      <option value="+44">+44 (UK)</option>
+      <option value="+91">+91 (India)</option>
+      <option value="+61">+61 (Australia)</option>
+      <option value="+81">+81 (Japan)</option>
+      {/* Add more country codes as needed */}
+    </select>
+
+    <div className="flex-1">
+      <label htmlFor="mobileNumber" className="block text-sm font-medium text-neutral-700 mb-1">Mobile Number</label>
+      <input
+        id="mobileNumber"
+        type="tel"
+        className={`w-full px-3 py-2 border ${
+          errors.mobileNumber ? 'border-error-500' : 'border-neutral-300'
+        } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
+        placeholder="Your mobile number"
+        {...register('mobileNumber', {
+          required: 'Mobile number is required',
+          pattern: {
+            value: /^[0-9]{10}$/,
+            message: 'Please enter a valid 10-digit mobile number',
+          },
+        })}
+      />
+    </div>
+  </div>
+
+  <div className="flex space-x-4">
+    {errors.countryCode && (
+      <p className="mt-1 text-sm text-error-600">{errors.countryCode.message}</p>
+    )}
+    {errors.mobileNumber && (
+      <p className="mt-1 text-sm text-error-600">{errors.mobileNumber.message}</p>
+    )}
+  </div>
+</div>
+
         
         {/* Crop Name */}
         <div>

@@ -3,6 +3,7 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { motion, AnimatePresence } from 'framer-motion';
 
+
 // Slideshow Data
 const slideshowData = [
   {
@@ -503,6 +504,8 @@ Discover the benefits of our natural insect control products and experience the 
   },
 ];
 
+
+
 const Slideshow = () => {
   const formatDescription = (text) =>
     text.split('\n').map((line, index) => {
@@ -512,10 +515,10 @@ const Slideshow = () => {
       return (
         <p
           key={index}
-          className={`mb-2 md:mb-3 transition-all duration-300 ${
+          className={`mb-2 transition-all duration-300 ${
             isHeading
-              ? 'font-semibold text-gray-900 text-sm md:text-lg tracking-tight'
-              : 'text-gray-800 text-xs md:text-base leading-relaxed'
+              ? 'font-semibold text-gray-900 text-xs sm:text-sm md:text-lg tracking-tight'
+              : 'text-gray-800 text-xs sm:text-sm md:text-base leading-relaxed'
           }`}
         >
           {trimmed}
@@ -524,7 +527,7 @@ const Slideshow = () => {
     });
 
   return (
-    <section className="w-full px-2 sm:px-4 md:px-8 py-8 bg-gradient-to-b from-gray-50 to-white">
+    <section className="w-full px-2 sm:px-4 md:px-8 py-8 bg-gradient-to-b from-gray-50 to-white overflow-visible">
       <Carousel
         autoPlay
         infiniteLoop
@@ -535,34 +538,11 @@ const Slideshow = () => {
         className="relative"
         showArrows={true}
         emulateTouch={true}
-       renderArrowPrev={(onClickHandler, hasPrev) =>
-  hasPrev && (
-    <button
-      onClick={onClickHandler}
-      className="absolute left-1 sm:left-2 top-[20%] sm:top-1/2 transform -translate-y-1/2 z-10 bg-white/80 p-2 sm:p-3 rounded-full shadow-lg hover:bg-white transition-all duration-300"
-      aria-label="Previous slide"
-    >
-      <svg className="w-4 h-4 sm:w-6 sm:h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-      </svg>
-    </button>
-  )
-}
-
-       renderArrowNext={(onClickHandler, hasNext) =>
-  hasNext && (
-    <button
-      onClick={onClickHandler}
-      className="absolute right-1 sm:right-2 top-[20%] sm:top-1/2 transform -translate-y-1/2 z-10 bg-white/80 p-2 sm:p-3 rounded-full shadow-lg hover:bg-white transition-all duration-300"
-      aria-label="Next slide"
-    >
-      <svg className="w-4 h-4 sm:w-6 sm:h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-      </svg>
-    </button>
-  )
-}
->
+        // Prevent carousel from capturing touch events that should scroll the page
+        swipeable={true}
+        preventMovementUntilSwipeScrollTolerance={true}
+        swipeScrollTolerance={50}
+      >
         {slideshowData.map((slide, index) => (
           <AnimatePresence key={slide.id}>
             <motion.div
@@ -572,7 +552,7 @@ const Slideshow = () => {
               transition={{ duration: 0.5 }}
               className={`flex flex-col ${
                 index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-              } items-center justify-between gap-4 sm:gap-6 md:gap-8 bg-white rounded-xl sm:rounded-2xl shadow-md sm:shadow-xl overflow-hidden p-4 sm:p-6 md:p-8 max-w-7xl mx-auto`}
+              } items-center justify-between gap-4 sm:gap-6 md:gap-8 bg-white rounded-xl sm:rounded-2xl shadow-md sm:shadow-xl p-4 sm:p-6 md:p-8 max-w-7xl mx-auto`}
             >
               {/* Image */}
               <motion.div
@@ -583,7 +563,7 @@ const Slideshow = () => {
                 <img
                   src={slide.image}
                   alt={slide.title}
-                  className="object-contain w-full h-auto max-h-[32rem] transition-transform duration-700 hover:scale-110"
+                  className="object-contain w-full h-auto max-h-[20rem] sm:max-h-[24rem] md:max-h-[32rem] transition-transform duration-700 hover:scale-110"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
@@ -595,7 +575,7 @@ const Slideshow = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2, duration: 0.5 }}
-                  className="text-xl sm:text-2xl md:text-3xl font-bold sm:font-extrabold text-gray-900 mb-3 sm:mb-5 tracking-tight"
+                  className="text-lg sm:text-xl md:text-3xl font-bold sm:font-extrabold text-gray-900 mb-3 sm:mb-5 tracking-tight"
                 >
                   {slide.title}
                 </motion.h2>
@@ -603,7 +583,7 @@ const Slideshow = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3, duration: 0.5 }}
-                  className="text-gray-700 text-xs sm:text-sm md:text-base leading-relaxed max-h-[400px] overflow-y-auto pr-2"
+                  className="text-gray-700 text-xs sm:text-sm md:text-base leading-relaxed max-h-[200px] sm:max-h-[300px] md:max-h-[400px] overflow-y-auto pr-2"
                 >
                   {formatDescription(slide.description)}
                 </motion.div>
