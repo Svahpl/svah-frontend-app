@@ -506,6 +506,8 @@ Discover the benefits of our natural insect control products and experience the 
 
 
 
+
+
 const Slideshow = () => {
   const formatDescription = (text) =>
     text.split('\n').map((line, index) => {
@@ -535,13 +537,35 @@ const Slideshow = () => {
         showThumbs={false}
         interval={7000}
         transitionTime={800}
-        className="relative"
         showArrows={true}
         emulateTouch={true}
-        // Prevent carousel from capturing touch events that should scroll the page
         swipeable={true}
         preventMovementUntilSwipeScrollTolerance={true}
         swipeScrollTolerance={50}
+        renderArrowPrev={(onClickHandler, hasPrev, label) =>
+          hasPrev && (
+            <button
+              type="button"
+              onClick={onClickHandler}
+              title={label}
+              className="absolute z-20 left-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 p-2 rounded-full shadow-md hover:bg-gray-100 transition"
+            >
+              ‹
+            </button>
+          )
+        }
+        renderArrowNext={(onClickHandler, hasNext, label) =>
+          hasNext && (
+            <button
+              type="button"
+              onClick={onClickHandler}
+              title={label}
+              className="absolute z-20 right-2 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 p-2 rounded-full shadow-md hover:bg-gray-100 transition"
+            >
+              ›
+            </button>
+          )
+        }
       >
         {slideshowData.map((slide, index) => (
           <AnimatePresence key={slide.id}>
