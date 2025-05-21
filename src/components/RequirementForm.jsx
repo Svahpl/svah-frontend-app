@@ -24,7 +24,7 @@ const RequirementForm = () => {
   
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-xl font-heading font-semibold text-primary-800 mb-4">Drop Us a Message - Requirement</h3>
+      <h3 className="text-xl font-heading font-semibold text-primary-800 mb-4">Drop Us a Message For Requirement</h3>
       
       {isSubmitted ? (
         <div className="bg-success-50 border border-success-200 text-success-800 rounded-md p-4 mb-4 animate-fade-in">

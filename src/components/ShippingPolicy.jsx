@@ -52,17 +52,6 @@ const ShippingPolicy = () => {
                 All products are carefully packaged to ensure they arrive in perfect condition. We use eco-friendly packaging materials whenever possible while maintaining product safety and quality.
               </p>
             </section>
-
-            <section>
-              <div className="flex items-center mb-4">
-                <Shield className="text-primary-600 w-6 h-6 mr-3" />
-                <h2 className="text-xl font-heading font-semibold text-primary-800">Insurance & Tracking</h2>
-              </div>
-              <p className="text-neutral-700 leading-relaxed mb-4">
-                All shipments are fully insured against loss or damage. Tracking information is provided via email once your order ships.
-              </p>
-            </section>
-
             <section>
               <div className="flex items-center mb-4">
                 <RefreshCw className="text-primary-600 w-6 h-6 mr-3" />

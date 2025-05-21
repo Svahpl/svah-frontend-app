@@ -4,22 +4,25 @@ import { X, AlertTriangle } from 'lucide-react';
 const CyberCrimeWarning = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const dismissed = localStorage.getItem('cyberCrimeWarningDismissed');
+useEffect(() => {
+  const dismissed = sessionStorage.getItem('cyberCrimeWarningDismissed');
 
-    if (!dismissed) {
-      const timer = setTimeout(() => {
-        setIsVisible(true);
-      }, 2000); // Show after 2 seconds
+  if (!dismissed) {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 2000);
 
-      return () => clearTimeout(timer); // Cleanup on unmount
-    }
-  }, []);
+    return () => clearTimeout(timer);
+  }
+}, []);
 
-  const handleClose = () => {
-    setIsVisible(false);
-    localStorage.setItem('cyberCrimeWarningDismissed', 'true');
-  };
+
+const handleClose = () => {
+  setIsVisible(false);
+  sessionStorage.setItem('cyberCrimeWarningDismissed', 'true');
+};
+
+
 
   if (!isVisible) return null;
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Leaf, Mail } from 'lucide-react';
+import { Leaf, Mail, Instagram, Youtube } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -12,14 +12,8 @@ const Footer = () => {
           {/* Brand */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <Leaf className="text-green-400 w-6 h-6" />
-              <h3 className="text-xl font-semibold text-white leading-tight">
-                SRI VENKATESWARA AGROS<br />AND HERBS
-              </h3>
+              
             </div>
-            <p className="text-sm text-gray-400">
-              Promoting nature’s purity with herbal and organic products.
-            </p>
           </div>
 
           {/* Quick Links */}
@@ -46,14 +40,9 @@ const Footer = () => {
           <div>
             <h4 className="text-white font-semibold mb-4">Contact</h4>
             <ul className="space-y-4 text-sm">
-               <li className="flex items-start gap-2">
-                <Mail size={26} className="mt-1 text-green-300" />
-              <h1>Official Mail</h1>
-              </li>
               <li className="flex items-start gap-2">
                 <Mail size={26} className="mt-1 text-green-300" />
                 <div>
-                  <span className="text-gray-400 block"></span>
                   <a href="mailto:srivenkateswaraagrosandherbs@gmail.com" className="text-white hover:underline">
                     srivenkateswaraagrosandherbs@gmail.com
                   </a>
@@ -74,6 +63,32 @@ const Footer = () => {
                   <span className="text-gray-400 block">Sales</span>
                   <a href="mailto:svaherbs@gmail.com" className="text-white hover:underline">
                     svaherbs@gmail.com
+                  </a>
+                </div>
+              </li>
+              <li className="flex items-start gap-2">
+                <Instagram size={26} className="mt-1 text-pink-400" />
+                <div>
+                  <a
+                    href="https://www.instagram.com/YOUR_INSTAGRAM"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:underline"
+                  >
+                    @svaherbs
+                  </a>
+                </div>
+              </li>
+              <li className="flex items-start gap-2">
+                <Youtube size={26} className="mt-1 text-red-500" />
+                <div>
+                  <a
+                    href="https://www.youtube.com/YOUR_YOUTUBE_CHANNEL"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:underline"
+                  >
+                    SVAH YouTube Channel
                   </a>
                 </div>
               </li>

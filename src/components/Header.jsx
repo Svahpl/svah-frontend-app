@@ -76,7 +76,7 @@ const Header = () => {
                 type="text"
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                placeholder="Search  products..."
+                placeholder="Search  Typing..."
                 className="w-full py-2 pl-4 pr-10 rounded-full border border-gray-200 shadow-sm focus:ring-2 focus:ring-primary-300 bg-gray-50 focus:bg-white text-gray-700 transition duration-200"
               />
               <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary-700">
@@ -91,7 +91,7 @@ const Header = () => {
               type="text"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              placeholder="Search  products..."
+              placeholder="Search  Typing..."
               className="w-full py-2 pl-5 pr-12 rounded-full border border-gray-200 shadow-sm focus:ring-2 focus:ring-primary-300 bg-gray-50 focus:bg-white text-gray-700 transition duration-200"
             />
             <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-gray-500 hover:text-primary-700">
@@ -126,7 +126,6 @@ const Header = () => {
         <nav className="hidden sm:flex items-center justify-between py-2.5 border-t border-primary-100/50">
           <div className="flex items-center space-x-1">
             <a href="/" className="px-4 py-2 font-medium text-gray-700 hover:text-primary-700 hover:bg-primary-50/60 rounded-md transition">Home</a>
-            <a href="#CategorySection" className="px-4 py-2 font-medium text-gray-700 hover:text-primary-700 hover:bg-primary-50/60 rounded-md transition">Products</a>
             <a href="/About" className="px-4 py-2 font-medium text-gray-700 hover:text-primary-700 hover:bg-primary-50/60 rounded-md transition">About Us</a>
             <a href="#blog" className="px-4 py-2 font-medium text-gray-700 hover:text-primary-700 hover:bg-primary-50/60 rounded-md transition">Blog</a>
             <a href="/Contact" className="px-4 py-2 font-medium text-gray-700 hover:text-primary-700 hover:bg-primary-50/60 rounded-md transition">Contact</a>
@@ -138,7 +137,6 @@ const Header = () => {
           <div className="sm:hidden mt-2 bg-white border-t border-primary-100/50 rounded-b-lg shadow-lg py-4 space-y-3">
             <nav className="flex flex-col space-y-1 px-4">
               <a href="/" onClick={() => setMenuOpen(false)} className="py-3 px-4 text-gray-700 hover:bg-primary-50 rounded-md font-medium">Home</a>
-              <a href="#CategorySection" onClick={() => setMenuOpen(false)} className="py-3 px-4 text-gray-700 hover:bg-primary-50 rounded-md font-medium">Products</a>
               <a href="/About" onClick={() => setMenuOpen(false)} className="py-3 px-4 text-gray-700 hover:bg-primary-50 rounded-md font-medium">About Us</a>
               <a href="#blog" onClick={() => setMenuOpen(false)} className="py-3 px-4 text-gray-700 hover:bg-primary-50 rounded-md font-medium">Blog</a>
               <a href="/Contact" onClick={() => setMenuOpen(false)} className="py-3 px-4 text-gray-700 hover:bg-primary-50 rounded-md font-medium">Contact</a>

@@ -10,7 +10,24 @@ const Contact = () => {
         <h2 className="text-3xl font-heading font-bold text-primary-800 mb-12 text-center">
           Contact Us
         </h2>
-        
+        <div className="bg-gray-100 rounded-lg p-6 mb-6">
+  <h2 className="text-xl font-semibold text-gray-800 mb-4">Emails</h2>
+  <ul className="space-y-3 text-gray-700 text-sm">
+    <li>
+      <span className="font-medium text-gray-900">Official Mail:</span>{' '}
+      srivenkateswaraagrosandherbs@gmail.com
+    </li>
+    <li>
+      <span className="font-medium text-gray-900">Requirements:</span>{' '}
+      Svahpl1@gmail.com
+    </li>
+    <li>
+      <span className="font-medium text-gray-900">Sales:</span>{' '}
+      svaherbs@gmail.com
+    </li>
+  </ul>
+</div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           <RequirementForm />
           <SalesForm />
@@ -39,7 +56,7 @@ const Contact = () => {
 <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
     <div>
-      <h3 className="text-xl font-heading font-semibold text-primary-800 mb-4">Our Address</h3>
+      <h3 className="text-xl font-heading font-semibold text-primary-800 mb-4"> Address</h3>
       
       <div className="flex items-start mb-4">
         <MapPin className="text-primary-600 mt-1 mr-3 shrink-0" size={20} />
