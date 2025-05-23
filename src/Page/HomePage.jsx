@@ -2,6 +2,7 @@ import {
   Slideshow,
   CategorySection,
   Certificates,
+  ContactSection
 } from "../components/compIndex";
 
 const HomePage = () => {
@@ -10,6 +11,7 @@ const HomePage = () => {
       <Slideshow />
       <CategorySection />
       <Certificates />
+      <ContactSection/>
     </>
   );
 };

@@ -12,6 +12,7 @@ import ShippingPolicy from "./components/ShippingPolicy";
 import TermsOfService from "./components/TermsOfService";
 // import PrivacyPolicy from "./components/PrivacyPolicy";
 import { HomePage } from "./Page/pageIndex";
+import ContactSection from "./components/ContactSection";
 
 function App() {
   useEffect(() => {
@@ -35,6 +36,7 @@ function App() {
           {/* <Route path="/privacy-policy" element={<PrivacyPolicy />} /> */}
           <Route path="/about" element={<About />} />
           <Route path="/Contact" element={<Contact />} />
+          <Route path="/DropMSG" element={<ContactSection/>}/>
         </Routes>
         <Footer />
       </div>
