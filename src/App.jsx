@@ -11,7 +11,7 @@ import Footer from "./components/Footer";
 import ShippingPolicy from "./components/ShippingPolicy";
 import TermsOfService from "./components/TermsOfService";
 // import PrivacyPolicy from "./components/PrivacyPolicy";
-import HomePage from "./Page/HomePage";
+import { HomePage } from "./Page/pageIndex";
 
 function App() {
   useEffect(() => {
