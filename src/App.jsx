@@ -11,7 +11,7 @@ import Footer from './components/Footer';
 import ShippingPolicy from './components/ShippingPolicy';
 import TermsOfService from './components/TermsOfService';
 import PrivacyPolicy from './components/PrivacyPolicy';
-
+import ContactSection from './components/ContactSection';
 function App() {
   useEffect(() => {
     document.title = "Sri Venkateswara Agros and Herbs";
@@ -27,6 +27,7 @@ function App() {
       <Slideshow />
       <CategorySection />
       <Certificates />
+      <ContactSection/>
     </>
   );
 
@@ -42,6 +43,7 @@ function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/about" element={<About />} />
           <Route path="/Contact" element={<Contact/>}/>
+          <Route path='/ContactSection' element={<ContactSection/>}/>
         </Routes>
         <Footer />
       </div>

@@ -5,90 +5,91 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-primary-900 text-gray-200 pt-12 pb-8">
+    <footer className="bg-gray-900 text-gray-200 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top Footer */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 border-b border-gray-700 pb-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-gray-700 pb-12">
           {/* Brand */}
-          <div>
-            <div className="flex items-center space-x-2 mb-4">
+          <div className="flex flex-col justify-start">
+            <div className="flex items-center space-x-3 mb-6">
               
+              <span className="text-2xl font-bold text-white"></span>
             </div>
+           
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h4 className="text-white font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-3 text-sm">
-              <li><a href="/" className="hover:text-white transition">Home</a></li>
-              <li><a href="/About" className="hover:text-white transition">About Us</a></li>
-              <li><a href="/contact" className="hover:text-white transition">Contact</a></li>
+          <div className="flex flex-col justify-start">
+            <h4 className="text-xl text-white font-semibold mb-5">QUICK LINKS</h4>
+            <ul className="space-y-4 text-sm">
+              <li><a href="/" className="hover:text-green-400 transition-colors">Home</a></li>
+              <li><a href="/About" className="hover:text-green-400 transition-colors">About Us</a></li>
+              <li><a href="/contact" className="hover:text-green-400 transition-colors">Contact</a></li>
             </ul>
           </div>
 
           {/* Legal */}
-          <div>
-            <h4 className="text-white font-semibold mb-4">Legal</h4>
-            <ul className="space-y-3 text-sm">
-              <li><a href="/privacy-policy" className="hover:text-white transition">Privacy Policy</a></li>
-              <li><a href="/terms-of-service" className="hover:text-white transition">Terms of Service</a></li>
-              <li><a href="/shipping-policy" className="hover:text-white transition">Shipping Policy</a></li>
+          <div className="flex flex-col justify-start">
+            <h4 className="text-xl text-white font-semibold mb-5">LEGAL</h4>
+            <ul className="space-y-4 text-sm">
+              <li><a href="/privacy-policy" className="hover:text-green-400 transition-colors">Privacy Policy</a></li>
+              <li><a href="/terms-of-service" className="hover:text-green-400 transition-colors">Terms of Service</a></li>
+              <li><a href="/shipping-policy" className="hover:text-green-400 transition-colors">Shipping Policy</a></li>
             </ul>
           </div>
 
           {/* Contact Info */}
-          <div>
-            <h4 className="text-white font-semibold mb-4">Contact</h4>
-            <ul className="space-y-4 text-sm">
-              <li className="flex items-start gap-2">
-                <Mail size={26} className="mt-1 text-green-300" />
+          <div className="flex flex-col justify-start">
+            <h4 className="text-xl text-white font-semibold mb-5">CONTACT</h4>
+            <ul className="space-y-5 text-sm">
+              <li className="flex items-start gap-3">
+                <Mail size={24} className="text-green-400 flex-shrink-0 mt-1" />
                 <div>
-                  <a href="mailto:srivenkateswaraagrosandherbs@gmail.com" className="text-white hover:underline">
+                  <a href="mailto:srivenkateswaraagrosandherbs@gmail.com" className="text-white hover:text-green-400 transition-colors">
                     srivenkateswaraagrosandherbs@gmail.com
                   </a>
                 </div>
               </li>
-              <li className="flex items-start gap-2">
-                <Mail size={26} className="mt-1 text-green-300" />
+              <li className="flex items-start gap-3">
+                <Mail size={24} className="text-green-400 flex-shrink-0 mt-1" />
                 <div>
-                  <span className="text-gray-400 block">Requirements</span>
-                  <a href="mailto:Svahpl1@gmail.com" className="text-white hover:underline">
+                  <span className="text-gray-400 block">FOR REQUIREMENTS</span>
+                  <a href="mailto:Svahpl1@gmail.com" className="text-white hover:text-green-400 transition-colors">
                     Svahpl1@gmail.com
                   </a>
                 </div>
               </li>
-              <li className="flex items-start gap-2">
-                <Mail size={26} className="mt-1 text-green-300" />
+              <li className="flex items-start gap-3">
+                <Mail size={24} className="text-green-400 flex-shrink-0 mt-1" />
                 <div>
-                  <span className="text-gray-400 block">Sales</span>
-                  <a href="mailto:svaherbs@gmail.com" className="text-white hover:underline">
+                  <span className="text-gray-400 block">FOR SALES</span>
+                  <a href="mailto:svaherbs@gmail.com" className="text-white hover:text-green-400 transition-colors">
                     svaherbs@gmail.com
                   </a>
                 </div>
               </li>
-              <li className="flex items-start gap-2">
-                <Instagram size={26} className="mt-1 text-pink-400" />
-                <div>
-                  <a
-                    href="https://www.instagram.com/YOUR_INSTAGRAM"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white hover:underline"
-                  >
-                    @svaherbs
+              <li className="flex items-start gap-3">
+                <Instagram size={24} className="text-green-400 flex-shrink-0 mt-1" />
+                <div className="flex items-center flex-wrap gap-2">
+                  <a href="https://www.instagram.com/svah.2021?utm_source=qr&igsh=MTZrbGswaXE4dXhqeA%3D%3D" className="text-white hover:text-green-400 transition-colors" target="_blank" rel="noopener noreferrer">
+                    svah.2021
+                  </a>
+                  <span className="text-gray-400 mx-2">|</span>
+                  <a href="https://www.instagram.com/svah_nurseries?utm_source=qr&igsh=N2Jpb3JwdmJmdmpk" className="text-white hover:text-green-400 transition-colors" target="_blank" rel="noopener noreferrer">
+                    svah_nurseries
                   </a>
                 </div>
               </li>
-              <li className="flex items-start gap-2">
-                <Youtube size={26} className="mt-1 text-red-500" />
+              <li className="flex items-start gap-3">
+                <Youtube size={24} className="text-green-400 flex-shrink-0 mt-1" />
                 <div>
                   <a
-                    href="https://www.youtube.com/YOUR_YOUTUBE_CHANNEL"
+                    href="https://www.youtube.com/@svah-2021"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white hover:underline"
+                    className="text-white hover:text-green-400 transition-colors"
                   >
-                    SVAH YouTube Channel
+                    @svah-2021
                   </a>
                 </div>
               </li>
@@ -97,8 +98,8 @@ const Footer = () => {
         </div>
 
         {/* Bottom Footer */}
-        <div className="pt-6 text-center text-sm text-gray-500">
-          © {currentYear} SRI VENKATESWARA AGROS AND HERBS. All rights reserved.
+        <div className="pt-8 text-center text-sm text-gray-400">
+          © {currentYear} SRI VENKATESWARA AGROS AND HERBS. ALL RIGHTS RESERVED.
         </div>
       </div>
     </footer>
