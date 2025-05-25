@@ -1,4 +1,6 @@
 import React from 'react';
+import { Clock, Truck, Shield } from 'lucide-react';
+
 import { certificates } from '../data/certificates';
 import { Mail } from 'lucide-react';
 import { MapPin } from 'lucide-react';
@@ -45,6 +47,26 @@ const Certificates = () => {
     </div>
   </div>
 </div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div className="bg-white rounded-lg shadow-md p-6 transform hover:scale-105 transition-transform">
+            <Clock className="text-primary-600 w-8 h-8 mb-4" />
+            <h3 className="text-xl font-heading font-semibold text-primary-800 mb-2">Quick Response</h3>
+            <p className="text-neutral-700">We aim to respond to all inquiries within 24 hours during business days.</p>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-md p-6 transform hover:scale-105 transition-transform">
+            <Truck className="text-primary-600 w-8 h-8 mb-4" />
+            <h3 className="text-xl font-heading font-semibold text-primary-800 mb-2">Global Shipping</h3>
+            <p className="text-neutral-700">We ship worldwide with reliable tracking and insurance coverage.</p>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-md p-6 transform hover:scale-105 transition-transform">
+            <Shield className="text-primary-600 w-8 h-8 mb-4" />
+            <h3 className="text-xl font-heading font-semibold text-primary-800 mb-2">Secure Transactions</h3>
+            <p className="text-neutral-700">Your data is protected with industry-standard encryption and security measures.</p>
+          </div>
+        </div>
+        
         {/* Contact Information Section */}
         <div>
           <h3 className="text-xl font-heading font-semibold text-primary-800 mb-4">Contact Information</h3>
