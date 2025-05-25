@@ -15,7 +15,7 @@ import { HomePage } from "./Page/pageIndex";
 
 function App() {
   useEffect(() => {
-    document.title = "Sri Venkateswara Agros and Herbs";
+    document.title = "SVAH | Home";
 
     const titleElement = document.querySelector("title[data-default]");
     if (titleElement) {

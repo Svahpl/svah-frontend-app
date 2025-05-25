@@ -5,7 +5,7 @@ const CyberCrimeWarning = () => {
   const [isVisible, setIsVisible] = useState(false);
 
 useEffect(() => {
-  const dismissed = sessionStorage.getItem('cyberCrimeWarningDismissed');
+  const dismissed = localStorage.getItem('cyberCrimeWarningDismissed');
 
   if (!dismissed) {
     const timer = setTimeout(() => {
@@ -19,7 +19,7 @@ useEffect(() => {
 
 const handleClose = () => {
   setIsVisible(false);
-  sessionStorage.setItem('cyberCrimeWarningDismissed', 'true');
+  localStorage.setItem('cyberCrimeWarningDismissed', 'true');
 };
 
 
