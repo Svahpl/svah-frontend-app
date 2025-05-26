@@ -11,21 +11,24 @@ const Contact = () => {
           Contact Us
         </h2>
         <div className="bg-gray-100 rounded-lg p-6 mb-6">
-  <h2 className="text-xl font-semibold text-gray-800 mb-4">Emails</h2>
-  <ul className="space-y-3 text-gray-700 text-sm">
-    <li>
-      <span className="font-medium text-gray-900">Official Mail:</span>{' '}
-      srivenkateswaraagrosandherbs@gmail.com
-    </li>
-    <li>
-      <span className="font-medium text-gray-900">Requirements:</span>{' '}
-      Svahpl1@gmail.com
-    </li>
-    <li>
-      <span className="font-medium text-gray-900">Sales:</span>{' '}
-      svaherbs@gmail.com
-    </li>
-  </ul>
+
+<ul className="space-y-3 text-gray-700 text-large">
+  <li className="flex items-center gap-2">
+    <Mail className="text-green-600 w-5 h-5" />
+    <span className="font-medium text-gray-900">Official Mail:</span>{' '}
+    srivenkateswaraagrosandherbs@gmail.com
+  </li>
+  <li className="flex items-center gap-2">
+    <Mail className="text-green-600 w-5 h-5" />
+    <span className="font-medium text-gray-900">Requirements:</span>{' '}
+    Svahpl1@gmail.com
+  </li>
+  <li className="flex items-center gap-2">
+    <Mail className="text-green-600 w-5 h-5" />
+    <span className="font-medium text-gray-900">Sales:</span>{' '}
+    svaherbs@gmail.com
+  </li>
+</ul>
 </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
@@ -53,21 +56,7 @@ const Contact = () => {
         
 <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <div>
-      <h3 className="text-xl font-heading font-semibold text-primary-800 mb-4"> Address</h3>
-      
-      <div className="flex items-start mb-4">
-        <MapPin className="text-primary-600 mt-1 mr-3 shrink-0" size={20} />
-        <div>
-          <p className="text-neutral-700">
-            3-1/A, Veerabhadravaram Village,<br />
-            Venkatapuram Mandal,<br />
-            Mulugu District, Telangana, India.<br />
-            PIN: 507136
-          </p>
-        </div>
-      </div>
-    </div>
+    
     
 <div>
   <h3 className="text-xl font-heading font-semibold text-primary-800 mb-4">Contact Information</h3>

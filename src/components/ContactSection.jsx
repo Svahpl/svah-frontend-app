@@ -8,14 +8,17 @@ const ContactSection = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [selectedCountryCode, setSelectedCountryCode] = useState(null);
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
   const onSubmit = (data) => {
-    console.log({ ...data, country: selectedCountry?.value });
+    const fullMobileNumber = selectedCountryCode ? `${selectedCountryCode.phoneCode}${data.mobileNumber}` : data.mobileNumber;
+    console.log({ ...data, country: selectedCountry?.value, mobileNumber: fullMobileNumber });
     setIsSubmitted(true);
     reset();
     setSelectedCountry(null);
+    setSelectedCountryCode(null);
     setTimeout(() => {
       setIsSubmitted(false);
       setIsFormVisible(false); // Hide form after submission
@@ -31,14 +34,14 @@ const ContactSection = () => {
             onClick={() => setIsFormVisible(!isFormVisible)}
             className="inline-flex items-center gap-2 bg-primary-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
-            <Mail size={0} className="text-white" />
+            <Mail size={20} className="text-white" />
             DROP US A MESSAGE FOR REQUIREMENT
           </button>
           <button
             onClick={() => setIsFormVisible(!isFormVisible)}
             className="inline-flex items-center gap-2 bg-primary-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
-            <Mail size={0} className="text-white" />
+            <Mail size={20} className="text-white" />
             DROP US A MESSAGE FOR SALES
           </button>
         </div>
@@ -71,7 +74,7 @@ const ContactSection = () => {
                   className={`w-full px-3 py-2 border ${
                     errors.fullName ? 'border-error-500' : 'border-neutral-300'
                   } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-                  placeholder="full name"
+                  placeholder="Full name"
                   {...register('fullName', { required: 'Full name is required' })}
                 />
                 {errors.fullName && (
@@ -89,7 +92,7 @@ const ContactSection = () => {
                   className={`w-full px-3 py-2 border ${
                     errors.companyName ? 'border-error-500' : 'border-neutral-300'
                   } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-                  placeholder="company name"
+                  placeholder="Company name"
                   {...register('companyName', { required: 'Company name is required' })}
                 />
                 {errors.companyName && (
@@ -107,7 +110,7 @@ const ContactSection = () => {
                   className={`w-full px-3 py-2 border ${
                     errors.companyEmail ? 'border-error-500' : 'border-neutral-300'
                   } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-                  placeholder="company email"
+                  placeholder="Company email"
                   {...register('companyEmail', {
                     required: 'Email is required',
                     pattern: {
@@ -129,7 +132,10 @@ const ContactSection = () => {
                   id="country"
                   options={countries}
                   value={selectedCountry}
-                  onChange={setSelectedCountry}
+                  onChange={(option) => {
+                    setSelectedCountry(option);
+                    setSelectedCountryCode(option); // Sync country code with country selection
+                  }}
                   placeholder="Select your country"
                   className="text-base"
                   classNames={{
@@ -137,10 +143,16 @@ const ContactSection = () => {
                       `!border ${
                         state.isFocused
                           ? '!border-primary-500 !shadow-md !ring-2 !ring-primary-200'
+                          : errors.country
+                          ? '!border-error-500'
                           : '!border-neutral-300'
                       } !rounded-md !bg-white`,
                   }}
+                  {...register('country', { required: 'Country is required' })}
                 />
+                {errors.country && (
+                  <p className="mt-1 text-sm text-error-600">{errors.country.message}</p>
+                )}
               </div>
 
               <div>
@@ -169,7 +181,7 @@ const ContactSection = () => {
                   id="websiteLink"
                   type="url"
                   className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  placeholder="https://svahpl.com"
+                  placeholder="https://example.com"
                   {...register('websiteLink')}
                 />
               </div>
@@ -178,15 +190,47 @@ const ContactSection = () => {
                 <label htmlFor="mobileNumber" className="block text-sm font-medium text-neutral-700 mb-1">
                   MOBILE NUMBER
                 </label>
-                <input
-                  id="mobileNumber"
-                  type="tel"
-                  className={`w-full px-3 py-2 border ${
-                    errors.mobileNumber ? 'border-error-500' : 'border-neutral-300'
-                  } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-                  placeholder="mobile number"
-                  {...register('mobileNumber', { required: 'Mobile number is required' })}
-                />
+                <div className="flex gap-2">
+                  <Select
+                    id="countryCode"
+                    options={countries}
+                    value={selectedCountryCode}
+                    onChange={setSelectedCountryCode}
+                    placeholder="Code"
+                    getOptionLabel={(option) => option.phoneCode}
+                    getOptionValue={(option) => option.phoneCode}
+                    className="w-1/4 text-base"
+                    classNames={{
+                      control: (state) =>
+                        `!border ${
+                          state.isFocused
+                            ? '!border-primary-500 !shadow-md !ring-2 !ring-primary-200'
+                            : errors.countryCode
+                            ? '!border-error-500'
+                            : '!border-neutral-300'
+                        } !rounded-md !bg-white`,
+                    }}
+                    {...register('countryCode', { required: 'Country code is required' })}
+                  />
+                  <input
+                    id="mobileNumber"
+                    type="tel"
+                    className={`w-3/4 px-3 py-2 border ${
+                      errors.mobileNumber ? 'border-error-500' : 'border-neutral-300'
+                    } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
+                    placeholder="Mobile number"
+                    {...register('mobileNumber', {
+                      required: 'Mobile number is required',
+                      pattern: {
+                        value: /^\d{7,15}$/,
+                        message: 'Mobile number must be 7-15 digits',
+                      },
+                    })}
+                  />
+                </div>
+                {errors.countryCode && (
+                  <p className="mt-1 text-sm text-error-600">{errors.countryCode.message}</p>
+                )}
                 {errors.mobileNumber && (
                   <p className="mt-1 text-sm text-error-600">{errors.mobileNumber.message}</p>
                 )}
