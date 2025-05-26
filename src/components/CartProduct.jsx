@@ -100,46 +100,37 @@ const CartProduct = ({
         </div>
 
         {/* Cart Action Buttons */}
-        <div className="flex mt-4 ml-4 gap-3 items-center">
-          {/* Quantity Controller */}
-          <div className="relative w-32 border-2 border-green-200 bg-white rounded-full py-2 text-center shadow-sm hover:shadow-md transition-all duration-200">
+        <div className="flex mt-2 h-20 ml-2 gap-4 items-center">
+          <div className="relative w-32 ml-1 border-green bg-white rounded-full py-1 text-center">
             <button
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-red-500 cursor-pointer transition-colors duration-200 hover:scale-110"
+              className="absolute left-2 top-1/2 -translate-y-1/2 cursor-pointer hover:text-red-500 transition-colors duration-200"
               onClick={handleQuantityDecrease}
               disabled={product.quantity <= 1}
             >
-              <Trash2 size={16} />
+              <Trash2 size={18} />
             </button>
-            <span className="block text-sm font-semibold text-gray-800">
-              {product.quantity}
-            </span>
+            <span className="block text-sm">{product.quantity}</span>
             <button
-              className="absolute right-3 top-1/2 -translate-y-1/2 font-bold text-lg text-gray-600 hover:text-green-500 cursor-pointer transition-colors duration-200 hover:scale-110"
+              className="absolute right-2 top-1/2 -translate-y-1/2 font-bold text-lg cursor-pointer hover:text-green-500 transition-colors duration-200"
               onClick={handleQuantityIncrease}
             >
               +
             </button>
           </div>
 
-          {/* Delete Button */}
-          <button
-            className="w-20 border-2 border-red-200 bg-white rounded-full py-2 text-center hover:bg-red-50 hover:border-red-300 cursor-pointer transition-all duration-200 hover:shadow-md"
+          <div
+            className="relative ml-2 w-20 border-green bg-white rounded-full py-1 text-center flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors duration-200"
             onClick={handleDelete}
           >
-            <span className="block text-sm font-medium text-red-600 hover:text-red-700">
-              Delete
-            </span>
-          </button>
+            <span className="block text-sm">Delete</span>
+          </div>
 
-          {/* Add to Wishlist Button */}
-          <button
-            className="w-36 border-2 border-blue-200 bg-white rounded-full py-2 text-center hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-all duration-200 hover:shadow-md"
+          <div
+            className="ml-2 w-32 mx-2 border-green bg-white rounded-full py-1 text-center flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors duration-200"
             onClick={handleAddToWishlist}
           >
-            <span className="capitalize text-sm font-medium text-blue-600 hover:text-blue-700">
-              add to wishlist
-            </span>
-          </button>
+            <span className="capitalize text-sm">add to wishlist</span>
+          </div>
         </div>
       </div>
     </div>
