@@ -21,6 +21,7 @@ const Footer = () => {
     {
       icon: <Mail size={24} className="text-green-400 flex-shrink-0 mt-1" />,
       label: 'OFFICIAL MAIL',
+      subLabel: 'OFFICIAL MAIL',
       content: (
         <a
           href="mailto:srivenkateswaraagrosandherbs@gmail.com"
