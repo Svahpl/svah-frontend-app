@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bg-green {
+  background-color: #1d3825;
+}
+
+.font-green {
+  color: #1d3825;
+}
+
+.border-green {
+  border: #1d3825 solid 2px;
+}
+
+@media screen and (max-width: 768px) {
+  .bg-mobile-green {
+    background-color: #1d3825;
+  }
+}

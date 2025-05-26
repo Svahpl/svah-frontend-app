@@ -13,7 +13,7 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const [cartCount, setCartCount] = useState(3);
+  const [cartCount, setCartCount] = useState(1);
 
   // Get auth state and user data
   const { isLoaded: authLoaded, isSignedIn } = useAuth();
@@ -155,7 +155,7 @@ const Header = () => {
               {/* MOBILE DEVICE LEFT-TOP NAVBAR LOGO TEXT */}
               <div className="block md:hidden">
                 <h1 className="text-lg font-bold text-primary-900 leading-tight">
-                  <span className="font-serif tracking-wide">SVAH</span>
+                  <span className="font-serif tracking-wide">SVAH |</span>
                   <span className="font-serif tracking-wide"> Store</span>
                   <br />
                 </h1>
@@ -170,7 +170,7 @@ const Header = () => {
               </div>
 
               <a
-                href="#"
+                href="/cart"
                 className="relative text-gray-600 hover:text-primary-700"
               >
                 <ShoppingCart size={20} />
@@ -201,7 +201,7 @@ const Header = () => {
                 type="text"
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                placeholder="Search  Typing..."
+                placeholder="Search  svahpl agros & herbs store"
                 className="w-full py-2 pl-4 pr-10 rounded-full border border-gray-200 shadow-sm focus:ring-2 focus:ring-primary-300 bg-gray-50 focus:bg-white text-gray-700 transition duration-200"
               />
               <button
@@ -239,7 +239,7 @@ const Header = () => {
             <AuthComponent isMobile={false} />
 
             <a
-              href="#"
+              href="/cart"
               className="relative group flex flex-col items-center transition hover:scale-105"
             >
               <div className="p-2.5 rounded-full bg-gradient-to-br from-primary-50 to-primary-100 group-hover:shadow-lg transition">
@@ -265,6 +265,12 @@ const Header = () => {
               className="px-4 py-2 font-medium text-gray-700 hover:text-primary-700 hover:bg-primary-50/60 rounded-md transition"
             >
               Home
+            </a>
+            <a
+              href="/"
+              className="px-4 py-2 font-medium text-gray-700 hover:text-primary-700 hover:bg-primary-50/60 rounded-md transition"
+            >
+              My Account
             </a>
             <a
               href="/About"
@@ -297,6 +303,13 @@ const Header = () => {
                 className="py-3 px-4 text-gray-700 hover:bg-primary-50 rounded-md font-medium"
               >
                 Home
+              </a>
+              <a
+                href="/my-account"
+                onClick={() => setMenuOpen(false)}
+                className="py-3 px-4 text-gray-700 hover:bg-primary-50 rounded-md font-medium"
+              >
+                My Account
               </a>
               <a
                 href="/About"

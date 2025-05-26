@@ -11,7 +11,7 @@ import Footer from "./components/Footer";
 import ShippingPolicy from "./components/ShippingPolicy";
 import TermsOfService from "./components/TermsOfService";
 // import PrivacyPolicy from "./components/PrivacyPolicy";
-import { HomePage } from "./Page/pageIndex";
+import { HomePage, CartPage } from "./Page/pageIndex";
 
 function App() {
   useEffect(() => {
@@ -30,6 +30,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/cart" element={<CartPage />} />
           <Route path="/shipping-policy" element={<ShippingPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           {/* <Route path="/privacy-policy" element={<PrivacyPolicy />} /> */}
