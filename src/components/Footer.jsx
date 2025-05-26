@@ -16,7 +16,7 @@ const Footer = () => {
     { label: 'Terms of Service', href: '/terms-of-service' },
     { label: 'Shipping Policy', href: '/shipping-policy' },
   ];
-
+//Weborium.site
   const contactItems = [
     {
       icon: <Mail size={24} className="text-green-400 flex-shrink-0 mt-1" />,
