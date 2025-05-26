@@ -11,12 +11,11 @@ import Footer from "./components/Footer";
 import ShippingPolicy from "./components/ShippingPolicy";
 import TermsOfService from "./components/TermsOfService";
 // import PrivacyPolicy from "./components/PrivacyPolicy";
-import { HomePage } from "./Page/pageIndex";
-import ContactSection from "./components/ContactSection";
+import { HomePage, CartPage } from "./Page/pageIndex";
 
 function App() {
   useEffect(() => {
-    document.title = "Sri Venkateswara Agros and Herbs";
+    document.title = "SVAH | Home";
 
     const titleElement = document.querySelector("title[data-default]");
     if (titleElement) {
@@ -31,12 +30,12 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/cart" element={<CartPage />} />
           <Route path="/shipping-policy" element={<ShippingPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           {/* <Route path="/privacy-policy" element={<PrivacyPolicy />} /> */}
           <Route path="/about" element={<About />} />
           <Route path="/Contact" element={<Contact />} />
-          <Route path="/DropMSG" element={<ContactSection/>}/>
         </Routes>
         <Footer />
       </div>

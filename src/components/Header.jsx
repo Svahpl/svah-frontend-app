@@ -5,13 +5,19 @@ import {
   SignedOut,
   SignInButton,
   UserButton,
+  useAuth,
+  useUser,
 } from "@clerk/clerk-react";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const [cartCount, setCartCount] = useState(3);
+  const [cartCount, setCartCount] = useState(1);
+
+  // Get auth state and user data
+  const { isLoaded: authLoaded, isSignedIn } = useAuth();
+  const { isLoaded: userLoaded, user } = useUser();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -22,6 +28,91 @@ const Header = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     console.log("Search:", searchText);
+  };
+
+  // Auth component that handles loading states properly
+  const AuthComponent = ({ isMobile = false }) => {
+    // Show loading placeholder while auth is loading
+    if (!authLoaded) {
+      return (
+        <div
+          className={`group flex flex-col items-center transition ${
+            isMobile ? "" : "hover:scale-105"
+          }`}
+        >
+          <div
+            className={`${
+              isMobile ? "p-1" : "p-2.5"
+            } rounded-full bg-gradient-to-br from-primary-50 to-primary-100 animate-pulse`}
+          >
+            <User
+              size={isMobile ? 20 : 20}
+              className="text-primary-700 opacity-50"
+            />
+          </div>
+          {!isMobile && <span className="text-xs text-gray-400">Account</span>}
+        </div>
+      );
+    }
+
+    // Once loaded, show appropriate auth state
+    return (
+      <>
+        <SignedOut>
+          <SignInButton mode="modal">
+            <button
+              className={`group flex flex-col items-center transition ${
+                isMobile ? "" : "hover:scale-105"
+              }`}
+            >
+              <div
+                className={`${
+                  isMobile ? "p-1" : "p-2.5"
+                } rounded-full bg-gradient-to-br from-primary-50 to-primary-100 group-hover:shadow-lg transition`}
+              >
+                <User size={isMobile ? 20 : 20} className="text-primary-700" />
+              </div>
+              {!isMobile && (
+                <span className="text-xs text-gray-600 group-hover:text-primary-700">
+                  Sign In
+                </span>
+              )}
+            </button>
+          </SignInButton>
+        </SignedOut>
+        <SignedIn>
+          <div
+            className={`flex flex-col items-center ${
+              isMobile ? "" : "group transition hover:scale-105"
+            }`}
+          >
+            <div
+              className={`${
+                isMobile ? "p-1" : "p-2.5"
+              } rounded-full bg-gradient-to-br from-primary-50 to-primary-100 ${
+                isMobile ? "" : "group-hover:shadow-lg"
+              } transition flex items-center justify-center`}
+            >
+              <UserButton
+                afterSignOutUrl="/"
+                appearance={{
+                  elements: {
+                    avatarBox: isMobile ? "w-5 h-5" : "w-5 h-5",
+                    userButtonPopoverCard: "shadow-xl border border-gray-200",
+                    userButtonPopoverActionButton: "hover:bg-primary-50",
+                  },
+                }}
+              />
+            </div>
+            {!isMobile && (
+              <span className="text-xs text-gray-600 group-hover:text-primary-700">
+                Account
+              </span>
+            )}
+          </div>
+        </SignedIn>
+      </>
+    );
   };
 
   return (
@@ -45,7 +136,8 @@ const Header = () => {
                   />
                 </div>
               </div>
-              <div>
+              {/* DESKTOP DEVICE LEFT-TOP NAVBAR LOGO TEXT */}
+              <div className="hidden md:block">
                 <h1 className="text-lg font-bold text-primary-900 leading-tight">
                   <span className="font-serif tracking-wide">
                     SRI VENKATESWARA
@@ -60,33 +152,25 @@ const Header = () => {
                   </span>
                 </h1>
               </div>
+              {/* MOBILE DEVICE LEFT-TOP NAVBAR LOGO TEXT */}
+              <div className="block md:hidden">
+                <h1 className="text-lg font-bold text-primary-900 leading-tight">
+                  <span className="font-serif tracking-wide">SVAH |</span>
+                  <span className="font-serif tracking-wide"> Store</span>
+                  <br />
+                </h1>
+              </div>
             </a>
 
             {/* Mobile Icons - Right Side */}
             <div className="flex items-center space-x-4 sm:hidden">
               {/* Mobile Clerk Auth */}
               <div className="text-gray-600 hover:text-primary-700">
-                <SignedOut>
-                  <SignInButton mode="modal">
-                    <button className="p-1">
-                      <User size={20} />
-                    </button>
-                  </SignInButton>
-                </SignedOut>
-                <SignedIn>
-                  <UserButton
-                    afterSignOutUrl="/"
-                    appearance={{
-                      elements: {
-                        avatarBox: "w-5 h-5",
-                      },
-                    }}
-                  />
-                </SignedIn>
+                <AuthComponent isMobile={true} />
               </div>
 
               <a
-                href="#"
+                href="/cart"
                 className="relative text-gray-600 hover:text-primary-700"
               >
                 <ShoppingCart size={20} />
@@ -117,7 +201,7 @@ const Header = () => {
                 type="text"
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                placeholder="Search  Typing..."
+                placeholder="Search  svahpl agros & herbs store"
                 className="w-full py-2 pl-4 pr-10 rounded-full border border-gray-200 shadow-sm focus:ring-2 focus:ring-primary-300 bg-gray-50 focus:bg-white text-gray-700 transition duration-200"
               />
               <button
@@ -152,40 +236,10 @@ const Header = () => {
           {/* Icons - Desktop */}
           <div className="hidden sm:flex items-center gap-6">
             {/* Desktop Clerk Auth */}
-            <div className="group flex flex-col items-center transition hover:scale-105">
-              <SignedOut>
-                <SignInButton mode="modal">
-                  <button className="group flex flex-col items-center transition hover:scale-105">
-                    <div className="p-2.5 rounded-full bg-gradient-to-br from-primary-50 to-primary-100 group-hover:shadow-lg transition">
-                      <User size={20} className="text-primary-700" />
-                    </div>
-                    <span className="text-xs text-gray-600 group-hover:text-primary-700">
-                      Sign In
-                    </span>
-                  </button>
-                </SignInButton>
-              </SignedOut>
-              <SignedIn>
-                <div className="flex flex-col items-center">
-                  <div className="p-2.5 rounded-full bg-gradient-to-br from-primary-50 to-primary-100 group-hover:shadow-lg transition">
-                    <UserButton
-                      afterSignOutUrl="/"
-                      appearance={{
-                        elements: {
-                          avatarBox: "w-5 h-5",
-                        },
-                      }}
-                    />
-                  </div>
-                  <span className="text-xs text-gray-600 group-hover:text-primary-700">
-                    Account
-                  </span>
-                </div>
-              </SignedIn>
-            </div>
+            <AuthComponent isMobile={false} />
 
             <a
-              href="#"
+              href="/cart"
               className="relative group flex flex-col items-center transition hover:scale-105"
             >
               <div className="p-2.5 rounded-full bg-gradient-to-br from-primary-50 to-primary-100 group-hover:shadow-lg transition">
@@ -211,6 +265,12 @@ const Header = () => {
               className="px-4 py-2 font-medium text-gray-700 hover:text-primary-700 hover:bg-primary-50/60 rounded-md transition"
             >
               Home
+            </a>
+            <a
+              href="/"
+              className="px-4 py-2 font-medium text-gray-700 hover:text-primary-700 hover:bg-primary-50/60 rounded-md transition"
+            >
+              My Account
             </a>
             <a
               href="/About"
@@ -243,6 +303,13 @@ const Header = () => {
                 className="py-3 px-4 text-gray-700 hover:bg-primary-50 rounded-md font-medium"
               >
                 Home
+              </a>
+              <a
+                href="/my-account"
+                onClick={() => setMenuOpen(false)}
+                className="py-3 px-4 text-gray-700 hover:bg-primary-50 rounded-md font-medium"
+              >
+                My Account
               </a>
               <a
                 href="/About"
