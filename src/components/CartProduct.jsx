@@ -3,7 +3,7 @@ import { Package, Trash2 } from "lucide-react";
 const CartProduct = ({
   product = {
     id: 1,
-    image: "https://m.media-amazon.com/images/I/61328ii81+L._AC_AA270_.jpg",
+    image: "https://www.svahpl.com/images/slide1.jpg",
     title:
       "Biotique Micro Clove Action Toothpaste - For Teeth Whitening - 140gm (Pack of 2) Toothpaste (280 g, Pack of 2)",
     price: 1999,

@@ -222,7 +222,7 @@ const Header = () => {
               type="text"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              placeholder="Search  Typing..."
+              placeholder="Search  svahpl agros & herbs store"
               className="w-full py-2 pl-5 pr-12 rounded-full border border-gray-200 shadow-sm focus:ring-2 focus:ring-primary-300 bg-gray-50 focus:bg-white text-gray-700 transition duration-200"
             />
             <button
