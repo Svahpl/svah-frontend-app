@@ -2,6 +2,7 @@ import {
   Slideshow,
   CategorySection,
   Certificates,
+  ContactSection
 } from "../components/compIndex";
 
 import { useAuth, useUser } from "@clerk/clerk-react";
@@ -42,6 +43,7 @@ const HomePage = () => {
       <Slideshow />
       <CategorySection />
       <Certificates />
+      <ContactSection/>
     </>
   );
 };

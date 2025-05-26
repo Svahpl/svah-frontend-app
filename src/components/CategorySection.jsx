@@ -40,6 +40,7 @@ const CategorySection = () => {
           ))}
         </div>
       </div>
+      
     </section>
   );
 };
