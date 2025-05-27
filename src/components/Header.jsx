@@ -267,7 +267,7 @@ const Header = () => {
               Home
             </a>
             <a
-              href="/"
+              href="/my-account"
               className="px-4 py-2 font-medium text-gray-700 hover:text-primary-700 hover:bg-primary-50/60 rounded-md transition"
             >
               My Account
