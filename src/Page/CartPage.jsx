@@ -1,18 +1,9 @@
-import { MapPin } from "lucide-react";
-import CartProduct from "../components/CartProduct";
+import { CartProduct, LocationUI } from "../components/compIndex";
 
 const CartPage = () => {
   return (
     <>
-      {/* Location UI */}
-      <div className="bg-mobile-green lg:bg-white lg:text-black text-white h-10 content-center lg:max-w-7xl lg:mx-auto lg:px-4 sm:px-6">
-        <span className="flex">
-          <MapPin className="mx-2" size={20} /> Deliver to Viral{" "}
-          <span className="ml-2">-</span>
-          <span className="city-name ml-2">Junagadh 362001</span>
-        </span>
-      </div>
-
+      <LocationUI />
       {/* Cart Links */}
       <div className="bg-gray-100 lg:bg-white h-9 font-medium text-black lg:max-w-7xl lg:mx-auto lg:px-4 sm:px-6">
         <ul className="flex content-center">
