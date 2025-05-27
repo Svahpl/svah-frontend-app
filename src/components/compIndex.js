@@ -1,6 +1,8 @@
 import Slideshow from "./Slideshow";
 import CategorySection from "./CategorySection";
 import Certificates from "./Certificates";
-import cartProduct from "./CartProduct";
+import CartProduct from "./CartProduct";
 import ContactSection from "./ContactSection";
-export { Slideshow, CategorySection, Certificates ,ContactSection , cartProduct};
+import LocationUI from "./LocationUI";
+
+export { Slideshow, CategorySection, Certificates ,ContactSection , CartProduct , LocationUI };
