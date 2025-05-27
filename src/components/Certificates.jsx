@@ -32,21 +32,7 @@ const Certificates = () => {
           ))}
         </div>
         
-<div>
-  <h3 className="text-xl font-heading font-semibold text-primary-800 mb-4">Address</h3>
 
-  <div className="flex items-start mb-4">
-    <MapPin className="text-primary-600 mt-1 mr-3 shrink-0" size={20} />
-    <div>
-      <p className="text-neutral-700">
-        3-1/A, Veerabhadravaram Village,<br />
-        Venkatapuram Mandal,<br />
-        Mulugu District, Telangana, India.<br />
-        PIN: 507136
-      </p>
-    </div>
-  </div>
-</div>
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="bg-white rounded-lg shadow-md p-6 transform hover:scale-105 transition-transform">
             <Clock className="text-primary-600 w-8 h-8 mb-4" />
@@ -66,7 +52,21 @@ const Certificates = () => {
             <p className="text-neutral-700">Your data is protected with industry-standard encryption and security measures.</p>
           </div>
         </div>
-        
+        <div>
+  <h3 className="text-xl font-heading font-semibold text-primary-800 mb-4">Address</h3>
+
+  <div className="flex items-start mb-4">
+    <MapPin className="text-primary-600 mt-1 mr-3 shrink-0" size={20} />
+    <div>
+      <p className="text-neutral-700">
+        3-1/A, Veerabhadravaram Village,<br />
+        Venkatapuram Mandal,<br />
+        Mulugu District, Telangana, India.<br />
+        PIN: 507136
+      </p>
+    </div>
+  </div>
+</div>
         {/* Contact Information Section */}
         <div>
           <h3 className="text-xl font-heading font-semibold text-primary-800 mb-4">Contact Information</h3>

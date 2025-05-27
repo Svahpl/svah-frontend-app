@@ -65,16 +65,15 @@ const ContactSection = () => {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div>
-                <label htmlFor="fullName" className="block text-sm font-medium text-neutral-700 mb-1">
-                  FULL NAME
+                <label htmlFor="Enter Full Name" className="block text-sm font-medium text-neutral-700 mb-1">
                 </label>
                 <input
-                  id="fullName"
+                  id="Enter Full Name"
                   type="text"
                   className={`w-full px-3 py-2 border ${
                     errors.fullName ? 'border-error-500' : 'border-neutral-300'
                   } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-                  placeholder="Full name"
+                  placeholder="Enter full name"
                   {...register('fullName', { required: 'Full name is required' })}
                 />
                 {errors.fullName && (
@@ -84,7 +83,6 @@ const ContactSection = () => {
 
               <div>
                 <label htmlFor="companyName" className="block text-sm font-medium text-neutral-700 mb-1">
-                  COMPANY NAME
                 </label>
                 <input
                   id="companyName"
@@ -92,7 +90,8 @@ const ContactSection = () => {
                   className={`w-full px-3 py-2 border ${
                     errors.companyName ? 'border-error-500' : 'border-neutral-300'
                   } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-                  placeholder="Company name"
+                  placeholder="Enter company name 
+"
                   {...register('companyName', { required: 'Company name is required' })}
                 />
                 {errors.companyName && (
@@ -102,7 +101,7 @@ const ContactSection = () => {
 
               <div>
                 <label htmlFor="companyEmail" className="block text-sm font-medium text-neutral-700 mb-1">
-                  COMPANY EMAIL
+              
                 </label>
                 <input
                   id="companyEmail"
@@ -110,7 +109,7 @@ const ContactSection = () => {
                   className={`w-full px-3 py-2 border ${
                     errors.companyEmail ? 'border-error-500' : 'border-neutral-300'
                   } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-                  placeholder="Company email"
+                  placeholder="Enter company email"
                   {...register('companyEmail', {
                     required: 'Email is required',
                     pattern: {
@@ -126,7 +125,6 @@ const ContactSection = () => {
 
               <div>
                 <label htmlFor="country" className="block text-sm font-medium text-neutral-700 mb-1">
-                  COUNTRY
                 </label>
                 <Select
                   id="country"
@@ -136,7 +134,7 @@ const ContactSection = () => {
                     setSelectedCountry(option);
                     setSelectedCountryCode(option); // Sync country code with country selection
                   }}
-                  placeholder="Select your country"
+                  placeholder="Select country"
                   className="text-base"
                   classNames={{
                     control: (state) =>
@@ -157,7 +155,7 @@ const ContactSection = () => {
 
               <div>
                 <label htmlFor="companyAddress" className="block text-sm font-medium text-neutral-700 mb-1">
-                  COMPANY ADDRESS
+            
                 </label>
                 <textarea
                   id="companyAddress"
@@ -165,7 +163,7 @@ const ContactSection = () => {
                   className={`w-full px-3 py-2 border ${
                     errors.companyAddress ? 'border-error-500' : 'border-neutral-300'
                   } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-                  placeholder="Your company address"
+                  placeholder="Enter company address"
                   {...register('companyAddress', { required: 'Company address is required' })}
                 />
                 {errors.companyAddress && (
@@ -175,20 +173,19 @@ const ContactSection = () => {
 
               <div>
                 <label htmlFor="websiteLink" className="block text-sm font-medium text-neutral-700 mb-1">
-                  WEBSITE LINK
+                  
                 </label>
                 <input
                   id="websiteLink"
                   type="url"
                   className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  placeholder="https://example.com"
+                  placeholder="Enter website link "
                   {...register('websiteLink')}
                 />
               </div>
 
               <div>
                 <label htmlFor="mobileNumber" className="block text-sm font-medium text-neutral-700 mb-1">
-                  MOBILE NUMBER
                 </label>
                 <div className="flex gap-2">
                   <Select
@@ -218,8 +215,8 @@ const ContactSection = () => {
                     className={`w-3/4 px-3 py-2 border ${
                       errors.mobileNumber ? 'border-error-500' : 'border-neutral-300'
                     } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-                    placeholder="Mobile number"
-                    {...register('mobileNumber', {
+                    placeholder="Type number"
+                    {...register('Type number', {
                       required: 'Mobile number is required',
                       pattern: {
                         value: /^\d{7,15}$/,
@@ -238,7 +235,7 @@ const ContactSection = () => {
 
               <div>
                 <label htmlFor="requirements" className="block text-sm font-medium text-neutral-700 mb-1">
-                  DESCRIBE REQUIREMENTS
+            
                 </label>
                 <textarea
                   id="requirements"
@@ -246,7 +243,7 @@ const ContactSection = () => {
                   className={`w-full px-3 py-2 border ${
                     errors.requirements ? 'border-error-500' : 'border-neutral-300'
                   } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-                  placeholder="Describe requirements"
+                  placeholder="Please describe your requirements"
                   {...register('requirements', { required: 'Requirements description is required' })}
                 />
                 {errors.requirements && (
@@ -256,13 +253,12 @@ const ContactSection = () => {
 
               <div>
                 <label htmlFor="message" className="block text-sm font-medium text-neutral-700 mb-1">
-                  MESSAGE
                 </label>
                 <textarea
                   id="message"
                   rows={3}
                   className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  placeholder="Additional message"
+                  placeholder=" message"
                   {...register('message')}
                 />
               </div>
