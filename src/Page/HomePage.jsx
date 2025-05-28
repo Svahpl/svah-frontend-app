@@ -2,10 +2,11 @@ import {
   Slideshow,
   CategorySection,
   Certificates,
-  ContactSection
+  ContactSection,
 } from "../components/compIndex";
 
 import { useAuth, useUser } from "@clerk/clerk-react";
+import axios from "axios";
 import { useEffect } from "react";
 
 const HomePage = () => {
@@ -24,14 +25,22 @@ const HomePage = () => {
       });
 
       if (user) {
-        console.log(
-          "user:",
-          user?.firstName,
-          user?.lastName,
-          user?.imageUrl,
-          user?.verification?.verification,
-          user?.primaryEmailAddress?.emailAddress
+        const signupResponse = axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`,
+          {
+            FirstName: user?.firstName,
+            LastName: user?.lastName,
+            Email: user?.primaryEmailAddress?.emailAddress,
+          }
         );
+        // console.log(
+        //   "user:",
+        //   user?.firstName,
+        //   user?.lastName,
+        //   user?.imageUrl,
+        //   user?.verification?.verification,
+        //   user?.primaryEmailAddress?.emailAddress
+        // );
       } else {
         console.log("user is undefined or not available yet");
       }
@@ -43,7 +52,7 @@ const HomePage = () => {
       <Slideshow />
       <CategorySection />
       <Certificates />
-      <ContactSection/>
+      <ContactSection />
     </>
   );
 };
