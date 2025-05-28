@@ -2,48 +2,71 @@ import {
   Slideshow,
   CategorySection,
   Certificates,
-  ContactSection
+  ContactSection,
 } from "../components/compIndex";
-
+import { useState, useEffect } from "react";
 import { useAuth, useUser } from "@clerk/clerk-react";
-import { useEffect } from "react";
+import axios from "axios";
 
 const HomePage = () => {
   const { isLoaded, isSignedIn, userId, sessionId, getToken } = useAuth();
   const { user } = useUser();
+  const [token, setToken] = useState("");
 
+  // Get token once auth is loaded and user is signed in
   useEffect(() => {
-    if (isLoaded) {
-      console.log("isLoaded:", isLoaded);
-      console.log("isSignedIn:", isSignedIn);
-      console.log("userId:", userId);
-      console.log("sessionId:", sessionId);
-
-      getToken().then((token) => {
-        console.log("getToken result:", token);
-      });
-
-      if (user) {
-        console.log(
-          "user:",
-          user?.firstName,
-          user?.lastName,
-          user?.imageUrl,
-          user?.verification?.verification,
-          user?.primaryEmailAddress?.emailAddress
-        );
-      } else {
-        console.log("user is undefined or not available yet");
-      }
+    if (isLoaded && isSignedIn) {
+      getToken()
+        .then((t) => {
+          setToken(t);
+          console.log("Token obtained:", t);
+        })
+        .catch((err) => {
+          console.error("Failed to get token:", err);
+        });
     }
-  }, [isLoaded, isSignedIn, userId, sessionId, getToken, user]);
+  }, [isLoaded, isSignedIn, getToken]);
+
+  // Make API calls once token and user are ready
+  useEffect(() => {
+    const sendUserData = async () => {
+      if (!token || !user) return;
+      try {
+        const signupResponse = await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`,
+          {
+            clerkUserId: user.id,
+            FirstName: user.firstName,
+            lastName: user.lastName,
+            Email: user.primaryEmailAddress?.emailAddress,
+            ProfileImage:user.imageUrl
+          }
+        );
+        console.log("Signup response:", signupResponse.data);
+
+        const protectedResponse = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/protected`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Protected response:", protectedResponse.data);
+      } catch (error) {
+        console.error("API call failed:", error);
+      }
+    };
+
+    sendUserData();
+  }, [token, user]);
 
   return (
     <>
       <Slideshow />
       <CategorySection />
       <Certificates />
-      <ContactSection/>
+      <ContactSection />
     </>
   );
 };
