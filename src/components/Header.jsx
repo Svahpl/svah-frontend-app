@@ -55,7 +55,6 @@ const Header = () => {
       );
     }
 
-    // Once loaded, show appropriate auth state
     return (
       <>
         <SignedOut>
@@ -209,7 +208,7 @@ const Header = () => {
                 type="text"
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                placeholder="Search svahpl agros & herbs store"
+                placeholder="Search"
                 className="w-full py-2 pl-4 pr-10 rounded-full border border-gray-200 shadow-sm focus:ring-2 focus:ring-primary-300 bg-gray-50 focus:bg-white text-gray-700 transition duration-200"
               />
               <button
@@ -230,7 +229,7 @@ const Header = () => {
               type="text"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              placeholder="Search svahpl agros & herbs store"
+              placeholder="Search"
               className="w-full py-2 pl-5 pr-12 rounded-full border border-gray-200 shadow-sm focus:ring-2 focus:ring-primary-300 bg-gray-50 focus:bg-white text-gray-700 transition duration-200"
             />
             <button

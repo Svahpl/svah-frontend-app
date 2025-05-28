@@ -9,37 +9,44 @@ const ContactSection = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedCountryCode, setSelectedCountryCode] = useState(null);
+  const [formType, setFormType] = useState(null); // Track whether it's 'requirements' or 'sales'
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
   const onSubmit = (data) => {
     const fullMobileNumber = selectedCountryCode ? `${selectedCountryCode.phoneCode}${data.mobileNumber}` : data.mobileNumber;
-    console.log({ ...data, country: selectedCountry?.value, mobileNumber: fullMobileNumber });
+    console.log({ ...data, country: selectedCountry?.value, mobileNumber: fullMobileNumber, formType });
     setIsSubmitted(true);
     reset();
     setSelectedCountry(null);
     setSelectedCountryCode(null);
     setTimeout(() => {
       setIsSubmitted(false);
-      setIsFormVisible(false); // Hide form after submission
+      setIsFormVisible(false);
+      setFormType(null); // Reset form type after submission
     }, 5000);
   };
 
+  const handleButtonClick = (type) => {
+    setFormType(type);
+    setIsFormVisible(!isFormVisible);
+  };
+
   return (
-    <section className="py-12 bg-gray-50">
+    <section className="py-12 bg-gradient-to-b from-gray-50 to-emerald-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Buttons for Requirement and Sales */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mb-12">
           <button
-            onClick={() => setIsFormVisible(!isFormVisible)}
-            className="inline-flex items-center gap-2 bg-primary-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            onClick={() => handleButtonClick('requirements')}
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-amber-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-emerald-700 hover:to-amber-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 shadow-md"
           >
             <Mail size={20} className="text-white" />
             DROP US A MESSAGE FOR REQUIREMENT
           </button>
           <button
-            onClick={() => setIsFormVisible(!isFormVisible)}
-            className="inline-flex items-center gap-2 bg-primary-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            onClick={() => handleButtonClick('sales')}
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-amber-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-emerald-700 hover:to-amber-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 shadow-md"
           >
             <Mail size={20} className="text-white" />
             DROP US A MESSAGE FOR SALES
@@ -48,67 +55,67 @@ const ContactSection = () => {
 
         {/* Form */}
         <div
-          className={`transition-all duration-300 ease-in-out ${
+          className={`transition-all duration-500 ease-in-out ${
             isFormVisible ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
           }`}
         >
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-heading font-semibold text-primary-800 mb-4">
-              DROP US A MESSAGE
+          <div className="bg-white rounded-xl shadow-lg p-8 transform transition-all duration-300">
+            <h3 className="text-2xl font-heading font-bold text-emerald-800 mb-6">
+              {formType === 'sales' ? 'Please provide your sales details' : 'DROP US A MESSAGE'}
             </h3>
-
             {isSubmitted ? (
-              <div className="bg-success-50 border border-success-200 text-success-800 rounded-md p-4 mb-4 animate-fade-in">
-                <p>Thank you. One of our representatives will get back to you within 24 hours.</p>
+              <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg p-4 mb-6 animate-fade-in">
+                <p className="font-medium">Thank you. One of our representatives will get back to you within 24 hours.</p>
               </div>
             ) : null}
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div>
-                <label htmlFor="Enter Full Name" className="block text-sm font-medium text-neutral-700 mb-1">
+                <label htmlFor="fullName" className="block text-sm font-medium text-emerald-700 mb-2">
+                  Full Name
                 </label>
                 <input
-                  id="Enter Full Name"
+                  id="fullName"
                   type="text"
-                  className={`w-full px-3 py-2 border ${
-                    errors.fullName ? 'border-error-500' : 'border-neutral-300'
-                  } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
+                  className={`w-full px-4 py-3 border ${
+                    errors.fullName ? 'border-red-500' : 'border-emerald-300'
+                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/80 text-emerald-800 placeholder-emerald-400 shadow-sm hover:shadow-md transition-all duration-300`}
                   placeholder="Enter full name"
                   {...register('fullName', { required: 'Full name is required' })}
                 />
                 {errors.fullName && (
-                  <p className="mt-1 text-sm text-error-600">{errors.fullName.message}</p>
+                  <p className="mt-1 text-sm text-red-600">{errors.fullName.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="companyName" className="block text-sm font-medium text-neutral-700 mb-1">
+                <label htmlFor="companyName" className="block text-sm font-medium text-emerald-700 mb-2">
+                  Company Name
                 </label>
                 <input
                   id="companyName"
                   type="text"
-                  className={`w-full px-3 py-2 border ${
-                    errors.companyName ? 'border-error-500' : 'border-neutral-300'
-                  } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-                  placeholder="Enter company name 
-"
+                  className={`w-full px-4 py-3 border ${
+                    errors.companyName ? 'border-red-500' : 'border-emerald-300'
+                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/80 text-emerald-800 placeholder-emerald-400 shadow-sm hover:shadow-md transition-all duration-300`}
+                  placeholder="Enter company name"
                   {...register('companyName', { required: 'Company name is required' })}
                 />
                 {errors.companyName && (
-                  <p className="mt-1 text-sm text-error-600">{errors.companyName.message}</p>
+                  <p className="mt-1 text-sm text-red-600">{errors.companyName.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="companyEmail" className="block text-sm font-medium text-neutral-700 mb-1">
-              
+                <label htmlFor="companyEmail" className="block text-sm font-medium text-emerald-700 mb-2">
+                  Company Email
                 </label>
                 <input
                   id="companyEmail"
                   type="email"
-                  className={`w-full px-3 py-2 border ${
-                    errors.companyEmail ? 'border-error-500' : 'border-neutral-300'
-                  } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
+                  className={`w-full px-4 py-3 border ${
+                    errors.companyEmail ? 'border-red-500' : 'border-emerald-300'
+                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/80 text-emerald-800 placeholder-emerald-400 shadow-sm hover:shadow-md transition-all duration-300`}
                   placeholder="Enter company email"
                   {...register('companyEmail', {
                     required: 'Email is required',
@@ -119,12 +126,13 @@ const ContactSection = () => {
                   })}
                 />
                 {errors.companyEmail && (
-                  <p className="mt-1 text-sm text-error-600">{errors.companyEmail.message}</p>
+                  <p className="mt-1 text-sm text-red-600">{errors.companyEmail.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="country" className="block text-sm font-medium text-neutral-700 mb-1">
+                <label htmlFor="country" className="block text-sm font-medium text-emerald-700 mb-2">
+                  Country
                 </label>
                 <Select
                   id="country"
@@ -132,7 +140,7 @@ const ContactSection = () => {
                   value={selectedCountry}
                   onChange={(option) => {
                     setSelectedCountry(option);
-                    setSelectedCountryCode(option); // Sync country code with country selection
+                    setSelectedCountryCode(option);
                   }}
                   placeholder="Select country"
                   className="text-base"
@@ -140,54 +148,55 @@ const ContactSection = () => {
                     control: (state) =>
                       `!border ${
                         state.isFocused
-                          ? '!border-primary-500 !shadow-md !ring-2 !ring-primary-200'
+                          ? '!border-emerald-500 !shadow-md !ring-2 !ring-emerald-200'
                           : errors.country
-                          ? '!border-error-500'
-                          : '!border-neutral-300'
-                      } !rounded-md !bg-white`,
+                          ? '!border-red-500'
+                          : '!border-emerald-300'
+                      } !rounded-lg !bg-white`,
                   }}
                   {...register('country', { required: 'Country is required' })}
                 />
                 {errors.country && (
-                  <p className="mt-1 text-sm text-error-600">{errors.country.message}</p>
+                  <p className="mt-1 text-sm text-red-600">{errors.country.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="companyAddress" className="block text-sm font-medium text-neutral-700 mb-1">
-            
+                <label htmlFor="companyAddress" className="block text-sm font-medium text-emerald-700 mb-2">
+                  Company Address
                 </label>
                 <textarea
                   id="companyAddress"
                   rows={2}
-                  className={`w-full px-3 py-2 border ${
-                    errors.companyAddress ? 'border-error-500' : 'border-neutral-300'
-                  } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
+                  className={`w-full px-4 py-3 border ${
+                    errors.companyAddress ? 'border-red-500' : 'border-emerald-300'
+                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/80 text-emerald-800 placeholder-emerald-400 shadow-sm hover:shadow-md transition-all duration-300`}
                   placeholder="Enter company address"
                   {...register('companyAddress', { required: 'Company address is required' })}
                 />
                 {errors.companyAddress && (
-                  <p className="mt-1 text-sm text-error-600">{errors.companyAddress.message}</p>
+                  <p className="mt-1 text-sm text-red-600">{errors.companyAddress.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="websiteLink" className="block text-sm font-medium text-neutral-700 mb-1">
-                  
+                <label htmlFor="websiteLink" className="block text-sm font-medium text-emerald-700 mb-2">
+                  Website Link (Optional)
                 </label>
                 <input
                   id="websiteLink"
                   type="url"
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  placeholder="Enter website link "
+                  className="w-full px-4 py-3 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/80 text-emerald-800 placeholder-emerald-400 shadow-sm hover:shadow-md transition-all duration-300"
+                  placeholder="Enter website link"
                   {...register('websiteLink')}
                 />
               </div>
 
               <div>
-                <label htmlFor="mobileNumber" className="block text-sm font-medium text-neutral-700 mb-1">
+                <label htmlFor="mobileNumber" className="block text-sm font-medium text-emerald-700 mb-2">
+                  Mobile Number
                 </label>
-                <div className="flex gap-2">
+                <div className="flex gap-3">
                   <Select
                     id="countryCode"
                     options={countries}
@@ -201,22 +210,22 @@ const ContactSection = () => {
                       control: (state) =>
                         `!border ${
                           state.isFocused
-                            ? '!border-primary-500 !shadow-md !ring-2 !ring-primary-200'
+                            ? '!border-emerald-500 !shadow-md !ring-2 !ring-emerald-200'
                             : errors.countryCode
-                            ? '!border-error-500'
-                            : '!border-neutral-300'
-                        } !rounded-md !bg-white`,
+                            ? '!border-red-500'
+                            : '!border-emerald-300'
+                        } !rounded-lg !bg-white`,
                     }}
                     {...register('countryCode', { required: 'Country code is required' })}
                   />
                   <input
                     id="mobileNumber"
                     type="tel"
-                    className={`w-3/4 px-3 py-2 border ${
-                      errors.mobileNumber ? 'border-error-500' : 'border-neutral-300'
-                    } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-                    placeholder="Type number"
-                    {...register('Type number', {
+                    className={`w-3/4 px-4 py-3 border ${
+                      errors.mobileNumber ? 'border-red-500' : 'border-emerald-300'
+                    } rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/80 text-emerald-800 placeholder-emerald-400 shadow-sm hover:shadow-md transition-all duration-300`}
+                    placeholder="Enter mobile number"
+                    {...register('mobileNumber', {
                       required: 'Mobile number is required',
                       pattern: {
                         value: /^\d{7,15}$/,
@@ -226,46 +235,48 @@ const ContactSection = () => {
                   />
                 </div>
                 {errors.countryCode && (
-                  <p className="mt-1 text-sm text-error-600">{errors.countryCode.message}</p>
+                  <p className="mt-1 text-sm text-red-600">{errors.countryCode.message}</p>
                 )}
                 {errors.mobileNumber && (
-                  <p className="mt-1 text-sm text-error-600">{errors.mobileNumber.message}</p>
+                  <p className="mt-1 text-sm text-red-600">{errors.mobileNumber.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="requirements" className="block text-sm font-medium text-neutral-700 mb-1">
-            
+                <label htmlFor="requirements" className="block text-sm font-medium text-emerald-700 mb-2">
+                  {formType === 'sales' ? 'Sales Details' : 'Requirements'}
                 </label>
                 <textarea
                   id="requirements"
                   rows={3}
-                  className={`w-full px-3 py-2 border ${
-                    errors.requirements ? 'border-error-500' : 'border-neutral-300'
-                  } rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500`}
-                  placeholder="Please describe your requirements"
-                  {...register('requirements', { required: 'Requirements description is required' })}
+                  className={`w-full px-4 py-3 border ${
+                    errors.requirements ? 'border-red-500' : 'border-emerald-300'
+                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/80 text-emerald-800 placeholder-emerald-400 shadow-sm hover:shadow-md transition-all duration-300`}
+                  placeholder={formType === 'sales' ? 'Please describe your sales details' : 'Please describe your requirements'}
+                  {...register('requirements', { required: formType === 'sales' ? 'Sales details are required' : 'Requirements description is required' })}
                 />
                 {errors.requirements && (
-                  <p className="mt-1 text-sm text-error-600">{errors.requirements.message}</p>
+                  <p className="mt-1 text-sm text-red-600">{errors.requirements.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-neutral-700 mb-1">
+                <label htmlFor="message" className="block text-sm font-medium text-emerald-700 mb-2">
+                  Additional Message (Optional)
                 </label>
                 <textarea
                   id="message"
                   rows={3}
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  placeholder=" message"
+                  className="w-full px-4 py-3 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/80 text-emerald-800 placeholder-emerald-400 shadow-sm hover:shadow-md transition-all duration-300"
+                  placeholder="Enter your message"
                   {...register('message')}
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-primary-600 text-white font-medium py-2 px-4 rounded-md hover:bg-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                className="w-full bg-gradient-to-r from-emeraldSARS
+                to-emerald-600 from-amber-600 text-white font-semibold py-3 px-6 rounded-lg hover:to-emerald-700 hover:from-amber-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 shadow-md"
               >
                 SUBMIT
               </button>
@@ -273,6 +284,12 @@ const ContactSection = () => {
           </div>
         </div>
       </div>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
     </section>
   );
 };
