@@ -1,4 +1,5 @@
 import HomePage from "./HomePage";
 import CartPage from "./CartPage";
+import AccountPage from "./AccountPage";
 
-export { HomePage , CartPage };
+export { HomePage, CartPage, AccountPage };
