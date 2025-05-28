@@ -31,14 +31,19 @@ const HomePage = () => {
   useEffect(() => {
     const sendUserData = async () => {
       if (!token || !user) return;
-
+      console.log({
+        token,
+        userObject: user,
+      });
       try {
         const signupResponse = await axios.post(
           `${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`,
           {
+            clerkUserId: userId,
             FirstName: user.firstName,
             lastName: user.lastName,
             Email: user.primaryEmailAddress?.emailAddress,
+            ProfileImage:user.imageUrl
           }
         );
         console.log("Signup response:", signupResponse.data);
