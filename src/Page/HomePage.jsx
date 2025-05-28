@@ -25,6 +25,14 @@ const HomePage = () => {
       });
 
       if (user) {
+        const signupResponse = axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`,
+          {
+            FirstName: user?.firstName,
+            lastName: user?.lastName,
+            Email: user?.primaryEmailAddress?.emailAddress,
+          }
+        );
         // console.log(
         //   "user:",
         //   user?.firstName,
