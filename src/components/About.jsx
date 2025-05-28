@@ -12,8 +12,10 @@ import {
   Leaf,
   Globe
 } from 'lucide-react';
+import UseTitle from './UseTitle';
 
 const About = () => {
+  UseTitle('SVAH | About Us')
   const coreValues = [
     {
       icon: <ShieldCheck className="w-6 h-6" />,

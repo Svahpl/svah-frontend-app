@@ -7,8 +7,10 @@ import {
 import { useState, useEffect } from "react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from "axios";
+import { UseTitle } from "../components/compIndex";
 
 const HomePage = () => {
+  UseTitle("SVAH | Agros & Herbs");
   const { isLoaded, isSignedIn, userId, sessionId, getToken } = useAuth();
   const { user } = useUser();
   const [token, setToken] = useState("");
@@ -39,7 +41,7 @@ const HomePage = () => {
             FirstName: user.firstName,
             lastName: user.lastName,
             Email: user.primaryEmailAddress?.emailAddress,
-            ProfileImage:user.imageUrl
+            ProfileImage: user.imageUrl,
           }
         );
         console.log("Signup response:", signupResponse.data);

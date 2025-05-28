@@ -1,6 +1,7 @@
-import { CartProduct, LocationUI } from "../components/compIndex";
+import { CartProduct, LocationUI, UseTitle } from "../components/compIndex";
 
 const CartPage = () => {
+  UseTitle('Your Cart')
   return (
     <>
       <LocationUI />
