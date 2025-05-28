@@ -132,7 +132,7 @@ const Header = () => {
                   <img
                     src="/images/LOGO.png"
                     alt="SVAH Logo"
-                    className="h-10 w-10 object-contain"
+                    className="h-7 w-7 object-contain"
                   />
                 </div>
               </div>
@@ -154,7 +154,7 @@ const Header = () => {
               </div>
               {/* MOBILE DEVICE LEFT-TOP NAVBAR LOGO TEXT */}
               <div className="block md:hidden">
-                <h1 className="text-lg font-bold text-primary-900 leading-tight">
+                <h1 className="text-sm font-bold text-primary-900 leading-tight">
                   <span className="font-serif tracking-wide">
                     SRI VENKATESWARA
                   </span>
@@ -163,7 +163,7 @@ const Header = () => {
                     AGROS AND HERBS
                   </span>
                   <br />
-                  <span className="text-primary-700 text-sm">
+                  <span className="text-primary-700 text-xs">
                     SINCE 2021
                   </span>
                 </h1>
