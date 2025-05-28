@@ -6,6 +6,7 @@ const LocationUI = () => {
   const [userLatitude, setUserLatitude] = useState(null);
   const [userLongitude, setUserLongitude] = useState(null);
   const [city, setCity] = useState("");
+  const [postCode, setPostCode] = useState("");
 
   // Get Coordinates using Geolocation
   useEffect(() => {
@@ -42,23 +43,35 @@ const LocationUI = () => {
               import.meta.env.VITE_OPEN_WEATHER_API_KEY
             }&units=metric`
           );
-          console.log(response.data.name);
           setCity(response.data.name);
         } catch (error) {
           console.log("Error getting user's location:", error);
         }
       };
+      const getPostCode = async () => {
+        try {
+          const response = await axios.get(
+            `https://us1.locationiq.com/v1/reverse.php?key=${"pk.045b6dad0566909d43f9fd24a5ffe132"}&lat=${userLatitude}&lon=${userLongitude}&format=json`
+          );
+          setPostCode(response.data.address.postcode);
+        } catch (error) {
+          console.log(`Error fetching pincode of the user: ${error}`);
+        }
+      };
       getlocation();
+      getPostCode();
     }
   }, [userLatitude, userLongitude]); // <- This effect runs when lat/lon changes
 
   return (
-    <div className="bg-mobile-green lg:bg-white lg:text-black text-white h-10 content-center lg:max-w-7xl lg:mx-auto lg:px-4 sm:px-6">
+    <div className="bg-mobile-green lg:bg-white lg:text-black mui-white h-10 content-center lg:max-w-7xl lg:mx-auto lg:px-4 sm:px-6">
       <span className="flex">
         <MapPin className="mx-2" size={20} /> Deliver to{" "}
         {`${removeDiacritics(city)}`}
         <span className="ml-2">-</span>
-        <span className="city-name ml-2">362001</span>
+        <span className="city-name ml-2">
+          {postCode ? postCode : "pincode"}
+        </span>
       </span>
     </div>
   );
