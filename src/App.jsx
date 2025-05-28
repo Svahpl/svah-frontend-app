@@ -13,10 +13,10 @@ import TermsOfService from "./components/TermsOfService";
 // import PrivacyPolicy from "./components/PrivacyPolicy";
 import { HomePage, CartPage , AccountPage , ProductPage } from "./Page/pageIndex";
 import ProductScreen from "./Page/ProductScreen";
+import {AddressManager} from "./components/compIndex"
 
 function App() {
   useEffect(() => {
-    document.title = "SVAH | Home";
 
     const titleElement = document.querySelector("title[data-default]");
     if (titleElement) {
@@ -34,6 +34,7 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/view-product/:id" element={<ProductScreen />} />
           <Route path="/my-account" element={<AccountPage />} />
+          <Route path="/my-account/addresses" element={<AddressManager />} />
           <Route path="/shipping-policy" element={<ShippingPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           {/* <Route path="/privacy-policy" element={<PrivacyPolicy />} /> */}

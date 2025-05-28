@@ -2,8 +2,10 @@ import React from 'react';
 import { Phone, Mail, Youtube, Instagram, MapPin, Clock, Truck, Shield } from 'lucide-react';
 import RequirementForm from './RequirementForm';
 import SalesForm from './SalesForm';
+import UseTitle from './UseTitle';
 
 const Contact = () => {
+  UseTitle('SVAH | Contact Us')
   return (
     <section id="contact" className="py-16 bg-neutral-50">
       <div className="container mx-auto px-4">

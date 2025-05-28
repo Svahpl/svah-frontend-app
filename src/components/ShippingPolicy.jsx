@@ -1,7 +1,9 @@
 import React from 'react';
 import { Truck, Package, Clock, Globe, Shield, RefreshCw } from 'lucide-react';
+import UseTitle from './UseTitle';
 
 const ShippingPolicy = () => {
+  UseTitle('Shipping Policy')
   return (
     <div className="py-16 bg-neutral-50">
       <div className="container mx-auto px-4">
