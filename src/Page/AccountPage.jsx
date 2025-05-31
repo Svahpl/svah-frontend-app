@@ -17,12 +17,14 @@ import {
   Users,
   Download,
   User,
+  ShoppingCart,
+  Heart,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import {UseTitle} from "../components/compIndex";
+import { UseTitle } from "../components/compIndex";
 
 const AccountPage = () => {
-  UseTitle('Your Account')
+  UseTitle("Your Account");
   const navigate = useNavigate();
 
   const AccountSection = ({ title, items, className = "" }) => (
@@ -69,6 +71,12 @@ const AccountPage = () => {
       link: "/orders",
     },
     {
+      icon: <ShoppingCart />,
+      title: "Your Cart",
+      description: "Your cart. Review and edit selections.",
+      link: "/cart",
+    },
+    {
       icon: <Settings className="w-6 h-6 md:w-8 md:h-8" />,
       title: "Your Addresses",
       description: "Edit addresses for orders and gifts",
@@ -80,43 +88,129 @@ const AccountPage = () => {
       description: "Contact our customer service via phone or chat",
       link: "/contact",
     },
+    {
+      icon: <Heart className="w-6 h-6 md:w-8 md:h-8" />,
+      title: "Your Wishlist",
+      description: "Save items. Keep track of what you love.",
+      link: "/",
+    },
   ];
 
   const digitalContentItems = [
-    { icon: <Smartphone className="w-5 h-5" />, title: "Apps and more", link: "/apps" },
-    { icon: <Download className="w-5 h-5" />, title: "Content Library", link: "/library" },
-    { icon: <Settings className="w-5 h-5" />, title: "Devices", link: "/devices" },
-    { icon: <Gift className="w-5 h-5" />, title: "Digital gifts you've received", link: "/digital-gifts" },
+    {
+      icon: <Smartphone className="w-5 h-5" />,
+      title: "Apps and more",
+      link: "/apps",
+    },
+    {
+      icon: <Download className="w-5 h-5" />,
+      title: "Content Library",
+      link: "/library",
+    },
+    {
+      icon: <Settings className="w-5 h-5" />,
+      title: "Devices",
+      link: "/devices",
+    },
+    {
+      icon: <Gift className="w-5 h-5" />,
+      title: "Digital gifts you've received",
+      link: "/digital-gifts",
+    },
   ];
 
   const emailAlertsItems = [
-    { icon: <Mail className="w-5 h-5" />, title: "Advertising preferences", link: "/ads-preferences" },
-    { icon: <MessageSquare className="w-5 h-5" />, title: "Communication preferences", link: "/communication-preferences" },
-    { icon: <Bell className="w-5 h-5" />, title: "SMS alert preferences", link: "/sms-preferences" },
-    { icon: <MessageSquare className="w-5 h-5" />, title: "Message Centre", link: "/message-centre" },
-    { icon: <Bell className="w-5 h-5" />, title: "Alexa shopping notifications", link: "/alexa-notifications" },
+    {
+      icon: <Mail className="w-5 h-5" />,
+      title: "Advertising preferences",
+      link: "/ads-preferences",
+    },
+    {
+      icon: <MessageSquare className="w-5 h-5" />,
+      title: "Communication preferences",
+      link: "/communication-preferences",
+    },
+    {
+      icon: <Bell className="w-5 h-5" />,
+      title: "SMS alert preferences",
+      link: "/sms-preferences",
+    },
+    {
+      icon: <MessageSquare className="w-5 h-5" />,
+      title: "Message Centre",
+      link: "/message-centre",
+    },
+    {
+      icon: <Bell className="w-5 h-5" />,
+      title: "Alexa shopping notifications",
+      link: "/alexa-notifications",
+    },
   ];
 
   const moreWaysToPayItems = [
-    { icon: <Settings className="w-5 h-5" />, title: "Default Purchase Settings", link: "/purchase-settings" },
-    { icon: <Wallet className="w-5 h-5" />, title: "Amazon Pay", link: "/amazon-pay" },
+    {
+      icon: <Settings className="w-5 h-5" />,
+      title: "Default Purchase Settings",
+      link: "/purchase-settings",
+    },
+    {
+      icon: <Wallet className="w-5 h-5" />,
+      title: "Amazon Pay",
+      link: "/amazon-pay",
+    },
     { icon: <Star className="w-5 h-5" />, title: "Coupons", link: "/coupons" },
   ];
 
   const orderingShoppingItems = [
-    { icon: <MessageSquare className="w-5 h-5" />, title: "Leave packaging feedback", link: "/packaging-feedback" },
+    {
+      icon: <MessageSquare className="w-5 h-5" />,
+      title: "Leave packaging feedback",
+      link: "/packaging-feedback",
+    },
     { icon: <List className="w-5 h-5" />, title: "Lists", link: "/lists" },
-    { icon: <Settings className="w-5 h-5" />, title: "Manage saved IDs", link: "/saved-ids" },
-    { icon: <User className="w-5 h-5" />, title: "Your Shopping preferences", link: "/shopping-preferences" },
-    { icon: <User className="w-5 h-5" />, title: "Your Content", link: "/your-content" },
-    { icon: <Settings className="w-5 h-5" />, title: "Language settings", link: "/language-settings" },
-    { icon: <Shield className="w-5 h-5" />, title: "Recalls and Product Safety Alerts", link: "/safety-alerts" },
+    {
+      icon: <Settings className="w-5 h-5" />,
+      title: "Manage saved IDs",
+      link: "/saved-ids",
+    },
+    {
+      icon: <User className="w-5 h-5" />,
+      title: "Your Shopping preferences",
+      link: "/shopping-preferences",
+    },
+    {
+      icon: <User className="w-5 h-5" />,
+      title: "Your Content",
+      link: "/your-content",
+    },
+    {
+      icon: <Settings className="w-5 h-5" />,
+      title: "Language settings",
+      link: "/language-settings",
+    },
+    {
+      icon: <Shield className="w-5 h-5" />,
+      title: "Recalls and Product Safety Alerts",
+      link: "/safety-alerts",
+    },
   ];
 
   const shoppingProgramsItems = [
-    { icon: <Users className="w-5 h-5" />, title: "Manage Your Amazon Family", link: "/amazon-family" },
-    { icon: <RotateCcw className="w-5 h-5" />, title: "Subscribe & Save", link: "/subscribe-save" },
-    { icon: <Users className="w-5 h-5" />, title: "Shop the Kids' Store by age", link: "/kids-store" },
+    {
+      icon: <Users className="w-5 h-5" />,
+      title: "Manage Your Amazon Family",
+      link: "/amazon-family",
+    },
+    {
+      icon: <RotateCcw className="w-5 h-5" />,
+      title: "Subscribe & Save",
+      link: "/subscribe-save",
+    },
+    {
+      icon: <Users className="w-5 h-5" />,
+      title: "Shop the Kids' Store by age",
+      link: "/kids-store",
+    },
   ];
 
   return (
@@ -129,7 +223,10 @@ const AccountPage = () => {
         {/* Quick Access Grid - Mobile */}
         <div className="md:hidden space-y-4 mb-8">
           <AccountSection title="Orders" items={quickAccessItems.slice(0, 3)} />
-          <AccountSection title="Account Settings" items={quickAccessItems.slice(3)} />
+          <AccountSection
+            title="Account Settings"
+            items={quickAccessItems.slice(3)}
+          />
         </div>
 
         {/* Desktop Quick Access Grid */}

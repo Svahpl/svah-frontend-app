@@ -33,6 +33,14 @@ const HomePage = () => {
   useEffect(() => {
     const sendUserData = async () => {
       if (!token || !user) return;
+      // test token send in backend
+      const response = await fetch("http://localhost:8000/api/protected", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      console.log(data);
       try {
         const signupResponse = await axios.post(
           `${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`,

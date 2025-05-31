@@ -1,8 +1,10 @@
 import React from 'react';
 import { productCategories } from '../data/categories';
 import { ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const CategorySection = () => {
+  const navigate = useNavigate();
   return (
     <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
@@ -19,7 +21,7 @@ const CategorySection = () => {
               
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {category.subcategories.map(subcategory => (
-                  <div key={subcategory.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:transform hover:scale-[1.02] group">
+                  <div onClick={()=>navigate(`/view-products`)} key={subcategory.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:transform hover:scale-[1.02] group">
                     <div className="relative w-full aspect-square overflow-hidden">
                       <img 
                         src={subcategory.image || 'https://images.pexels.com/photos/5946026/pexels-photo-5946026.jpeg'} 

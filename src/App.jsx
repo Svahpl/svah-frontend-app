@@ -11,11 +11,18 @@ import Footer from "./components/Footer";
 import ShippingPolicy from "./components/ShippingPolicy";
 import TermsOfService from "./components/TermsOfService";
 // import PrivacyPolicy from "./components/PrivacyPolicy";
-import { HomePage, CartPage, AccountPage, ProductPage } from "./Page/pageIndex";
+import {
+  HomePage,
+  CartPage,
+  AccountPage,
+  ProductPage,
+  CategoryProducts,
+} from "./Page/pageIndex";
 import ProductScreen from "./Page/ProductScreen";
 import { AddressManager } from "./components/compIndex";
 import PaypalPayment from "./components/PaypalPayment";
-import PaymentSuccess from "./components/PaymentSuccess"
+import PaymentSuccess from "./components/PaymentSuccess";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   useEffect(() => {
@@ -28,12 +35,19 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-white font-sans">
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: { fontSize: "17px", background: "#1d3825", color: "white" },
+          }}
+        />
         <CyberCrimeWarning />
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/view-product/:id" element={<ProductScreen />} />
+          <Route path="/view-products" element={<CategoryProducts />} />
           <Route path="/my-account" element={<AccountPage />} />
           <Route path="/my-account/addresses" element={<AddressManager />} />
 
@@ -47,6 +61,14 @@ function App() {
           {/* <Route path="/privacy-policy" element={<PrivacyPolicy />} /> */}
           <Route path="/about" element={<About />} />
           <Route path="/Contact" element={<Contact />} />
+          <Route
+            path="*"
+            element={
+              <>
+                <div>404 Not Found</div>
+              </>
+            }
+          />
         </Routes>
         <Footer />
       </div>

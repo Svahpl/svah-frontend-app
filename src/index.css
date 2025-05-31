@@ -14,11 +14,19 @@
   border: #1d3825 solid 2px;
 }
 
+.footerContainer {
+  margin-top: 600px;
+}
+
 @media screen and (max-width: 768px) {
   .bg-mobile-green {
     background-color: #1d3825;
   }
-  .mui-white{
+  .mui-white {
     color: white;
+  }
+  .categorySearchContainer {
+    margin: 0 auto;
+    padding: 0 1.2rem;
   }
 }
