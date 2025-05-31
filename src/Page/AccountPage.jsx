@@ -29,7 +29,7 @@ const AccountPage = () => {
 
   const AccountSection = ({ title, items, className = "" }) => (
     <div
-      className={`bg-white rounded-lg border border-gray-200 p-4 md:p-6 ${className}`}
+      className={`bg-white rounded-2xl border border-gray-200 p-4 md:p-6 ${className}`}
     >
       <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
         {title}
@@ -234,7 +234,7 @@ const AccountPage = () => {
           {quickAccessItems.map((item, index) => (
             <div
               key={index}
-              className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+              className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
               onClick={() => item.link && navigate(item.link)}
             >
               <div className="flex items-start space-x-4">

@@ -69,7 +69,7 @@ const ProductCategoryCard = ({ product }) => {
           <>
             <button
               onClick={() => toast("Item Added")}
-              className="w-full mt-4 bg-green-950 text-white py-2 px-4 rounded-full transition-colors duration-200"
+              className="w-full hover:scale-105 mt-4 bg-green-950 text-white py-2 px-4 rounded-full transition-colors duration-200"
             >
               Add to cart
             </button>

@@ -10,18 +10,20 @@ import {
   Shield,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import PaymentModal from "../components/PaymentModal";
+import toast from "react-hot-toast";
 
 const ProductScreen = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedWeight, setSelectedWeight] = useState("250g");
+  const [selectedWeight, setSelectedWeight] = useState(5);
   const [isLiked, setIsLiked] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   // Default weights - could also come from API
-  const weights = ["100g", "250g", "500g", "1kg"];
+  const weights = [1, 5, 10, 15, 20];
 
   // Mock API call - replace with your actual API endpoint
   useEffect(() => {
@@ -47,7 +49,7 @@ const ProductScreen = () => {
             subcategory: "BAMBOO PRODUCTS",
             categoryId: 5,
             subcategoryId: 502,
-            quantity: 62,
+            quantity: 12,
             keyIngredients: ["Mechanical Switches", "RGB Lighting"],
             ratings: [
               { user: "60f7b3a16c9d3c39d8e9b007", rating: 4 },
@@ -129,233 +131,17 @@ const ProductScreen = () => {
   };
 
   // Payment Modal Component
-  const PaymentModal = () => {
+  const HandlePaymentModal = () => {
     if (!showPaymentModal) return null;
 
     return (
       <>
-        {/* Backdrop */}
-        <div
-          className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-50 transition-opacity duration-300 ${
-            showPaymentModal ? "opacity-100" : "opacity-0"
-          }`}
-          onClick={closePaymentModal}
+        <PaymentModal
+          showPaymentModal={showPaymentModal}
+          closePaymentModal={closePaymentModal}
+          product={product}
+          selectedWeight={selectedWeight}
         />
-
-        {/* Modal */}
-        <div
-          className={`fixed inset-x-0 bottom-0 md:inset-0 md:flex md:items-center md:justify-center z-50 transition-all duration-500 ease-out ${
-            showPaymentModal
-              ? "translate-y-0 opacity-100"
-              : "translate-y-full opacity-0"
-          }`}
-        >
-          {/* Mobile Modal */}
-          <div className="md:hidden bg-white rounded-t-3xl shadow-2xl max-h-[85vh] overflow-y-auto">
-            {/* Handle bar */}
-            <div className="flex justify-center pt-3 pb-2">
-              <div className="w-12 h-1.5 bg-gray-300 rounded-full"></div>
-            </div>
-
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                  <CreditCard className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    Payment
-                  </h3>
-                  <p className="text-sm text-gray-500">Secure checkout</p>
-                </div>
-              </div>
-              <button
-                onClick={closePaymentModal}
-                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition"
-              >
-                <X className="w-4 h-4 text-gray-600" />
-              </button>
-            </div>
-
-            {/* Content */}
-            <div className="px-6 py-6 space-y-6">
-              {/* Order Summary */}
-              <div className="bg-gray-50 rounded-2xl p-4">
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={product.images[0]}
-                    alt={product.title}
-                    className="w-16 h-16 object-cover rounded-xl"
-                  />
-                  <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 text-sm">
-                      {product.title}
-                    </h4>
-                    <p className="text-xs text-gray-500">
-                      Weight: {selectedWeight}
-                    </p>
-                    <p className="text-lg font-bold text-gray-900">
-                      ${product.price}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Security Badge */}
-              <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
-                <Shield className="w-4 h-4 text-green-600" />
-                <span>256-bit SSL encrypted payment</span>
-              </div>
-
-              {/* PayPal Buttons */}
-              <div className="space-y-3">
-                <button className="w-full bg-[#0070ba] hover:bg-[#005ea6] text-white font-semibold py-4 px-6 rounded-2xl transition duration-200 flex items-center justify-center space-x-2">
-                  <span className="text-lg font-bold">Pay</span>
-                  <span className="text-lg font-bold">Pal</span>
-                </button>
-
-                <button className="w-full bg-[#ffc439] hover:bg-[#ffb800] text-black font-semibold py-4 px-6 rounded-2xl transition duration-200">
-                  <span>Pay in 4 with PayPal</span>
-                </button>
-
-                <div className="relative my-4">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-200"></div>
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-white text-gray-500">or</span>
-                  </div>
-                </div>
-
-                <button className="w-full border-2 border-gray-300 hover:border-gray-400 text-gray-700 font-semibold py-4 px-6 rounded-2xl transition duration-200">
-                  Debit or Credit Card
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Desktop Modal */}
-          <div className="hidden md:block bg-white rounded-3xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            {/* Header */}
-            <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
-                  <CreditCard className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900">
-                    Secure Payment
-                  </h3>
-                  <p className="text-gray-500">Complete your purchase</p>
-                </div>
-              </div>
-              <button
-                onClick={closePaymentModal}
-                className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition"
-              >
-                <X className="w-5 h-5 text-gray-600" />
-              </button>
-            </div>
-
-            {/* Content */}
-            <div className="px-8 py-8">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Left - Order Summary */}
-                <div className="space-y-6">
-                  <h4 className="text-lg font-semibold text-gray-900">
-                    Order Summary
-                  </h4>
-
-                  <div className="bg-gray-50 rounded-2xl p-6">
-                    <div className="flex items-center space-x-4">
-                      <img
-                        src={product.images[0]}
-                        alt={product.title}
-                        className="w-20 h-20 object-cover rounded-xl"
-                      />
-                      <div className="flex-1">
-                        <h5 className="font-medium text-gray-900">
-                          {product.title}
-                        </h5>
-                        <p className="text-sm text-gray-500">
-                          Weight: {selectedWeight}
-                        </p>
-                        <p className="text-sm text-gray-500">Quantity: 1</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xl font-bold text-gray-900">
-                          ${product.price}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 pt-4 border-t border-gray-200">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Subtotal</span>
-                        <span className="text-gray-900">${product.price}</span>
-                      </div>
-                      <div className="flex justify-between text-sm mt-2">
-                        <span className="text-gray-600">Shipping</span>
-                        <span className="text-green-600">Free</span>
-                      </div>
-                      <div className="flex justify-between text-lg font-bold mt-4 pt-2 border-t border-gray-200">
-                        <span>Total</span>
-                        <span>${product.price}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Security Badge */}
-                  <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
-                    <Shield className="w-5 h-5 text-green-600" />
-                    <span>
-                      Your payment information is secure and encrypted
-                    </span>
-                  </div>
-                </div>
-
-                {/* Right - Payment Methods */}
-                <div className="space-y-6">
-                  <h4 className="text-lg font-semibold text-gray-900">
-                    Payment Method
-                  </h4>
-
-                  <div className="space-y-4">
-                    <button className="w-full bg-[#0070ba] hover:bg-[#005ea6] text-white font-semibold py-4 px-6 rounded-2xl transition duration-200 flex items-center justify-center space-x-3">
-                      <span className="text-xl font-bold">Pay</span>
-                      <span className="text-xl font-bold">Pal</span>
-                    </button>
-
-                    <button className="w-full bg-[#ffc439] hover:bg-[#ffb800] text-black font-semibold py-4 px-6 rounded-2xl transition duration-200">
-                      <span>Pay in 4 interest-free payments</span>
-                    </button>
-
-                    <div className="relative my-6">
-                      <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-gray-200"></div>
-                      </div>
-                      <div className="relative flex justify-center text-sm">
-                        <span className="px-4 bg-white text-gray-500">
-                          or pay with card
-                        </span>
-                      </div>
-                    </div>
-
-                    <button className="w-full border-2 border-gray-300 hover:border-gray-400 text-gray-700 font-semibold py-4 px-6 rounded-2xl transition duration-200">
-                      Debit or Credit Card
-                    </button>
-
-                    <div className="text-xs text-gray-500 text-center mt-4">
-                      By completing your purchase, you agree to our Terms of
-                      Service and Privacy Policy.
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </>
     );
   };
@@ -498,8 +284,8 @@ const ProductScreen = () => {
             <span className="text-3xl font-bold text-gray-900">
               ${product.price}
             </span>
-            <span className="ml-3 text-green-600 font-medium">
-              {product.quantity} in stock
+            <span className="ml-3 text-green-600 text-sm font-medium">
+              {product.quantity > 0 ? "In Stock" : "Out of stock"}
             </span>
           </div>
 
@@ -537,7 +323,7 @@ const ProductScreen = () => {
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
-                  {w}
+                  {`${w}kg`}
                 </button>
               ))}
             </div>
@@ -557,12 +343,26 @@ const ProductScreen = () => {
               <ShoppingBag className="w-4 h-4" />
               <span className="text-sm">Add To Bag</span>
             </button>
-            <button
-              onClick={handleBuyNow}
-              className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 px-4 rounded-full transition shadow hover:shadow-lg transform hover:scale-105"
-            >
-              <span className="text-sm">Buy Now</span>
-            </button>
+            {product.quantity <= 0 ? (
+              <>
+                <button
+                  disabled
+                  onClick={() => toast("Out of stock")}
+                  className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 px-4 rounded-full transition shadow hover:shadow-lg transform hover:scale-105"
+                >
+                  <span className="text-sm">Out of stock</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={handleBuyNow}
+                  className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 px-4 rounded-full transition shadow hover:shadow-lg transform hover:scale-105"
+                >
+                  <span className="text-sm">Buy Now</span>
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -669,7 +469,7 @@ const ProductScreen = () => {
                   ${product.price}
                 </span>
                 <span className="ml-4 text-green-600 font-medium text-lg">
-                  {product.quantity} in stock
+                  {product.quantity > 0 ? "In Stock" : "Out of stock"}
                 </span>
               </div>
             </div>
@@ -728,19 +528,33 @@ const ProductScreen = () => {
                 <ShoppingBag className="w-5 h-5" />
                 <span>Add To Bag</span>
               </button>
-              <button
-                onClick={handleBuyNow}
-                className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-4 px-6 rounded-full transition shadow hover:shadow-xl transform hover:scale-105"
-              >
-                <span>Buy Now</span>
-              </button>
+              {product.quantity <= 0 ? (
+                <>
+                  <button
+                    disabled
+                    onClick={() => toast("Out of stock")}
+                    className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 px-4 rounded-full transition shadow hover:shadow-lg transform hover:scale-105"
+                  >
+                    <span className="text-sm">Out of stock</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={handleBuyNow}
+                    className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 px-4 rounded-full transition shadow hover:shadow-lg transform hover:scale-105"
+                  >
+                    <span className="text-sm">Buy Now</span>
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
       </div>
 
       {/* Payment Modal */}
-      <PaymentModal />
+      <HandlePaymentModal />
     </div>
   );
 };

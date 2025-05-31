@@ -1,7 +1,7 @@
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from "axios";
 
-const PaypalPayment = () => {
+const PaypalPayment = ({ productPrice = 0 }) => {
   const initialOptions = {
     clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID,
   };
@@ -12,7 +12,8 @@ const PaypalPayment = () => {
   const onCreateOrder = async () => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/paypal/create-order`
+        `${import.meta.env.VITE_BACKEND_URL}/api/paypal/create-order`,
+        { price: productPrice }
       );
       console.log(response);
       return response.data.orderId;
@@ -25,7 +26,7 @@ const PaypalPayment = () => {
   };
   const onError = () => {
     console.error(`Payment Error`);
-    window.location.href = "/payment-cancel";
+    // window.location.href = "/payment-cancel";
   };
   return (
     <>
