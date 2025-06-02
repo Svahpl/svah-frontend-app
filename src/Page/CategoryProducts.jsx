@@ -3,6 +3,7 @@ import { productCategories } from "../data/categories";
 import { ProductCategoryCard, ScreenLoaders } from "../components/compIndex";
 import { dummyProducts as products } from "../data/dummyProduct.js";
 import { X } from "lucide-react";
+import axios from "axios";
 
 const CategoryProducts = () => {
   const [price, setPrice] = useState(1000);
@@ -11,8 +12,20 @@ const CategoryProducts = () => {
   const [selectedRating, setSelectedRating] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const getAllProducts = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/product/get-all`
+      );
+      console.log("DEBUG PRODUCT API RESPONSE", res.data);
+      setDummyProducts(res.data.products);
+    } catch (error) {
+      console.log(`Error fetching all products: ${error}`);
+    }
+  };
+
   useEffect(() => {
-    setDummyProducts(products);
+    getAllProducts();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
@@ -21,7 +34,7 @@ const CategoryProducts = () => {
     setTimeout(() => {
       filterFunction();
       setIsLoading(false);
-    }, 800); 
+    }, 800);
   };
 
   const handleCategoryChange = (category) => {

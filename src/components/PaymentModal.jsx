@@ -1,3 +1,4 @@
+/* eslint-disable no-irregular-whitespace */
 import {
   ChevronLeft,
   Heart,
@@ -8,9 +9,12 @@ import {
   X,
   CreditCard,
   Shield,
+  Plus,
+  Minus,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import PaypalPayment from "./PaypalPayment";
+import axios from "axios";
 
 const PaymentModal = ({
   showPaymentModal,
@@ -21,9 +25,25 @@ const PaymentModal = ({
   const [shippingMethod, setShippingMethod] = useState("air");
   const [finalPrice, setFinalPrice] = useState(0);
   const [shippingCost, setShippingCost] = useState(0);
+  const [dollar, setDollar] = useState(85.567517);
+  const [quantity, setQuantity] = useState(1);
+  const [finalWeight, setFinalWeight] = useState();
 
   const handleShippingChange = (method) => {
     setShippingMethod(method);
+  };
+
+  const handleQuantityChange = (newQuantity) => {
+    if (newQuantity >= 1) {
+      setQuantity(newQuantity);
+      const newTotalWeight = selectedWeight * newQuantity;
+      setFinalWeight(newTotalWeight);
+
+      // If current shipping method is "ship" but new weight is below 100kg, switch to "air"
+      if (shippingMethod === "ship" && newTotalWeight < 100) {
+        setShippingMethod("air");
+      }
+    }
   };
 
   const handleShippingCharges = (
@@ -33,26 +53,57 @@ const PaymentModal = ({
     productWeight
   ) => {
     let shippingPrice = 0;
+    const totalWeight = productWeight * qty;
+
     if (shippingMethod === "ship") {
-      shippingPrice = productWeight * 8.19;
+      shippingPrice = totalWeight * (700 / dollar);
     } else if (shippingMethod === "air") {
-      shippingPrice = productWeight * 11.7;
+      shippingPrice = totalWeight * (1000 / dollar);
     }
 
     setShippingCost(shippingPrice);
-    setFinalPrice(price * qty + shippingPrice);
+    setFinalPrice(product.price * qty + shippingPrice);
+  };
+
+  const getCurrentDollarinInr = async () => {
+    try {
+      const res = await axios.get(`https://open.er-api.com/v6/latest/USD`);
+      const inr = res.data.rates.INR;
+      setDollar(inr);
+      console.log(res);
+      console.log(`----debug dollar to inr fought: ${dollar}`);
+    } catch (error) {
+      console.log(`Error fetching current dollar price in inr: ${error}`);
+    }
   };
 
   // Calculate shipping on component mount and when dependencies change
   useEffect(() => {
-    if (product && selectedWeight) {
-      handleShippingCharges(product.price, shippingMethod, 1, selectedWeight);
+    getCurrentDollarinInr();
+    const totalWeight = selectedWeight * quantity;
+    setFinalWeight(totalWeight);
+
+    // If current shipping method is "ship" but weight is below 100kg, switch to "air"
+    if (shippingMethod === "ship" && totalWeight < 100) {
+      setShippingMethod("air");
     }
-  }, [product, selectedWeight, shippingMethod]);
+
+    if (product && selectedWeight) {
+      handleShippingCharges(
+        product.price,
+        shippingMethod,
+        quantity,
+        selectedWeight
+      );
+    }
+  }, [product, selectedWeight, shippingMethod, quantity]);
 
   const formatPrice = (price) => {
     return typeof price === "number" ? price.toFixed(2) : "0.00";
   };
+
+  // Check if ship shipping is available based on total weight
+  const isShipShippingAvailable = finalWeight >= 100;
 
   return (
     <>
@@ -113,7 +164,7 @@ const PaymentModal = ({
                     {product.title}
                   </h4>
                   <p className="text-xs text-gray-500">
-                    Weight: {selectedWeight}
+                    Weight: {selectedWeight}kg × {quantity} = {finalWeight}kg
                   </p>
                   <p className="text-lg font-bold text-gray-900">
                     ${formatPrice(product.price)}
@@ -121,12 +172,41 @@ const PaymentModal = ({
                 </div>
               </div>
 
+              {/* Quantity Selector for Mobile */}
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-700">
+                    Quantity
+                  </span>
+                  <div className="flex items-center space-x-3">
+                    <button
+                      onClick={() => handleQuantityChange(quantity - 1)}
+                      className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition"
+                      disabled={quantity <= 1}
+                    >
+                      <Minus className="w-4 h-4 text-gray-600" />
+                    </button>
+                    <span className="text-lg font-semibold text-gray-900 min-w-[2rem] text-center">
+                      {quantity}
+                    </span>
+                    <button
+                      onClick={() => handleQuantityChange(quantity + 1)}
+                      className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition"
+                    >
+                      <Plus className="w-4 h-4 text-gray-600" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               {/* Price Breakdown for Mobile */}
               <div className="mt-4 pt-4 border-t border-gray-200 space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Product Price</span>
+                  <span className="text-gray-600">
+                    Product Price (${formatPrice(product.price)} × {quantity})
+                  </span>
                   <span className="text-gray-900">
-                    ${formatPrice(product.price)}
+                    ${formatPrice(product.price * quantity)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -151,7 +231,11 @@ const PaymentModal = ({
               <h5 className="text-sm font-medium text-gray-700">
                 Choose Shipping Method:
               </h5>
-              <div className="grid grid-cols-2 gap-3">
+              <div
+                className={`grid ${
+                  isShipShippingAvailable ? "grid-cols-2" : "grid-cols-1"
+                } gap-3`}
+              >
                 <label
                   className={`flex flex-col items-center space-y-2 p-3 rounded-xl border-2 cursor-pointer transition-all ${
                     shippingMethod === "air"
@@ -172,37 +256,47 @@ const PaymentModal = ({
                   <div className="text-center">
                     <div className="font-medium text-sm">Air Shipping</div>
                     <div className="text-xs text-gray-500">
-                      ${formatPrice(selectedWeight * 11.7)}
+                      ${formatPrice(finalWeight * 11.7)}
                     </div>
                     <div className="text-xs text-gray-500">5-7 days</div>
                   </div>
                 </label>
-                <label
-                  className={`flex flex-col items-center space-y-2 p-3 rounded-xl border-2 cursor-pointer transition-all ${
-                    shippingMethod === "ship"
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300"
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="shipping"
-                    value="ship"
-                    checked={shippingMethod === "ship"}
-                    onChange={() => {
-                      handleShippingChange("ship");
-                    }}
-                    className="sr-only"
-                  />
-                  <div className="text-center">
-                    <div className="font-medium text-sm">Sea Shipping</div>
-                    <div className="text-xs text-gray-500">
-                      ${formatPrice(selectedWeight * 8.19)}
+
+                {isShipShippingAvailable && (
+                  <label
+                    className={`flex flex-col items-center space-y-2 p-3 rounded-xl border-2 cursor-pointer transition-all ${
+                      shippingMethod === "ship"
+                        ? "border-blue-500 bg-blue-50"
+                        : "border-gray-200 hover:border-gray-300"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="shipping"
+                      value="ship"
+                      checked={shippingMethod === "ship"}
+                      onChange={() => {
+                        handleShippingChange("ship");
+                      }}
+                      className="sr-only"
+                    />
+                    <div className="text-center">
+                      <div className="font-medium text-sm">Sea Shipping</div>
+                      <div className="text-xs text-gray-500">
+                        ${formatPrice(finalWeight * 8.19)}
+                      </div>
+                      <div className="text-xs text-gray-500">15-25 days</div>
                     </div>
-                    <div className="text-xs text-gray-500">15-25 days</div>
-                  </div>
-                </label>
+                  </label>
+                )}
               </div>
+
+              {!isShipShippingAvailable && (
+                <div className="text-xs text-gray-500 text-center bg-gray-100 p-3 rounded-lg">
+                  Sea shipping is available for orders of 100kg or more. Current
+                  weight: {finalWeight}kg
+                </div>
+              )}
             </div>
 
             {/* Security Badge */}
@@ -213,7 +307,16 @@ const PaymentModal = ({
 
             {/* PayPal Buttons */}
             <div className="space-y-3">
-              <PaypalPayment productPrice={finalPrice} />
+              <PaypalPayment
+                productPrice={finalPrice}
+                uid={"6838698f3eb780270052dc0a"}
+                num={"9876543210"}
+                sha={"123, Green Street, Springfield, USA"}
+                dmode={shippingMethod}
+                products={product}
+                weight={finalWeight}
+                quantity={quantity}
+              />
             </div>
           </div>
         </div>
@@ -262,9 +365,12 @@ const PaymentModal = ({
                         {product.title}
                       </h5>
                       <p className="text-sm text-gray-500">
-                        Weight: {selectedWeight}
+                        Weight: {selectedWeight}kg × {quantity} = {finalWeight}
+                        kg
                       </p>
-                      <p className="text-sm text-gray-500">Quantity: 1</p>
+                      <p className="text-sm text-gray-500">
+                        Quantity: {quantity}
+                      </p>
                     </div>
                     <div className="text-right">
                       <p className="text-xl font-bold text-gray-900">
@@ -273,12 +379,43 @@ const PaymentModal = ({
                     </div>
                   </div>
 
+                  {/* Quantity Selector for Desktop */}
+                  <div className="mt-6 pt-4 border-t border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700">
+                        Quantity
+                      </span>
+                      <div className="flex items-center space-x-3">
+                        <button
+                          onClick={() => handleQuantityChange(quantity - 1)}
+                          className="w-10 h-10 rounded-lg bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition"
+                          disabled={quantity <= 1}
+                        >
+                          <Minus className="w-4 h-4 text-gray-600" />
+                        </button>
+                        <span className="text-lg font-semibold text-gray-900 min-w-[3rem] text-center">
+                          {quantity}
+                        </span>
+                        <button
+                          onClick={() => handleQuantityChange(quantity + 1)}
+                          className="w-10 h-10 rounded-lg bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition"
+                        >
+                          <Plus className="w-4 h-4 text-gray-600" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Shipping Option */}
                   <div className="mt-6 space-y-4">
                     <h5 className="text-sm font-medium text-gray-700">
                       Choose Shipping Method:
                     </h5>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div
+                      className={`grid ${
+                        isShipShippingAvailable ? "grid-cols-2" : "grid-cols-1"
+                      } gap-4`}
+                    >
                       <label
                         className={`flex flex-col space-y-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
                           shippingMethod === "air"
@@ -308,52 +445,64 @@ const PaymentModal = ({
                         </div>
                         <div className="text-right">
                           <span className="text-sm font-semibold text-gray-900">
-                            ${formatPrice(selectedWeight * 11.7)}
+                            ${formatPrice(finalWeight * 11.7)}
                           </span>
                         </div>
                       </label>
 
-                      <label
-                        className={`flex flex-col space-y-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                          shippingMethod === "ship"
-                            ? "border-blue-500 bg-blue-50"
-                            : "border-gray-200 hover:border-gray-300"
-                        }`}
-                      >
-                        <div className="flex items-center space-x-3">
-                          <input
-                            type="radio"
-                            name="shipping-desktop"
-                            value="ship"
-                            checked={shippingMethod === "ship"}
-                            onChange={() => {
-                              handleShippingChange("ship");
-                            }}
-                            className="w-4 h-4 text-blue-600"
-                          />
-                          <div>
-                            <div className="font-medium text-sm">
-                              Sea Shipping
-                            </div>
-                            <div className="text-xs text-gray-500">
-                              15-25 business days
+                      {isShipShippingAvailable && (
+                        <label
+                          className={`flex flex-col space-y-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                            shippingMethod === "ship"
+                              ? "border-blue-500 bg-blue-50"
+                              : "border-gray-200 hover:border-gray-300"
+                          }`}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <input
+                              type="radio"
+                              name="shipping-desktop"
+                              value="ship"
+                              checked={shippingMethod === "ship"}
+                              onChange={() => {
+                                handleShippingChange("ship");
+                              }}
+                              className="w-4 h-4 text-blue-600"
+                            />
+                            <div>
+                              <div className="font-medium text-sm">
+                                Sea Shipping
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                15-25 business days
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="text-right">
-                          <span className="text-sm font-semibold text-gray-900">
-                            ${formatPrice(selectedWeight * 8.19)}
-                          </span>
-                        </div>
-                      </label>
+                          <div className="text-right">
+                            <span className="text-sm font-semibold text-gray-900">
+                              ${formatPrice(finalWeight * 8.19)}
+                            </span>
+                          </div>
+                        </label>
+                      )}
                     </div>
+
+                    {!isShipShippingAvailable && (
+                      <div className="text-xs text-gray-500 text-center bg-gray-100 p-3 rounded-lg">
+                        Sea shipping is available for orders of 100kg or more.
+                        Current weight: {finalWeight}kg
+                      </div>
+                    )}
                   </div>
 
                   <div className="mt-6 pt-6 border-t border-gray-200 space-y-3">
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Product Price</span>
+                      <span className="text-gray-600">
+                        Product Price (${formatPrice(product.price)} ×{" "}
+                        {quantity})
+                      </span>
                       <span className="text-gray-900">
-                        ${formatPrice(product.price)}
+                        ${formatPrice(product.price * quantity)}
                       </span>
                     </div>
                     <div className="flex justify-between text-sm">
@@ -391,7 +540,16 @@ const PaymentModal = ({
                 </h4>
 
                 <div className="space-y-4">
-                  <PaypalPayment productPrice={finalPrice} />
+                  <PaypalPayment
+                    productPrice={finalPrice}
+                    uid={"6838698f3eb780270052dc0a"}
+                    num={"9876543210"}
+                    sha={"123, Green Street, Springfield, USA"}
+                    dmode={shippingMethod}
+                    products={[product]}
+                    weight={finalWeight}
+                    quantity={quantity}
+                  />
                   <div className="text-xs text-gray-500 text-center mt-4">
                     By completing your purchase, you agree to our Terms of
                     Service and Privacy Policy.

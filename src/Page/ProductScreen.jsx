@@ -12,6 +12,8 @@ import {
 import { useEffect, useState } from "react";
 import PaymentModal from "../components/PaymentModal";
 import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const ProductScreen = () => {
   const [product, setProduct] = useState(null);
@@ -23,48 +25,22 @@ const ProductScreen = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   // Default weights - could also come from API
-  const weights = [1, 5, 10, 15, 20];
+  const weights = [1, 5, 10, 20, 25, 50, 100];
+  const { id } = useParams();
 
   // Mock API call - replace with your actual API endpoint
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        // Replace this with your actual API call
-        // const response = await fetch('/api/products/[id]');
-        // const data = await response.json();
-
-        // Mock API response for demonstration
-        setTimeout(() => {
-          const mockProduct = {
-            title: "Mechanical Gaming Keyboard",
-            description:
-              "RGB backlit mechanical keyboard with tactile switches and programmable keys.",
-            price: 149,
-            images: [
-              "https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=400&h=400&fit=crop",
-              "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&h=400&fit=crop",
-            ],
-            category: "WOOD AND BAMBOO PRODUCTS",
-            subcategory: "BAMBOO PRODUCTS",
-            categoryId: 5,
-            subcategoryId: 502,
-            quantity: 12,
-            keyIngredients: ["Mechanical Switches", "RGB Lighting"],
-            ratings: [
-              { user: "60f7b3a16c9d3c39d8e9b007", rating: 4 },
-              { user: "60f7b3a16c9d3c39d8e9b008", rating: 5 },
-            ],
-            rating: 3.5,
-            ratingCount: 2,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          };
-          setProduct(mockProduct);
-          setLoading(false);
-        }, 1000); // Simulate API delay
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/product/get-product/${id}`
+        );
+        setProduct(res.data.product);
       } catch (err) {
         setError(err.message);
+        setLoading(false);
+      } finally {
         setLoading(false);
       }
     };
@@ -282,7 +258,7 @@ const ProductScreen = () => {
 
           <div className="flex items-center mb-6">
             <span className="text-3xl font-bold text-gray-900">
-              ${product.price}
+              ${product.price} <span className="text-xs">/kg</span>
             </span>
             <span className="ml-3 text-green-600 text-sm font-medium">
               {product.quantity > 0 ? "In Stock" : "Out of stock"}
@@ -466,7 +442,7 @@ const ProductScreen = () => {
 
               <div className="flex items-center mb-8">
                 <span className="text-4xl font-bold text-gray-900">
-                  ${product.price}
+                  ${product.price} <span className="text-xs">/kg</span>
                 </span>
                 <span className="ml-4 text-green-600 font-medium text-lg">
                   {product.quantity > 0 ? "In Stock" : "Out of stock"}
@@ -508,7 +484,7 @@ const ProductScreen = () => {
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                   >
-                    {w}
+                    {`${w} kg`}
                   </button>
                 ))}
               </div>

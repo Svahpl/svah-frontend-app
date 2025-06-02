@@ -23,11 +23,11 @@ const ProductCategoryCard = ({ product }) => {
   const roundedRating = Math.round(rating);
   const navigate = useNavigate();
 
-  useEffect(()=>{},)
+  useEffect(() => {});
 
   return (
     <div
-      onClick={() => navigate("/view-product/123")}
+      onClick={() => navigate(`/view-product/${product._id}`)}
       data-aos="fade-up"
       data-aos-duration="600"
       data-aos-anchor-placement="top-bottom"
