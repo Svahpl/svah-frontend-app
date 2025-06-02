@@ -9,7 +9,8 @@ const PaypalPayment = ({
   sha,
   dmode,
   products,
-  weight,
+  userSelectedWeight,
+  totalWeight,
   quantity = 1,
 }) => {
   const [paypalOid, setPaypalOid] = useState("");
@@ -20,7 +21,12 @@ const PaypalPayment = ({
     shapes: "rect",
     layout: "vertical",
   };
-  console.log("-----degbug weight recieved", weight);
+  console.log("---- PRODUCT PRICE ---", productPrice);
+  console.log("---- SHIPPINH MODE  ---", sha);
+  console.log("---- PRODUCT PRICE ---", products[0]?.price);
+  console.log("--- QUANTITY---", quantity);
+  console.log("--- USER SELECTED WEIGHT ---",userSelectedWeight)
+
   const onCreateOrder = async () => {
     try {
       const response = await axios.post(
@@ -43,13 +49,20 @@ const PaypalPayment = ({
         shippingaddress: sha,
         finalAmount: productPrice,
         shipThrough: dmode,
-        items: products,
-        weight,
+        weight: totalWeight,
+        items: [
+          {
+            _id: products[0]?._id,
+            price: products[0]?.price,
+            qty: quantity,
+            weight: userSelectedWeight,
+          },
+        ],
         qty: quantity,
         paypalOrderId: paypalOid,
       }
     );
-    console.log(response);
+    console.log(response.data);
   };
   const onError = () => {
     console.error(`Payment Error`);

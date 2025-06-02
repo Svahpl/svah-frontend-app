@@ -8,12 +8,14 @@ import { useState, useEffect } from "react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from "axios";
 import { UseTitle } from "../components/compIndex";
-
+import { useAuthContext } from "../context/AuthContext";
 const HomePage = () => {
   UseTitle("SVAH | Agros & Herbs");
   const { isLoaded, isSignedIn, userId, sessionId, getToken } = useAuth();
   const { user } = useUser();
   const [token, setToken] = useState("");
+
+  const { storeTokenInLocalStorage, storeUser } = useAuthContext();
 
   // Get token once auth is loaded and user is signed in
   useEffect(() => {
@@ -21,7 +23,7 @@ const HomePage = () => {
       getToken()
         .then((t) => {
           setToken(t);
-          console.log("Token obtained:", t);
+          storeTokenInLocalStorage(t);
         })
         .catch((err) => {
           console.error("Failed to get token:", err);
@@ -29,7 +31,17 @@ const HomePage = () => {
     }
   }, [isLoaded, isSignedIn, getToken]);
 
-  // Make API calls once token and user are ready
+  const getMongoUserId = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/map/clerk/${user.id}`
+      );
+      storeUser(res.data.user[0]._id);
+    } catch (error) {
+      console.log(`Error getting MONGOUSER Id`, error);
+    }
+  };
+
   useEffect(() => {
     const sendUserData = async () => {
       if (!token || !user) return;
@@ -69,6 +81,7 @@ const HomePage = () => {
     };
 
     sendUserData();
+    getMongoUserId();
   }, [token, user]);
 
   return (

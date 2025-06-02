@@ -62,7 +62,7 @@ const PaymentModal = ({
     }
 
     setShippingCost(shippingPrice);
-    setFinalPrice(product.price * qty + shippingPrice);
+    setFinalPrice(selectedWeight * product.price * quantity + shippingPrice);
   };
 
   const getCurrentDollarinInr = async () => {
@@ -104,6 +104,9 @@ const PaymentModal = ({
 
   // Check if ship shipping is available based on total weight
   const isShipShippingAvailable = finalWeight >= 100;
+
+  // Calculate product total price based on weight and quantity
+  const productTotalPrice = selectedWeight * product.price * quantity;
 
   return (
     <>
@@ -167,7 +170,7 @@ const PaymentModal = ({
                     Weight: {selectedWeight}kg × {quantity} = {finalWeight}kg
                   </p>
                   <p className="text-lg font-bold text-gray-900">
-                    ${formatPrice(product.price)}
+                    ${formatPrice(product.price)}/kg
                   </p>
                 </div>
               </div>
@@ -203,10 +206,11 @@ const PaymentModal = ({
               <div className="mt-4 pt-4 border-t border-gray-200 space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">
-                    Product Price (${formatPrice(product.price)} × {quantity})
+                    Product Price (${formatPrice(product.price)}/kg ×{" "}
+                    {selectedWeight}kg × {quantity})
                   </span>
                   <span className="text-gray-900">
-                    ${formatPrice(product.price * quantity)}
+                    ${formatPrice(productTotalPrice)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -315,6 +319,7 @@ const PaymentModal = ({
                 dmode={shippingMethod}
                 products={product}
                 weight={finalWeight}
+                userSelectedWeight={selectedWeight}
                 quantity={quantity}
               />
             </div>
@@ -374,7 +379,7 @@ const PaymentModal = ({
                     </div>
                     <div className="text-right">
                       <p className="text-xl font-bold text-gray-900">
-                        ${formatPrice(product.price)}
+                        ${formatPrice(product.price)}/kg
                       </p>
                     </div>
                   </div>
@@ -498,11 +503,11 @@ const PaymentModal = ({
                   <div className="mt-6 pt-6 border-t border-gray-200 space-y-3">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">
-                        Product Price (${formatPrice(product.price)} ×{" "}
-                        {quantity})
+                        Product Price (${formatPrice(product.price)}/kg ×{" "}
+                        {selectedWeight}kg × {quantity})
                       </span>
                       <span className="text-gray-900">
-                        ${formatPrice(product.price * quantity)}
+                        ${formatPrice(productTotalPrice)}
                       </span>
                     </div>
                     <div className="flex justify-between text-sm">
@@ -548,6 +553,7 @@ const PaymentModal = ({
                     dmode={shippingMethod}
                     products={[product]}
                     weight={finalWeight}
+                    userSelectedWeight={selectedWeight}
                     quantity={quantity}
                   />
                   <div className="text-xs text-gray-500 text-center mt-4">
