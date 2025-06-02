@@ -25,7 +25,7 @@ const PaypalPayment = ({
   console.log("---- SHIPPINH MODE  ---", sha);
   console.log("---- PRODUCT PRICE ---", products[0]?.price);
   console.log("--- QUANTITY---", quantity);
-  console.log("--- USER SELECTED WEIGHT ---",userSelectedWeight)
+  console.log("--- USER SELECTED WEIGHT ---", userSelectedWeight);
 
   const onCreateOrder = async () => {
     try {
@@ -41,28 +41,32 @@ const PaypalPayment = ({
     }
   };
   const onApprove = async () => {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BACKEND_URL}/api/order/create-order`,
-      {
-        userId: uid,
-        phoneNumber: num,
-        shippingaddress: sha,
-        finalAmount: productPrice,
-        shipThrough: dmode,
-        weight: totalWeight,
-        items: [
-          {
-            _id: products[0]?._id,
-            price: products[0]?.price,
-            qty: quantity,
-            weight: userSelectedWeight,
-          },
-        ],
-        qty: quantity,
-        paypalOrderId: paypalOid,
-      }
-    );
-    console.log(response.data);
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/order/create-order`,
+        {
+          userId: uid,
+          phoneNumber: num,
+          shippingaddress: sha,
+          finalAmount: productPrice,
+          shipThrough: dmode,
+          weight: totalWeight,
+          items: [
+            {
+              _id: products[0]?._id,
+              price: products[0]?.price,
+              qty: quantity,
+              weight: userSelectedWeight,
+            },
+          ],
+          qty: quantity,
+          paypalOrderId: paypalOid,
+        }
+      );
+      window.location.href = "/complete-payment";
+    } catch (error) {
+      console.log("On approve error", error);
+    }
   };
   const onError = () => {
     console.error(`Payment Error`);
