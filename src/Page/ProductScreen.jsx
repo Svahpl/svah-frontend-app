@@ -162,6 +162,22 @@ const ProductScreen = () => {
     );
   }
 
+  const addToCart = async (req, res) => {
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/cart/add-to-cart`,
+        {
+          userId: localStorage.getItem("uid"),
+          productId: id,
+          quantity: 1,
+        }
+      );
+      res.status === 200 ? toast("Added to cart") : null;
+    } catch (error) {
+      console.log("Add to cart error", error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Mobile Layout */}
@@ -315,7 +331,10 @@ const ProductScreen = () => {
           </div>
 
           <div className="space-y-3">
-            <button className="w-full bg-gradient-to-r from-emerald-600 to-green-700 hover:from-emerald-700 hover:to-green-800 text-white font-semibold py-3 px-4 rounded-full flex items-center justify-center space-x-2 transition shadow hover:shadow-lg transform hover:scale-105">
+            <button
+              onClick={() => addToCart()}
+              className="w-full bg-gradient-to-r from-emerald-600 to-green-700 hover:from-emerald-700 hover:to-green-800 text-white font-semibold py-3 px-4 rounded-full flex items-center justify-center space-x-2 transition shadow hover:shadow-lg transform hover:scale-105"
+            >
               <ShoppingBag className="w-4 h-4" />
               <span className="text-sm">Add To Bag</span>
             </button>
@@ -500,7 +519,10 @@ const ProductScreen = () => {
             </div>
 
             <div className="space-y-4">
-              <button className="w-full bg-green-950 text-white font-semibold py-4 px-6 rounded-full flex items-center justify-center space-x-3 transition shadow hover:shadow-xl transform hover:scale-105">
+              <button
+                onClick={() => addToCart()}
+                className="w-full bg-green-950 text-white font-semibold py-4 px-6 rounded-full flex items-center justify-center space-x-3 transition shadow hover:shadow-xl transform hover:scale-105"
+              >
                 <ShoppingBag className="w-5 h-5" />
                 <span>Add To Bag</span>
               </button>

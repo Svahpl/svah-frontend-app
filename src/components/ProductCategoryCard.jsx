@@ -1,5 +1,6 @@
 import AOS from "aos";
 import "aos/dist/aos.css";
+import axios from "axios";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -23,17 +24,37 @@ const ProductCategoryCard = ({ product }) => {
   const roundedRating = Math.round(rating);
   const navigate = useNavigate();
 
+  const addToCart = async (req, res) => {
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/cart/add-to-cart`,
+        {
+          userId: localStorage.getItem("uid"),
+          productId: product._id,
+          quantity: 1,
+        }
+      );
+      res.status === 200 ? toast("Added to cart") : null;
+    } catch (error) {
+      console.log("Add to cart error", error);
+    }
+  };
+
   useEffect(() => {});
 
   return (
     <div
-      onClick={() => navigate(`/view-product/${product._id}`)}
       data-aos="fade-up"
       data-aos-duration="600"
       data-aos-anchor-placement="top-bottom"
       className="max-w-sm w-full bg-white rounded-2xl shadow-lg overflow-hidden mx-auto flex flex-col"
     >
-      <img src={images[0]} alt={title} className="w-full h-64 object-cover" />
+      <img
+        onClick={() => navigate(`/view-product/${product._id}`)}
+        src={images[0]}
+        alt={title}
+        className="w-full h-64 object-cover cursor-pointer"
+      />
 
       <div className="p-5 flex flex-col flex-grow">
         <div className="space-y-2 flex-grow">
@@ -68,7 +89,7 @@ const ProductCategoryCard = ({ product }) => {
         {quantity > 0 ? (
           <>
             <button
-              onClick={() => toast("Item Added")}
+              onClick={() => addToCart()}
               className="w-full hover:scale-105 mt-4 bg-green-950 text-white py-2 px-4 rounded-full transition-colors duration-200"
             >
               Add to cart

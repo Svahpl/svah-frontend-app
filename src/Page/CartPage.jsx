@@ -1,7 +1,56 @@
+import { useEffect, useState } from "react";
 import { CartProduct, LocationUI, UseTitle } from "../components/compIndex";
+import axios from "axios";
 
 const CartPage = () => {
-  UseTitle('Your Cart')
+  UseTitle("Your Cart");
+
+  const [userCartItems, setUserCartItems] = useState([]);
+
+  const userId = localStorage.getItem("uid");
+  // fetch user cart from API endpoint
+  const getCart = async () => {
+    console.log(userId);
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/cart/getcart/${userId}`
+      );
+      setUserCartItems(res.data.items);
+    } catch (error) {
+      console.error(`Error fetching user's cart`, error);
+    }
+  };
+
+  useEffect(() => {
+    getCart();
+  }, []);
+
+  const deleteCartItem = async (id, qty, action, cartItemId) => {
+    try {
+      if (action === "delete") {
+        const res = await axios.delete(
+          `${
+            import.meta.env.VITE_BACKEND_URL
+          }/api/cart/delete-cart-item?userId=${userId}&productId=${id}`
+        );
+        console.log(res);
+      } else {
+        const res = await axios.put(
+          `${
+            import.meta.env.VITE_BACKEND_URL
+          }/api/cart/update-cart/${userId}/${cartItemId}`,
+          {
+            newQuantity: qty,
+            action: action,
+          }
+        );
+        console.log(res);
+      }
+    } catch (error) {
+      console.log("Cart Item Deletion error", error);
+    }
+  };
+
   return (
     <>
       <LocationUI />
@@ -33,7 +82,10 @@ const CartPage = () => {
 
             {/* Mobile Proceed To Buy Button - Hidden on Desktop */}
             <div className="buy-btn text-center content-center mt-5 lg:hidden">
-              <button className="rounded-full bg-green text-white w-96 py-2">
+              <button
+                onClick={() => {}}
+                className="rounded-full bg-green text-white w-96 py-2"
+              >
                 Proceed To Buy
               </button>
             </div>
@@ -56,7 +108,14 @@ const CartPage = () => {
             </div>
 
             {/* Cart Product Items */}
-            <CartProduct />
+            {userCartItems.map((item, index) => {
+              console.log("Parent Comp ID", item);
+              return (
+                <>
+                  <CartProduct product={item} onDelete={deleteCartItem} />
+                </>
+              );
+            })}
           </div>
 
           {/* Sidebar - Checkout Section (Right Column on Desktop) */}
@@ -71,7 +130,10 @@ const CartPage = () => {
               </div>
 
               {/* Proceed to Buy Button */}
-              <button className="w-full bg-green lg:text-white text-black font-medium py-2 px-4 rounded-full mb-4 transition-colors">
+              <button
+                onClick={() => {}}
+                className="w-full bg-green lg:text-white text-black font-medium py-2 px-4 rounded-full mb-4 transition-colors"
+              >
                 Proceed to Buy
               </button>
 

@@ -43,34 +43,45 @@ const PaypalPayment = ({
     }
   };
   const onApprove = async () => {
+    console.log("CREATING ORDER FOR THE FOLLOWING:", uid);
+    console.log("CREATING ORDER FOR THE FOLLOWING:", num);
+    console.log("CREATING ORDER FOR THE FOLLOWING:", sha);
+    console.log("CREATING ORDER FOR THE FOLLOWING:", productPrice);
+    console.log("CREATING ORDER FOR THE FOLLOWING:", dmode);
+    console.log("CREATING ORDER FOR THE FOLLOWING:", products[0]?._id);
+    console.log("CREATING ORDER FOR THE FOLLOWING:", products[0]?.price);
+    console.log("CREATING ORDER FOR THE FOLLOWING:", userSelectedWeight);
+    console.log("CREATING ORDER FOR THE FOLLOWING:", quantity);
+    console.log("CREATING ORDER FOR THE FOLLOWING:", paypalOid);
+
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/order/create-order`,
         {
-          userId: uid,
+          user: uid,
           phoneNumber: num,
-          shippingaddress: sha,
-          finalAmount: productPrice,
+          shippingAddress: sha, 
+          totalAmount: productPrice,
           shipThrough: dmode,
-          weight: totalWeight,
           items: [
             {
-              _id: products[0]?._id,
+              product: products[0]?._id, 
               price: products[0]?.price,
-              qty: quantity,
+              quantity: quantity, 
               weight: userSelectedWeight,
             },
           ],
-          qty: quantity,
-          paypalOrderId: paypalOid,
+          expectedDelivery: null, 
         }
       );
+
       console.log(response.data);
       navigate("/complete-payment");
     } catch (error) {
-      console.log("On approve error", error);
+      console.log("On approve error", error.response?.data || error.message);
     }
   };
+
   const onError = () => {
     console.error(`Payment Error`);
     // window.location.href = "/payment-cancel";

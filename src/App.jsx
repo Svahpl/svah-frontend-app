@@ -17,6 +17,7 @@ import {
   AccountPage,
   ProductPage,
   CategoryProducts,
+  InvoiceTemplate,
 } from "./Page/pageIndex";
 import ProductScreen from "./Page/ProductScreen";
 import { AddressManager } from "./components/compIndex";
@@ -50,7 +51,7 @@ function App() {
           <Route path="/view-products" element={<CategoryProducts />} />
           <Route path="/my-account" element={<AccountPage />} />
           <Route path="/my-account/addresses" element={<AddressManager />} />
-
+          <Route path="/invoice-template" element={<InvoiceTemplate />} />
           {/* -------- IMPORTANT PAYMENT ROUTES DO NOT TOUCH ---------- */}
           <Route path="/paypal-test" element={<PaypalPayment />} />
           <Route path="/complete-payment" element={<PaymentSuccess />} />
