@@ -1,6 +1,7 @@
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const PaypalPayment = ({
   productPrice = 0,
@@ -14,6 +15,7 @@ const PaypalPayment = ({
   quantity = 1,
 }) => {
   const [paypalOid, setPaypalOid] = useState("");
+  const navigate = useNavigate();
   const initialOptions = {
     clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID,
   };
@@ -63,7 +65,8 @@ const PaypalPayment = ({
           paypalOrderId: paypalOid,
         }
       );
-      window.location.href = "/complete-payment";
+      console.log(response.data);
+      navigate("/complete-payment");
     } catch (error) {
       console.log("On approve error", error);
     }
