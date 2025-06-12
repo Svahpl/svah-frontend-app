@@ -4,6 +4,7 @@ import App from "./App.jsx";
 import "./index.css";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { AuthProvider } from "./context/AuthContext.jsx";
+import { AppProvider } from "./context/AppContext.jsx";
 
 // Import your Publishable Key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -15,10 +16,12 @@ if (!PUBLISHABLE_KEY) {
 const rootElement = document.getElementById("root");
 createRoot(rootElement).render(
   <StrictMode>
-    <AuthProvider>
-      <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-        <App />
-      </ClerkProvider>
-    </AuthProvider>
+    <AppProvider>
+      <AuthProvider>
+        <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+          <App />
+        </ClerkProvider>
+      </AuthProvider>
+    </AppProvider>
   </StrictMode>
 );

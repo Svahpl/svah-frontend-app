@@ -92,7 +92,7 @@ const AccountPage = () => {
       icon: <Heart className="w-6 h-6 md:w-8 md:h-8" />,
       title: "Your Wishlist",
       description: "Save items. Keep track of what you love.",
-      link: "/",
+      link: "/wishlist",
     },
   ];
 

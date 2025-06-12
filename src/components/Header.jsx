@@ -8,21 +8,41 @@ import {
   useAuth,
   useUser,
 } from "@clerk/clerk-react";
+import axios from "axios";
+import { useAppContext } from "../context/AppContext";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const [cartCount, setCartCount] = useState(1);
+  // const [cartCount, setCartCount] = useState(0);
 
   // Get auth state and user data
   const { isLoaded: authLoaded, isSignedIn } = useAuth();
+  const { cartCount, setCartCounter } = useAppContext();
   const { isLoaded: userLoaded, user } = useUser();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const getCartCounter = async () => {
+    try {
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/cart/getcart/${localStorage.getItem("uid")}`
+      );
+      setCartCounter(res?.data?.items?.length);
+    } catch (error) {
+      console.log("Error getting cart", error);
+    }
+  };
+
+  useEffect(() => {
+    getCartCounter();
   }, []);
 
   const handleSearch = (e) => {
@@ -162,9 +182,7 @@ const Header = () => {
                     AGROS AND HERBS
                   </span>
                   <br />
-                  <span className="text-primary-700 text-xs">
-                    SINCE 2021
-                  </span>
+                  <span className="text-primary-700 text-xs">SINCE 2021</span>
                 </h1>
               </div>
             </a>

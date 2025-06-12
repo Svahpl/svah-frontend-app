@@ -11,9 +11,11 @@ const CategoryProducts = () => {
   const [ratingFilter, setRatingFilter] = useState([4, 3, 2, 1]);
   const [selectedRating, setSelectedRating] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isApiLoading, setIsApiLoading] = useState(true); // New state for API loading
 
   const getAllProducts = async () => {
     try {
+      setIsApiLoading(true); // Start loading
       const res = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/product/get-all`
       );
@@ -21,6 +23,10 @@ const CategoryProducts = () => {
       setDummyProducts(res.data.products);
     } catch (error) {
       console.log(`Error fetching all products: ${error}`);
+      // Fallback to dummy products if API fails
+      setDummyProducts(products);
+    } finally {
+      setIsApiLoading(false); // Stop loading
     }
   };
 
@@ -87,6 +93,15 @@ const CategoryProducts = () => {
   const LoadingOverlay = () => (
     <ScreenLoaders text={" Filtering products... "} />
   );
+
+  const ApiLoadingOverlay = () => (
+    <ScreenLoaders text={" Loading products... "} />
+  );
+
+  // Show API loading screen while fetching initial data
+  if (isApiLoading) {
+    return <ApiLoadingOverlay />;
+  }
 
   return (
     <>

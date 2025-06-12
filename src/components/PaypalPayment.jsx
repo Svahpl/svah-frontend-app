@@ -71,7 +71,8 @@ const PaypalPayment = ({
               weight: userSelectedWeight,
             },
           ],
-          expectedDelivery: null, 
+          expectedDelivery: new Date(),
+          paypalOid:paypalOid, 
         }
       );
 

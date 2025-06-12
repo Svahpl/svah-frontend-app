@@ -20,14 +20,13 @@ const CartProduct = ({
 
   const handleDelete = () => {
     // id, qty, action, cartItemId
-    onDelete?.(product._id,null,"delete",'')
+    onDelete?.(product._id, null, "delete", "");
     // onDelete?.(product.id);
   };
 
   const handleAddToWishlist = () => {
-    onAddToWishlist?.(product.id);
+    onAddToWishlist?.(product._id);
   };
-
 
   return (
     <>
@@ -95,17 +94,19 @@ const CartProduct = ({
 
           {/* Cart Action Buttons */}
           <div className="flex mt-2 h-20 ml-2 gap-4 items-center">
-            <div className="relative w-32 ml-1 border-green bg-white rounded-full py-1 text-center">
+            <div className="relative w-32 ml-1 border-green bg-green rounded-full py-2 px-2 text-center">
               <button
-                className="absolute left-2 top-1/2 -translate-y-1/2 cursor-pointer hover:text-red-500 transition-colors duration-200"
+                className="absolute text-white left-2 text-2xl px-2 top-1/2 -translate-y-1/2 cursor-pointer  transition-colors duration-200"
                 onClick={handleQuantityDecrease}
                 disabled={product.quantity <= 1}
               >
                 -
               </button>
-              <span className="block text-sm">{product.quantity}</span>
+              <span className="block text-white text-sm">
+                {product.quantity}
+              </span>
               <button
-                className="absolute right-2 top-1/2 -translate-y-1/2 font-bold text-lg cursor-pointer hover:text-green-500 transition-colors duration-200"
+                className="absolute text-white right-2 top-1/2 -translate-y-1/2 font-bold text-lg cursor-pointer transition-colors duration-200"
                 onClick={handleQuantityIncrease}
               >
                 +
@@ -113,14 +114,14 @@ const CartProduct = ({
             </div>
 
             <div
-              className="relative ml-2 w-20 border-green bg-white rounded-full py-1 text-center flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+              className="relative ml-2 w-20 border-green bg-green text-white rounded-full py-2 px-2 text-center flex items-center justify-center cursor-pointer transition-colors duration-200"
               onClick={handleDelete}
             >
               <span className="block text-sm">Delete</span>
             </div>
 
             <div
-              className="ml-2 w-32 mx-2 border-green bg-white rounded-full py-1 text-center flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+              className="ml-2 bg-green text-white w-32 mx-2 border-green rounded-full py-2 px-2  text-center flex items-center justify-center cursor-pointer  transition-colors duration-200"
               onClick={handleAddToWishlist}
             >
               <span className="capitalize text-sm">add to wishlist</span>

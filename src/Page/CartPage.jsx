@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { CartProduct, LocationUI, UseTitle } from "../components/compIndex";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const CartPage = () => {
   UseTitle("Your Cart");
 
   const [userCartItems, setUserCartItems] = useState([]);
+  const [refresh, setRefresh] = useState(0);
 
   const userId = localStorage.getItem("uid");
   // fetch user cart from API endpoint
@@ -21,9 +23,13 @@ const CartPage = () => {
     }
   };
 
+  const refreshComponent = () => {
+    setRefresh((prev) => prev + 1);
+  };
+
   useEffect(() => {
     getCart();
-  }, []);
+  }, [refresh]);
 
   const deleteCartItem = async (id, qty, action, cartItemId) => {
     try {
@@ -33,7 +39,8 @@ const CartPage = () => {
             import.meta.env.VITE_BACKEND_URL
           }/api/cart/delete-cart-item?userId=${userId}&productId=${id}`
         );
-        console.log(res);
+        toast("Deleted");
+        refreshComponent();
       } else {
         const res = await axios.put(
           `${
@@ -48,6 +55,20 @@ const CartPage = () => {
       }
     } catch (error) {
       console.log("Cart Item Deletion error", error);
+    }
+  };
+
+  const addToWishList = async (productId) => {
+    try {
+      const res = await axios.post(
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/wishlist/add-to-wishlist/${userId}/${productId}`
+      );
+      if (res.status === 200) toast("Added to wishlist!");
+    } catch (error) {
+      console.log("Error adding item to wishlist", error);
+      toast("Internal Error");
     }
   };
 
@@ -108,11 +129,15 @@ const CartPage = () => {
             </div>
 
             {/* Cart Product Items */}
-            {userCartItems.map((item, index) => {
+            {userCartItems?.map((item, index) => {
               console.log("Parent Comp ID", item);
               return (
                 <>
-                  <CartProduct product={item} onDelete={deleteCartItem} />
+                  <CartProduct
+                    product={item}
+                    onDelete={deleteCartItem}
+                    onAddToWishlist={addToWishList}
+                  />
                 </>
               );
             })}
