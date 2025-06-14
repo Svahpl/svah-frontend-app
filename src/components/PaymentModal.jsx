@@ -313,7 +313,7 @@ const PaymentModal = ({
             <div className="space-y-3">
               <PaypalPayment
                 productPrice={finalPrice}
-                uid={"6838698f3eb780270052dc0a"}
+                uid={localStorage.getItem('uid')}
                 num={"9876543210"}
                 sha={"123, Green Street, Springfield, USA"}
                 dmode={shippingMethod}
