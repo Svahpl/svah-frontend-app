@@ -13,12 +13,74 @@ const initialAddresses = [
   },
 ];
 
+// Skeleton Loader Component
+const AddressSkeleton = () => {
+  return (
+    <div className="group relative overflow-hidden rounded-lg border border-gray-300 bg-white p-6 shadow-sm animate-pulse">
+      {/* Header skeleton */}
+      <div className="flex items-center justify-between mb-5">
+        <div className="h-6 w-20 bg-gray-300 rounded-md"></div>
+        <div className="flex gap-2">
+          <div className="h-8 w-8 bg-gray-200 rounded-md"></div>
+          <div className="h-8 w-8 bg-gray-200 rounded-md"></div>
+        </div>
+      </div>
+
+      {/* Address Information Grid skeleton */}
+      <div className="space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Address Section skeleton */}
+          <div className="space-y-2">
+            <div className="h-4 w-24 bg-gray-300 rounded"></div>
+            <div className="space-y-2">
+              <div className="h-5 w-full bg-gray-200 rounded"></div>
+              <div className="h-4 w-3/4 bg-gray-200 rounded"></div>
+            </div>
+          </div>
+
+          {/* Location Section skeleton */}
+          <div className="space-y-3">
+            <div className="h-4 w-28 bg-gray-300 rounded"></div>
+            <div className="space-y-2">
+              <div className="flex items-center">
+                <div className="h-4 w-10 bg-gray-300 rounded mr-2"></div>
+                <div className="h-4 w-20 bg-gray-200 rounded"></div>
+              </div>
+              <div className="flex items-center">
+                <div className="h-4 w-10 bg-gray-300 rounded mr-2"></div>
+                <div className="h-4 w-16 bg-gray-200 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Contact Information skeleton */}
+        <div className="pt-4 border-t border-gray-200">
+          <div className="h-4 w-32 bg-gray-300 rounded mb-2"></div>
+          <div className="flex items-center">
+            <div className="h-4 w-12 bg-gray-300 rounded mr-2"></div>
+            <div className="h-4 w-24 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Action Buttons skeleton */}
+      <div className="flex gap-3 mt-5 pt-4 border-t border-gray-200 lg:hidden">
+        <div className="flex-1 h-10 bg-gray-200 rounded-md"></div>
+        <div className="flex-1 h-10 bg-gray-200 rounded-md"></div>
+      </div>
+    </div>
+  );
+};
+
 export default function AddressManager() {
   UseTitle("Your Addresses");
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const userId = localStorage.getItem("uid");
+
   // State for addresses so we can update on edit
   const [addresses, setAddresses] = useState(initialAddresses);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -170,6 +232,7 @@ export default function AddressManager() {
 
   const fetchUsersAddress = async () => {
     try {
+      setIsLoading(true);
       const res = await axios.get(
         `${backendUrl}/api/auth/get-user-address/${userId}`
       );
@@ -177,6 +240,8 @@ export default function AddressManager() {
       setPhoneNumber(res?.data?.address?.phoneNumber);
     } catch (error) {
       console.log("Error fetching users address", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -199,118 +264,127 @@ export default function AddressManager() {
           </div>
         </div>
 
-        {/* Existing addresses */}
-        {addresses.map((addr, idx) => (
-          <div
-            key={idx}
-            className="group relative overflow-hidden rounded-lg border border-gray-300 bg-white p-6 shadow-sm transition-all duration-200 hover:shadow-md hover:border-green-700"
-          >
-            {/* Header with country and actions */}
-            <div className="flex items-center justify-between mb-5">
-              <span className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-semibold bg-green-800 text-white uppercase tracking-wide">
-                {addr.country}
-              </span>
-              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        {/* Show skeleton loaders while loading */}
+        {isLoading ? (
+          <>
+            {[...Array(2)].map((_, idx) => (
+              <AddressSkeleton key={idx} />
+            ))}
+          </>
+        ) : (
+          /* Existing addresses */
+          addresses.map((addr, idx) => (
+            <div
+              key={idx}
+              className="group relative overflow-hidden rounded-lg border border-gray-300 bg-white p-6 shadow-sm transition-all duration-200 hover:shadow-md hover:border-green-700"
+            >
+              {/* Header with country and actions */}
+              <div className="flex items-center justify-between mb-5">
+                <span className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-semibold bg-green-800 text-white uppercase tracking-wide">
+                  {addr.country}
+                </span>
+                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <button
+                    className="p-2 cursor-pointer rounded-md bg-green-50 text-green-800 hover:bg-green-100 border border-green-200 transition-colors duration-200"
+                    type="button"
+                    onClick={() => openEditModal(idx)}
+                    title="Edit Address"
+                  >
+                    <Pencil size={16} />
+                  </button>
+                  <button
+                    className="p-2 cursor-pointer rounded-md bg-red-50 text-red-700 hover:bg-red-100 border border-red-200 transition-colors duration-200"
+                    type="button"
+                    onClick={() => handleDelete(idx, addr._id)}
+                    title="Delete Address"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Address Information Grid */}
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  {/* Address Section */}
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                      Street Address
+                    </h4>
+                    <div className="text-gray-900 leading-relaxed">
+                      <div className="font-medium">{addr.addressLine1}</div>
+                      {addr.addressLine2 && (
+                        <div className="text-gray-600 mt-1">
+                          {addr.addressLine2}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Location Section */}
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                      Location Details
+                    </h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center">
+                        <span className="text-gray-600 text-sm font-medium w-16">
+                          City:
+                        </span>
+                        <span className="text-gray-900 font-medium capitalize">
+                          {addr.city}
+                        </span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="text-gray-600 text-sm font-medium w-16">
+                          State:
+                        </span>
+                        <span className="text-gray-900 capitalize">
+                          {addr.state}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact Information */}
+                <div className="pt-4 border-t border-gray-200">
+                  <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-2">
+                    Contact Information
+                  </h4>
+                  <div className="flex items-center">
+                    <span className="text-gray-600 text-sm font-medium w-16">
+                      Phone:
+                    </span>
+                    <span className="text-gray-900 font-mono text-sm">
+                      {addr.phone}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile Action Buttons */}
+              <div className="flex gap-3 mt-5 pt-4 border-t border-gray-200 lg:hidden">
                 <button
-                  className="p-2 cursor-pointer rounded-md bg-green-50 text-green-800 hover:bg-green-100 border border-green-200 transition-colors duration-200"
+                  className="flex-1 cursor-pointer flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-green-800 bg-green-50 border border-green-200 rounded-md hover:bg-green-100 transition-colors duration-200"
                   type="button"
                   onClick={() => openEditModal(idx)}
-                  title="Edit Address"
                 >
-                  <Pencil size={16} />
+                  <Pencil size={14} />
+                  Edit Address
                 </button>
                 <button
-                  className="p-2 cursor-pointer rounded-md bg-red-50 text-red-700 hover:bg-red-100 border border-red-200 transition-colors duration-200"
+                  className="flex-1 cursor-pointer flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-red-700 bg-red-50 border border-red-200 rounded-md hover:bg-red-100 transition-colors duration-200"
                   type="button"
                   onClick={() => handleDelete(idx, addr._id)}
-                  title="Delete Address"
                 >
-                  <Trash2 size={16} />
+                  <Trash2 size={14} />
+                  Delete Address
                 </button>
               </div>
             </div>
-
-            {/* Address Information Grid */}
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {/* Address Section */}
-                <div className="space-y-2">
-                  <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
-                    Street Address
-                  </h4>
-                  <div className="text-gray-900 leading-relaxed">
-                    <div className="font-medium">{addr.addressLine1}</div>
-                    {addr.addressLine2 && (
-                      <div className="text-gray-600 mt-1">
-                        {addr.addressLine2}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Location Section */}
-                <div className="space-y-3">
-                  <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
-                    Location Details
-                  </h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center">
-                      <span className="text-gray-600 text-sm font-medium w-16">
-                        City:
-                      </span>
-                      <span className="text-gray-900 font-medium capitalize">
-                        {addr.city}
-                      </span>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="text-gray-600 text-sm font-medium w-16">
-                        State:
-                      </span>
-                      <span className="text-gray-900 capitalize">
-                        {addr.state}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Contact Information */}
-              <div className="pt-4 border-t border-gray-200">
-                <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-2">
-                  Contact Information
-                </h4>
-                <div className="flex items-center">
-                  <span className="text-gray-600 text-sm font-medium w-16">
-                    Phone:
-                  </span>
-                  <span className="text-gray-900 font-mono text-sm">
-                    {addr.phone}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Mobile Action Buttons */}
-            <div className="flex gap-3 mt-5 pt-4 border-t border-gray-200 lg:hidden">
-              <button
-                className="flex-1 cursor-pointer flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-green-800 bg-green-50 border border-green-200 rounded-md hover:bg-green-100 transition-colors duration-200"
-                type="button"
-                onClick={() => openEditModal(idx)}
-              >
-                <Pencil size={14} />
-                Edit Address
-              </button>
-              <button
-                className="flex-1 cursor-pointer flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-red-700 bg-red-50 border border-red-200 rounded-md hover:bg-red-100 transition-colors duration-200"
-                type="button"
-                onClick={() => handleDelete(idx, addr._id)}
-              >
-                <Trash2 size={14} />
-                Delete Address
-              </button>
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       {/* Add/Edit Modal */}
