@@ -36,7 +36,8 @@ const HomePage = () => {
       const res = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/auth/map/clerk/${user.id}`
       );
-      storeUser(res.data.user[0]._id);
+      console.log('user id',res?.data?.user[0]?._id);
+      storeUser(res?.data?.user[0]?._id);
     } catch (error) {
       console.log(`Error getting MONGOUSER Id`, error);
     }

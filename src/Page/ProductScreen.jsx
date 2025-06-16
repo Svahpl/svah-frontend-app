@@ -71,6 +71,7 @@ const ProductScreen = () => {
     setShowPaymentModal(false);
     // Restore body scroll
     document.body.style.overflow = "unset";
+    window.location.reload();
   };
 
   // Function to render star rating

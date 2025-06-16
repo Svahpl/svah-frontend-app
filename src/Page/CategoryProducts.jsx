@@ -210,7 +210,7 @@ const CategoryProducts = () => {
               isLoading ? "opacity-50" : "opacity-100"
             }`}
           >
-            {dummyProducts.map((product, index) => (
+            {dummyProducts?.map((product, index) => (
               <ProductCategoryCard key={index} product={product} />
             ))}
           </div>

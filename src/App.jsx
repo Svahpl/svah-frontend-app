@@ -19,6 +19,7 @@ import {
   CategoryProducts,
   InvoiceTemplate,
   WishlistPage,
+  MyOrdersPage,
 } from "./Page/pageIndex";
 import ProductScreen from "./Page/ProductScreen";
 import { AddressManager } from "./components/compIndex";
@@ -51,6 +52,7 @@ function App() {
           <Route path="/wishlist" element={<WishlistPage />} />
           <Route path="/view-product/:id" element={<ProductScreen />} />
           <Route path="/view-products" element={<CategoryProducts />} />
+          <Route path="/orders" element={<MyOrdersPage />} />
           <Route path="/my-account" element={<AccountPage />} />
           <Route path="/my-account/addresses" element={<AddressManager />} />
           <Route path="/invoice-template" element={<InvoiceTemplate />} />
