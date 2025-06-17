@@ -94,7 +94,7 @@ const CartProduct = ({
 
           {/* Cart Action Buttons */}
           <div className="flex mt-2 h-20 ml-2 gap-4 items-center">
-            <div className="relative w-32 ml-1 border-green bg-green rounded-full py-2 px-2 text-center">
+            <div className="relative w-32 ml-1 border-none bg-green-800 rounded-lg py-2 px-2 text-center">
               <button
                 className="absolute text-white left-2 text-2xl px-2 top-1/2 -translate-y-1/2 cursor-pointer  transition-colors duration-200"
                 onClick={handleQuantityDecrease}
@@ -114,14 +114,14 @@ const CartProduct = ({
             </div>
 
             <div
-              className="relative ml-2 w-20 border-green bg-green text-white rounded-full py-2 px-2 text-center flex items-center justify-center cursor-pointer transition-colors duration-200"
+              className="relative ml-2 w-20 border-none bg-green-800 text-white rounded-lg py-2 px-2 text-center flex items-center justify-center cursor-pointer transition-colors duration-200"
               onClick={handleDelete}
             >
               <span className="block text-sm">Delete</span>
             </div>
 
             <div
-              className="ml-2 bg-green text-white w-32 mx-2 border-green rounded-full py-2 px-2  text-center flex items-center justify-center cursor-pointer  transition-colors duration-200"
+              className="ml-2 bg-green-800 text-white w-32 mx-2 border-none rounded-lg py-2 px-2  text-center flex items-center justify-center cursor-pointer  transition-colors duration-200"
               onClick={handleAddToWishlist}
             >
               <span className="capitalize text-sm">add to wishlist</span>

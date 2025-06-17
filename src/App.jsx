@@ -41,7 +41,7 @@ function App() {
         <Toaster
           position="top-right"
           toastOptions={{
-            style: { fontSize: "17px", background: "#1d3825", color: "white" },
+            style: { fontSize: "17px", background: "#166434", color: "white" },
           }}
         />
         <CyberCrimeWarning />

@@ -105,7 +105,7 @@ const CartPage = () => {
             <div className="buy-btn text-center content-center mt-5 lg:hidden">
               <button
                 onClick={() => {}}
-                className="rounded-full bg-green text-white w-96 py-2"
+                className="rounded-lg bg-green-800 text-white w-96 py-2"
               >
                 Proceed To Buy
               </button>
@@ -157,7 +157,7 @@ const CartPage = () => {
               {/* Proceed to Buy Button */}
               <button
                 onClick={() => {}}
-                className="w-full bg-green lg:text-white text-black font-medium py-2 px-4 rounded-full mb-4 transition-colors"
+                className="w-full bg-green-800 text-lg lg:text-white text-black font-medium py-2 px-4 rounded-lg mb-4 transition-colors"
               >
                 Proceed to Buy
               </button>
