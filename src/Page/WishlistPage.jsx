@@ -5,6 +5,9 @@ import toast from "react-hot-toast";
 
 // Wishlist Product Component
 const WishlistProduct = ({ product, onDelete, onAddToCart }) => {
+  // Check if product exists and has quantity property
+  if (!product) return null;
+
   // Check if product is in stock based on quantity
   const isInStock = product.quantity > 0;
 
@@ -15,7 +18,7 @@ const WishlistProduct = ({ product, onDelete, onAddToCart }) => {
         <div className="flex-shrink-0">
           <img
             src={product.images?.[0] || "/api/placeholder/150/150"}
-            alt={product.title}
+            alt={product.title || "Product image"}
             className="w-32 h-32 lg:w-40 lg:h-40 object-cover rounded-lg"
             onError={(e) => {
               e.target.src = "/api/placeholder/150/150";
@@ -26,7 +29,7 @@ const WishlistProduct = ({ product, onDelete, onAddToCart }) => {
         {/* Product Details */}
         <div className="flex-1 min-w-0">
           <h3 className="text-lg font-medium text-gray-900 mb-2 line-clamp-2">
-            {product.title}
+            {product.title || "Untitled Product"}
           </h3>
 
           {/* Description */}
@@ -40,7 +43,7 @@ const WishlistProduct = ({ product, onDelete, onAddToCart }) => {
           <div className="mb-3">
             <span className="text-xl font-bold text-gray-900">
               <sup>$</sup>
-              {product.price}
+              {product.price || "0.00"}
             </span>
           </div>
 
@@ -59,9 +62,11 @@ const WishlistProduct = ({ product, onDelete, onAddToCart }) => {
 
           {/* Category/Subcategory */}
           <div className="mb-3 flex flex-wrap gap-2">
-            <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-              {product.category}
-            </span>
+            {product.category && (
+              <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                {product.category}
+              </span>
+            )}
             {product.subcategory && (
               <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">
                 {product.subcategory}
@@ -97,7 +102,7 @@ const WishlistProduct = ({ product, onDelete, onAddToCart }) => {
                   </svg>
                 ))}
                 <span className="ml-2 text-sm text-gray-600">
-                  {product.rating} ({product.ratingCount} reviews)
+                  {product.rating} ({product.ratingCount || 0} reviews)
                 </span>
               </div>
             </div>
@@ -106,7 +111,7 @@ const WishlistProduct = ({ product, onDelete, onAddToCart }) => {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-2 mt-4">
             <button
-              onClick={() => onAddToCart(product._id)}
+              onClick={() => product._id && onAddToCart(product._id)}
               disabled={!isInStock}
               className={`px-4 py-2 rounded-full font-medium transition-colors ${
                 isInStock
@@ -118,7 +123,7 @@ const WishlistProduct = ({ product, onDelete, onAddToCart }) => {
             </button>
 
             <button
-              onClick={() => onDelete(product._id)}
+              onClick={() => product._id && onDelete(product._id)}
               className="px-4 py-2 border border-gray-300 rounded-full text-gray-700 hover:bg-gray-50 transition-colors"
             >
               Remove from Wishlist
@@ -160,7 +165,11 @@ const WishlistPage = () => {
 
       // Handle response structure based on your API response format
       if (res.data && res.data.success && res.data.wishlist) {
-        setUserWishlistItems(res.data.wishlist);
+        // Filter out any null or undefined items from the wishlist
+        const filteredWishlist = res.data.wishlist.filter(
+          (item) => item !== null && item !== undefined
+        );
+        setUserWishlistItems(filteredWishlist);
       } else {
         setUserWishlistItems([]);
       }
@@ -193,7 +202,7 @@ const WishlistPage = () => {
 
   // Remove item from wishlist
   const removeFromWishlist = async (productId) => {
-    if (!userId) {
+    if (!userId || !productId) {
       toast.error("Please login to modify wishlist");
       return;
     }
@@ -207,7 +216,7 @@ const WishlistPage = () => {
 
       if (res.status === 200 || res.data.success) {
         setUserWishlistItems((prev) =>
-          prev.filter((item) => item._id !== productId)
+          prev.filter((item) => item?._id !== productId)
         );
         toast("Removed from wishlist!");
       } else {
@@ -228,7 +237,7 @@ const WishlistPage = () => {
 
   // Add item to cart
   const addToCart = async (productId) => {
-    if (!userId) {
+    if (!userId || !productId) {
       toast.error("Please login to add items to cart");
       return;
     }
@@ -465,14 +474,16 @@ const WishlistPage = () => {
             {/* Wishlist Items */}
             {!loading &&
               !error &&
-              userWishlistItems.map((item, index) => (
-                <WishlistProduct
-                  key={item._id || index}
-                  product={item}
-                  onDelete={removeFromWishlist}
-                  onAddToCart={addToCart}
-                />
-              ))}
+              userWishlistItems
+                .filter((item) => item !== null && item !== undefined)
+                .map((item, index) => (
+                  <WishlistProduct
+                    key={item._id || index}
+                    product={item}
+                    onDelete={removeFromWishlist}
+                    onAddToCart={addToCart}
+                  />
+                ))}
           </div>
 
           {/* Sidebar - Actions Section (Right Column on Desktop) */}
@@ -493,18 +504,20 @@ const WishlistPage = () => {
                   <button
                     onClick={() => {
                       const inStockItems = userWishlistItems.filter(
-                        (item) => item.quantity > 0
+                        (item) => item?.quantity > 0
                       );
                       inStockItems.forEach((item) => {
-                        addToCart(item._id);
+                        if (item?._id) {
+                          addToCart(item._id);
+                        }
                       });
                     }}
                     disabled={
-                      userWishlistItems.filter((item) => item.quantity > 0)
+                      userWishlistItems.filter((item) => item?.quantity > 0)
                         .length === 0
                     }
                     className={`w-full font-medium py-2 px-4 rounded-full transition-colors ${
-                      userWishlistItems.filter((item) => item.quantity > 0)
+                      userWishlistItems.filter((item) => item?.quantity > 0)
                         .length > 0
                         ? "bg-green text-white hover:bg-green"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
