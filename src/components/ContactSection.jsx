@@ -42,9 +42,7 @@ const ContactSection = () => {
   setValue('country', option?.value || '');
   if (option) {
     clearErrors('country');
-  } else {
-    setError('country', { type: 'required', message: 'Country is required' });
-  }
+  } 
 };
 
 const onSubmit = async (formData) => {
@@ -70,13 +68,16 @@ const onSubmit = async (formData) => {
       code: selectedCountry.phoneCode,
       number: formData.mobileNumber,
       additionalMessage: formData.message || undefined,
-      requirements: formData.requirements,
+      ...(formType === 'sales'
+        ? { SalesDetails: formData.requirements }
+        : { requirements: formData.requirements }),
     };
-
+    
+    
     console.log('Payload to Send:', payload);
     const endpoint = formType === 'sales'
-      ? 'http://localhost:8000/api/form/salesform'
-      : 'http://localhost:8000/api/form/requirementform';
+      ? `${import.meta.env.VITE_BACKEND_URL}/api/form/salseform`
+      : `${import.meta.env.VITE_BACKEND_URL}/api/form/requirementform`;
 
     const response = await fetch(endpoint, {
       method: 'POST',
@@ -287,7 +288,7 @@ const onSubmit = async (formData) => {
 
               <TextAreaField
                 id="requirements"
-                label={formType === 'sales' ? 'Sales Details' : 'Requirements'}
+                label={formType === 'sales' ? 'SalesDetails' : 'Requirements'}
                 rows={4}
                 placeholder={formType === 'sales' ? 'Describe your sales inquiry...' : 'Describe your requirements...'}
               />
