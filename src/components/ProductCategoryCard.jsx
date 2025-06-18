@@ -33,6 +33,7 @@ const ProductCategoryCard = ({ product }) => {
           userId: localStorage.getItem("uid"),
           productId: product._id,
           quantity: 1,
+          weight: 1,
         }
       );
       res.status === 200 ? toast("Added to cart") : null;

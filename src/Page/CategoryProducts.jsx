@@ -8,25 +8,27 @@ import axios from "axios";
 const CategoryProducts = () => {
   const [price, setPrice] = useState(1000);
   const [dummyProducts, setDummyProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]); // ✅ All products from API
   const [ratingFilter, setRatingFilter] = useState([4, 3, 2, 1]);
   const [selectedRating, setSelectedRating] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isApiLoading, setIsApiLoading] = useState(true); // New state for API loading
+  const [isApiLoading, setIsApiLoading] = useState(true);
 
   const getAllProducts = async () => {
     try {
-      setIsApiLoading(true); // Start loading
+      setIsApiLoading(true);
       const res = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/product/get-all`
       );
       console.log("DEBUG PRODUCT API RESPONSE", res.data);
+      setAllProducts(res.data.products); // ✅ save all products
       setDummyProducts(res.data.products);
     } catch (error) {
       console.log(`Error fetching all products: ${error}`);
-      // Fallback to dummy products if API fails
+      setAllProducts(products); // fallback
       setDummyProducts(products);
     } finally {
-      setIsApiLoading(false); // Stop loading
+      setIsApiLoading(false);
     }
   };
 
@@ -45,7 +47,7 @@ const CategoryProducts = () => {
 
   const handleCategoryChange = (category) => {
     executeWithLoading(() => {
-      const filteredProducts = products.filter(
+      const filteredProducts = allProducts.filter(
         (pd) => pd.category === category
       );
       setDummyProducts(filteredProducts);
@@ -54,7 +56,7 @@ const CategoryProducts = () => {
 
   const handleSubCategoryChange = (subcategory) => {
     executeWithLoading(() => {
-      const filteredProducts = products.filter(
+      const filteredProducts = allProducts.filter(
         (pd) => pd.subcategory === subcategory
       );
       setDummyProducts(filteredProducts);
@@ -65,17 +67,21 @@ const CategoryProducts = () => {
     setSelectedRating(n);
     executeWithLoading(() => {
       if (n === "") {
-        setDummyProducts(products);
+        setDummyProducts(allProducts);
         return;
       }
       const stringNum = parseFloat(n);
-      const filteredProducts = products.filter((pd) => pd.rating >= stringNum);
+      const filteredProducts = allProducts.filter(
+        (pd) => pd.rating >= stringNum
+      );
       setDummyProducts(filteredProducts);
     });
   };
 
   const handlePriceFilter = (price) => {
-    const priceFiltered = products.filter((product) => product.price <= price);
+    const priceFiltered = allProducts.filter(
+      (product) => product.price <= price
+    );
     setDummyProducts(priceFiltered);
     setPrice(price);
     setSelectedRating("");
@@ -84,7 +90,7 @@ const CategoryProducts = () => {
 
   const clearFilter = () => {
     executeWithLoading(() => {
-      setDummyProducts(products);
+      setDummyProducts(allProducts);
       setSelectedRating("");
       setPrice(1000);
     });
@@ -98,7 +104,6 @@ const CategoryProducts = () => {
     <ScreenLoaders text={" Loading products... "} />
   );
 
-  // Show API loading screen while fetching initial data
   if (isApiLoading) {
     return <ApiLoadingOverlay />;
   }
@@ -122,13 +127,13 @@ const CategoryProducts = () => {
                 disabled={isLoading}
                 className="w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200"
               >
-                {[...new Set(products.map((product) => product.category))].map(
-                  (category, index) => (
-                    <option key={index} value={category}>
-                      {category}
-                    </option>
-                  )
-                )}
+                {[
+                  ...new Set(allProducts.map((product) => product.category)),
+                ].map((category, index) => (
+                  <option key={index} value={category}>
+                    {category}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -143,7 +148,7 @@ const CategoryProducts = () => {
                 className="w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200"
               >
                 {[
-                  ...new Set(products.map((product) => product.subcategory)),
+                  ...new Set(allProducts.map((product) => product.subcategory)),
                 ].map((subcategory, index) => (
                   <option key={index}>{subcategory}</option>
                 ))}
@@ -191,12 +196,12 @@ const CategoryProducts = () => {
               </select>
             </div>
 
-            {/* Clear Rating Options */}
+            {/* Clear Filters */}
             <div className="mb-4">
               <button
                 onClick={clearFilter}
                 disabled={isLoading}
-                className="flex items-center gap-2 bg-green-950 text-white font-medium py-2 px-4 rounded-full shadow-sm transition duration-300 ease-in-out hover:bg-green-900 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-green-950"
+                className="flex items-center gap-2 bg-green-800 text-white font-medium py-2 px-4 rounded-lg shadow-sm transition duration-300 ease-in-out hover:bg-green-900 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-green-950"
               >
                 <X size={18} />
                 Clear Filters

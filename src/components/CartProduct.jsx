@@ -7,15 +7,14 @@ const CartProduct = ({
   onAddToWishlist,
   cartItemId,
 }) => {
-  console.log("product from cart product", product);
   const handleQuantityDecrease = () => {
     if (product.quantity > 1) {
-      onQuantityChange?.(product.id, product.quantity - 1);
+      onQuantityChange?.(cartItemId, "decrease");
     }
   };
 
   const handleQuantityIncrease = () => {
-    onQuantityChange?.(product.id, product.quantity + 1);
+    onQuantityChange?.(cartItemId, "increase");
   };
 
   const handleDelete = () => {
@@ -55,15 +54,26 @@ const CartProduct = ({
                 </h5>
               </div>
 
+              {/* Weight */}
+              <div className="ml-4 mt-2">
+                <span className="text-sm text-gray-700 font-semibold">
+                  Weight:
+                </span>
+                <span className="ml-1 text-sm text-gray-600">
+                  {product.weight}
+                  <b> kg</b>
+                </span>
+              </div>
+
               {/* Delivery Details */}
-              <div className="mt-3 ml-4">
+              {/* <div className="mt-3 ml-4">
                 <span className="ml-3 text-sm font-semibold text-gray-700">
                   {product.deliveryDate}
                 </span>
                 <span className="text-xs text-gray-500 ml-1">
                   for SVAH Members
                 </span>
-              </div>
+              </div> */}
 
               {/* Stock Check
                     <div

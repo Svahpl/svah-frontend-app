@@ -8,11 +8,13 @@ import {
   X,
   CreditCard,
   Shield,
+  MessageSquare,
+  User,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import PaymentModal from "../components/PaymentModal";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 const ProductScreen = () => {
@@ -23,10 +25,14 @@ const ProductScreen = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [newComment, setNewComment] = useState("");
+  const [commentLoading, setCommentLoading] = useState(false);
 
   // Default weights - could also come from API
   const weights = [1, 5, 10, 20, 25, 50, 100];
   const { id } = useParams();
+
+  const navigate = useNavigate();
 
   // Mock API call - replace with your actual API endpoint
   useEffect(() => {
@@ -37,6 +43,7 @@ const ProductScreen = () => {
           `${import.meta.env.VITE_BACKEND_URL}/api/product/get-product/${id}`
         );
         setProduct(res.data.product);
+        console.log(res.data);
       } catch (err) {
         setError(err.message);
         setLoading(false);
@@ -58,7 +65,7 @@ const ProductScreen = () => {
   const goToImage = (index) => setCurrentImageIndex(index);
 
   const goBack = () => {
-    console.log("Go back");
+    navigate(-1);
   };
 
   const handleBuyNow = () => {
@@ -123,6 +130,38 @@ const ProductScreen = () => {
     );
   };
 
+  const handleAddComment = async () => {
+    if (!newComment.trim()) return;
+
+    try {
+      setCommentLoading(true);
+      // Replace with your actual API endpoint for adding comments
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/product/add-comment/${id}`,
+        {
+          userId: localStorage.getItem("uid"),
+          comment: newComment,
+          rating: 5, // You can add a rating input if needed
+        }
+      );
+
+      if (res.status === 200) {
+        toast.success("Comment added successfully");
+        setNewComment("");
+        // Refresh product data to show new comment
+        const updatedRes = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/product/get-product/${id}`
+        );
+        setProduct(updatedRes.data.product);
+      }
+    } catch (error) {
+      toast.error("Failed to add comment");
+      console.error("Add comment error", error);
+    } finally {
+      setCommentLoading(false);
+    }
+  };
+
   // Loading state
   if (loading) {
     return (
@@ -171,6 +210,7 @@ const ProductScreen = () => {
           userId: localStorage.getItem("uid"),
           productId: id,
           quantity: 1,
+          weight: selectedWeight,
         }
       );
       res.status === 200 ? toast("Added to cart") : null;
@@ -334,7 +374,7 @@ const ProductScreen = () => {
           <div className="space-y-3">
             <button
               onClick={() => addToCart()}
-              className="w-full bg-gradient-to-r from-emerald-600 to-green-700 hover:from-emerald-700 hover:to-green-800 text-white font-semibold py-3 px-4 rounded-full flex items-center justify-center space-x-2 transition shadow hover:shadow-lg transform hover:scale-105"
+              className="w-full  bg-green-800 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition shadow hover:shadow-lg transform hover:scale-105"
             >
               <ShoppingBag className="w-4 h-4" />
               <span className="text-sm">Add To Bag</span>
@@ -353,12 +393,85 @@ const ProductScreen = () => {
               <>
                 <button
                   onClick={handleBuyNow}
-                  className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 px-4 rounded-full transition shadow hover:shadow-lg transform hover:scale-105"
+                  className="w-full mt-4 bg-green-800 hover:bg-green-900 text-white py-3 px-4 rounded-lg transition-all duration-200 font-medium"
                 >
                   <span className="text-sm">Buy Now</span>
                 </button>
               </>
             )}
+          </div>
+
+          {/* Comments Section */}
+          <div className="mt-12 border-t border-gray-200 pt-8">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-semibold text-gray-900 flex items-center">
+                <MessageSquare className="w-5 h-5 mr-2 text-green-800" />
+                Customer Reviews
+              </h3>
+              <span className="text-sm text-gray-500">
+                {product.ratings?.length || 0} comments
+              </span>
+            </div>
+
+            {/* Add Comment Form */}
+            <div className="mb-8">
+              <div className="flex items-start space-x-3">
+                <User className="w-5 h-5 text-gray-600" />
+                <div className="flex-1">
+                  <textarea
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    placeholder="Share your thoughts about this product..."
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-800 focus:border-green-800 outline-none resize-none"
+                    rows={3}
+                  />
+                  <div className="flex justify-end mt-2">
+                    <button
+                      onClick={handleAddComment}
+                      disabled={commentLoading || !newComment.trim()}
+                      className="px-4 py-2 bg-green-800 text-white rounded-lg hover:bg-green-900 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                    >
+                      {commentLoading ? (
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      ) : null}
+                      Post Comment
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Comments List */}
+            <div className="space-y-6">
+              {product.ratings?.length > 0 ? (
+                product.ratings.map((rating) => (
+                  <div key={rating._id} className="flex space-x-4">
+                    <User className="w-5 h-5 text-gray-600" />
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-medium text-gray-900">
+                          {rating.userId || "Anonymous"}
+                        </h4>
+                        <div className="flex items-center">
+                          {renderStarRating(rating.rating)}
+                        </div>
+                      </div>
+                      <p className="text-gray-600 mt-1">{rating.comment}</p>
+                      <div className="text-xs text-gray-500 mt-2">
+                        {new Date(rating.createdAt).toLocaleDateString()}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8">
+                  <MessageSquare className="w-10 h-10 mx-auto text-gray-400" />
+                  <p className="mt-2 text-gray-500">
+                    No reviews yet. Be the first to share your thoughts!
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -522,7 +635,7 @@ const ProductScreen = () => {
             <div className="space-y-4">
               <button
                 onClick={() => addToCart()}
-                className="w-full bg-green-950 text-white font-semibold py-4 px-6 rounded-full flex items-center justify-center space-x-3 transition shadow hover:shadow-xl transform hover:scale-105"
+                className="w-full bg-green-800 text-white font-semibold py-4 px-6 rounded-lg flex items-center justify-center space-x-3 transition shadow hover:shadow-xl transform hover:scale-105"
               >
                 <ShoppingBag className="w-5 h-5" />
                 <span>Add To Bag</span>
@@ -532,7 +645,7 @@ const ProductScreen = () => {
                   <button
                     disabled
                     onClick={() => toast("Out of stock")}
-                    className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 px-4 rounded-full transition shadow hover:shadow-lg transform hover:scale-105"
+                    className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 px-4 rounded-lg transition shadow hover:shadow-lg transform hover:scale-105"
                   >
                     <span className="text-sm">Out of stock</span>
                   </button>
@@ -541,13 +654,122 @@ const ProductScreen = () => {
                 <>
                   <button
                     onClick={handleBuyNow}
-                    className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 px-4 rounded-full transition shadow hover:shadow-lg transform hover:scale-105"
+                    className="w-full bg-green-800 text-white font-semibold py-3 px-4 rounded-lg transition shadow hover:shadow-lg transform hover:scale-105"
                   >
                     <span className="text-sm">Buy Now</span>
                   </button>
                 </>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* Comments Section - Desktop */}
+        <div className="mt-16 border-t border-gray-200 pt-12">
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-2xl font-semibold text-gray-900 flex items-center">
+              <MessageSquare className="w-6 h-6 mr-3 text-green-800" />
+              Customer Reviews
+            </h3>
+            <span className="text-gray-500">
+              {product.ratings?.length || 0} comments
+            </span>
+          </div>
+
+          {/* Add Comment Form */}
+          <div className="mb-12 bg-gray-50 rounded-xl p-6">
+            <h4 className="text-lg font-medium text-gray-900 mb-4">
+              Share your thoughts
+            </h4>
+            <div className="flex items-start space-x-4">
+              <User className="w-6 h-6 text-gray-600" />
+
+              <div className="flex-1">
+                <textarea
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="What do you think about this product?"
+                  className="w-full px-5 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-800 focus:border-green-800 outline-none resize-none text-lg"
+                  rows={4}
+                />
+                <div className="flex justify-between items-center mt-4">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-gray-600">Your rating:</span>
+                    <div className="flex">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          className={`w-5 h-5 ${
+                            star <= 5
+                              ? "text-yellow-400 fill-yellow-400"
+                              : "text-gray-300"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleAddComment}
+                    disabled={commentLoading || !newComment.trim()}
+                    className="px-6 py-2 bg-green-800 text-white rounded-lg hover:bg-green-900 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                  >
+                    {commentLoading ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : null}
+                    Post Review
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Comments List */}
+          <div className="space-y-8">
+            {product.ratings?.length > 0 ? (
+              product.ratings.map((rating) => (
+                <div
+                  key={rating._id}
+                  className="flex space-x-5 p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition"
+                >
+                  <User className="w-6 h-6 text-gray-600" />
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-medium text-gray-900 text-lg">
+                        {rating.userId || "Anonymous"}
+                      </h4>
+                      <div className="flex items-center">
+                        {renderStarRating(rating.rating, "w-5 h-5")}
+                        <span className="ml-2 text-sm text-gray-500">
+                          {new Date(rating.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
+                    <p className="text-gray-600 mt-2 text-lg">
+                      {rating.comment}
+                    </p>
+                    <div className="flex space-x-4 mt-4">
+                      <button className="text-sm text-gray-500 hover:text-gray-700">
+                        Helpful
+                      </button>
+                      <button className="text-sm text-gray-500 hover:text-gray-700">
+                        Reply
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-12 bg-gray-50 rounded-xl">
+                <MessageSquare className="w-12 h-12 mx-auto text-gray-400" />
+                <h4 className="mt-4 text-lg font-medium text-gray-700">
+                  No reviews yet
+                </h4>
+                <p className="mt-2 text-gray-500 max-w-md mx-auto">
+                  Be the first to share your thoughts about this product. Your
+                  review will help others make informed decisions.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

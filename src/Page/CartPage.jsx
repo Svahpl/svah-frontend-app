@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { CartProduct, LocationUI, UseTitle } from "../components/compIndex";
+import {
+  CartPaymentModal,
+  CartProduct,
+  LocationUI,
+  UseTitle,
+} from "../components/compIndex";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -7,7 +12,11 @@ const CartPage = () => {
   UseTitle("Your Cart");
 
   const [userCartItems, setUserCartItems] = useState([]);
+  const [products, setProducts] = useState(null);
+  const [subtotalItems, setSubtotalItems] = useState(null);
+  const [subtotalPrice, setSubtotalPrice] = useState(null);
   const [refresh, setRefresh] = useState(0);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   const userId = localStorage.getItem("uid");
   // fetch user cart from API endpoint
@@ -41,17 +50,6 @@ const CartPage = () => {
         );
         toast("Deleted");
         refreshComponent();
-      } else {
-        const res = await axios.put(
-          `${
-            import.meta.env.VITE_BACKEND_URL
-          }/api/cart/update-cart/${userId}/${cartItemId}`,
-          {
-            newQuantity: qty,
-            action: action,
-          }
-        );
-        console.log(res);
       }
     } catch (error) {
       console.log("Cart Item Deletion error", error);
@@ -72,6 +70,73 @@ const CartPage = () => {
     }
   };
 
+  const handleQuantity = async (cartItemId, value) => {
+    try {
+      const res = await axios.put(
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/cart/update-cart/${userId}/${cartItemId}`,
+        {
+          newQuantity: 1,
+          action: value,
+        }
+      );
+      if (res.status === 200) toast.success("Updated");
+      refreshComponent();
+    } catch (error) {
+      console.error(`ERROR From handle Quantity API: ${error}`);
+      toast.error("Internal Error");
+    }
+  };
+
+  const closePaymentModal = () => {
+    setShowPaymentModal(false);
+    // Restore body scroll
+    document.body.style.overflow = "unset";
+    window.location.reload();
+  };
+
+  const handleCheckout = () => {
+    setShowPaymentModal(true);
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = "hidden";
+  };
+
+  const HandlePaymentModal = () => {
+    if (!showPaymentModal) return null;
+    return (
+      <>
+        <CartPaymentModal
+          showPaymentModal={true} // boolean to control modal visibility
+          closePaymentModal={() => setShowPaymentModal(false)} // function to close modal
+          cartItems={userCartItems}
+        />
+      </>
+    );
+  };
+
+  const calculateTotalItems = () => {
+    const totalItems = userCartItems.reduce(
+      (sum, item) => sum + item.quantity,
+      0
+    );
+    setSubtotalItems(totalItems);
+  };
+
+  const calculateTotalPrice = () => {
+    const totalPrice = userCartItems.reduce(
+      (sum, item) => sum + item.quantity * item.price * item.weight,
+      0
+    );
+    setSubtotalPrice(totalPrice?.toFixed(2));
+  };
+
+  useEffect(() => {
+    calculateTotalItems();
+    calculateTotalPrice();
+    console.log(userCartItems);
+  }, [userCartItems]);
+
   return (
     <>
       <LocationUI />
@@ -90,24 +155,25 @@ const CartPage = () => {
           {/* Main Content - Cart Items (Left Column on Desktop) */}
           <div className="lg:flex-1">
             {/* Mobile Subtotal - Hidden on Desktop */}
-            <div className="flex lg:hidden">
-              <div className="">
-                <h5 className="ml-4 font-medium mt-3 text-xl">
-                  Subtotal
-                  <span className="font-bold mx-3">
-                    <sup>$</sup>1999<sup>00</sup>
-                  </span>
+            <div className="flex lg:hidden justify-between items-center px-4 py-3 bg-white border-b border-gray-200">
+              <div>
+                <h5 className="font-medium text-lg">
+                  Subtotal ({subtotalItems} items):
                 </h5>
+              </div>
+              <div>
+                <span className="font-bold text-lg">${subtotalPrice}</span>
               </div>
             </div>
 
             {/* Mobile Proceed To Buy Button - Hidden on Desktop */}
-            <div className="buy-btn text-center content-center mt-5 lg:hidden">
+            <div className="lg:hidden px-4 py-3 bg-white sticky bottom-0 z-10 border-t border-gray-200">
               <button
-                onClick={() => {}}
-                className="rounded-lg bg-green-800 text-white w-96 py-2"
+                onClick={() => handleCheckout()}
+                className="w-full rounded-lg bg-green-800 text-white py-3 font-medium"
+                disabled={userCartItems.length === 0}
               >
-                Proceed To Buy
+                Proceed To Buy ({subtotalItems} items)
               </button>
             </div>
 
@@ -129,18 +195,25 @@ const CartPage = () => {
             </div>
 
             {/* Cart Product Items */}
-            {userCartItems?.map((item, index) => {
-              console.log("Parent Comp ID", item);
-              return (
-                <>
+            {userCartItems?.length > 0 ? (
+              userCartItems.map((item, index) => {
+                console.log("Parent Comp ID", item);
+                return (
                   <CartProduct
+                    key={index}
                     product={item}
+                    onQuantityChange={handleQuantity}
                     onDelete={deleteCartItem}
                     onAddToWishlist={addToWishList}
+                    cartItemId={item.cartId}
                   />
-                </>
-              );
-            })}
+                );
+              })
+            ) : (
+              <div className="text-center py-10">
+                <p className="text-lg text-gray-600">Your cart is empty</p>
+              </div>
+            )}
           </div>
 
           {/* Sidebar - Checkout Section (Right Column on Desktop) */}
@@ -149,15 +222,16 @@ const CartPage = () => {
               {/* Subtotal Section */}
               <div className="mb-4">
                 <h3 className="text-lg font-normal mb-2">
-                  Subtotal (1 items):{" "}
-                  <span className="font-bold">$1,297.00</span>
+                  Subtotal ({subtotalItems} items) :{" "}
+                  <span className="font-bold">${subtotalPrice}</span>
                 </h3>
               </div>
 
               {/* Proceed to Buy Button */}
               <button
-                onClick={() => {}}
+                onClick={() => handleCheckout()}
                 className="w-full bg-green-800 text-lg lg:text-white text-black font-medium py-2 px-4 rounded-lg mb-4 transition-colors"
+                disabled={userCartItems.length === 0}
               >
                 Proceed to Buy
               </button>
@@ -186,10 +260,9 @@ const CartPage = () => {
             {/* Beauty Bestsellers Section */}
             <div className="mt-6 bg-white border border-gray-200 rounded-lg p-4">
               <h3 className="font-medium mb-4">
-                Natural Wellness Favorites You’ll Love
+                Natural Wellness Favorites You'll Love
               </h3>
               <div className="space-y-4">
-                {/* Sample product recommendations would go here */}
                 <div className="text-sm text-gray-600">
                   Product recommendations handpicked for your health and
                   lifestyle.
@@ -198,6 +271,9 @@ const CartPage = () => {
             </div>
           </div>
         </div>
+
+        {/* Payment Modal */}
+        <HandlePaymentModal />
       </div>
     </>
   );
