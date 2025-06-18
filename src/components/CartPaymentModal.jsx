@@ -27,6 +27,7 @@ const CartPaymentModal = ({
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [step, setStep] = useState("address");
   const [reloadPaypal, setReloadPaypal] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
@@ -72,6 +73,12 @@ const CartPaymentModal = ({
     } catch (error) {
       console.log(`Error fetching current dollar price in inr: ${error}`);
     }
+  }, []);
+
+  const handleRefresh = useCallback(() => {
+    setIsRefreshing(true);
+    setReloadPaypal((prev) => !prev);
+    setTimeout(() => setIsRefreshing(false), 1000);
   }, []);
 
   useEffect(() => {
@@ -141,14 +148,14 @@ const CartPaymentModal = ({
   const AddressSelectionStep = useCallback(
     () => (
       <div className="px-6 py-6 space-y-6">
-        <div className="bg-gray-50 rounded-2xl p-4">
-          <div className="flex items-center justify-between mb-4">
+        <div className="bg-gray-50 rounded-2xl p-6">
+          <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-semibold text-gray-900">
               Select Shipping Address
             </h3>
             <button
               onClick={() => navigate("/my-account/addresses")}
-              className="text-green-800 text-sm font-medium flex items-center"
+              className="text-green-700 hover:text-green-800 text-sm font-medium flex items-center transition-colors"
             >
               <Plus className="w-4 h-4 mr-1" /> Add New
             </button>
@@ -157,15 +164,15 @@ const CartPaymentModal = ({
           {user?.address?.map((address) => (
             <div
               key={address._id}
-              className={`border rounded-lg p-4 mb-3 cursor-pointer transition-all ${
+              className={`border-2 rounded-lg p-4 mb-4 cursor-pointer transition-all ${
                 selectedAddress?._id === address._id
-                  ? "border-green-500 bg-green-50"
+                  ? "border-green-600 bg-green-50"
                   : "border-gray-200 hover:border-gray-300"
               }`}
               onClick={() => setSelectedAddress(address)}
             >
               <div className="flex items-start">
-                <MapPin className="w-5 h-5 text-green-800 mr-3 mt-0.5 flex-shrink-0" />
+                <MapPin className="w-5 h-5 text-green-700 mr-3 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="font-medium text-gray-900">{user.FullName}</p>
                   <p className="text-gray-600">{address.addressLine1}</p>
@@ -186,7 +193,8 @@ const CartPaymentModal = ({
 
           <button
             onClick={handleContinueToPayment}
-            className="w-full bg-green-800 text-white rounded-xl py-3 font-medium mt-4 hover:bg-green-700 transition"
+            className="w-full bg-green-700 hover:bg-green-800 text-white rounded-xl py-3 font-medium mt-6 transition-colors duration-200 shadow-sm hover:shadow-md"
+            disabled={!selectedAddress}
           >
             Continue to Payment
           </button>
@@ -216,7 +224,7 @@ const CartPaymentModal = ({
             <div className="flex items-center space-x-3">
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                  step === "address" ? "bg-green-800" : "bg-gray-100"
+                  step === "address" ? "bg-green-700" : "bg-gray-100"
                 }`}
               >
                 {step === "address" ? (
@@ -249,18 +257,18 @@ const CartPaymentModal = ({
           ) : (
             <div className="px-6 py-6 space-y-6">
               {selectedAddress && (
-                <div className="bg-gray-50 rounded-2xl p-4">
-                  <div className="flex items-center justify-between mb-2">
+                <div className="bg-gray-50 rounded-2xl p-5">
+                  <div className="flex items-center justify-between mb-3">
                     <h4 className="font-medium text-gray-900">Shipping To</h4>
                     <button
                       onClick={() => setStep("address")}
-                      className="text-green-800 text-sm"
+                      className="text-green-700 hover:text-green-800 text-sm transition-colors"
                     >
                       Change
                     </button>
                   </div>
                   <div className="flex items-start">
-                    <MapPin className="w-5 h-5 text-green-800 mr-3 mt-0.5 flex-shrink-0" />
+                    <MapPin className="w-5 h-5 text-green-700 mr-3 mt-0.5 flex-shrink-0" />
                     <div>
                       <p className="font-medium text-gray-900">
                         {user?.FullName}
@@ -285,7 +293,7 @@ const CartPaymentModal = ({
                 </div>
               )}
 
-              <div className="bg-gray-50 rounded-2xl p-4">
+              <div className="bg-gray-50 rounded-2xl p-5">
                 <h4 className="font-medium text-gray-900 mb-4">
                   Your Items ({cartItems.length})
                 </h4>
@@ -321,7 +329,7 @@ const CartPaymentModal = ({
                             onClick={() =>
                               handleQuantityChange(item._id, item.quantity - 1)
                             }
-                            className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition"
+                            className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition disabled:opacity-50"
                             disabled={item.quantity <= 1}
                           >
                             <Minus className="w-4 h-4 text-gray-600" />
@@ -343,7 +351,7 @@ const CartPaymentModal = ({
                   </div>
                 ))}
 
-                <div className="mt-4 pt-4 border-t border-gray-200 space-y-2">
+                <div className="mt-4 pt-4 border-t border-gray-200 space-y-3">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Product Price</span>
                     <span className="text-gray-900">
@@ -358,16 +366,16 @@ const CartPaymentModal = ({
                       ${formatPrice(shippingCost)}
                     </span>
                   </div>
-                  <div className="flex justify-between text-lg font-bold pt-2 border-t border-gray-200">
+                  <div className="flex justify-between text-lg font-bold pt-3 border-t border-gray-200">
                     <span>Total</span>
-                    <span className="text-green-800">
+                    <span className="text-green-700">
                       ${formatPrice(finalPrice)}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <h5 className="text-sm font-medium text-gray-700">
                   Choose Shipping Method:
                 </h5>
@@ -379,7 +387,7 @@ const CartPaymentModal = ({
                   <label
                     className={`flex flex-col items-center space-y-2 p-3 rounded-xl border-2 cursor-pointer transition-all ${
                       shippingMethod === "air"
-                        ? "border-green-500 bg-green-50"
+                        ? "border-green-600 bg-green-50"
                         : "border-gray-200 hover:border-gray-300"
                     }`}
                   >
@@ -404,7 +412,7 @@ const CartPaymentModal = ({
                     <label
                       className={`flex flex-col items-center space-y-2 p-3 rounded-xl border-2 cursor-pointer transition-all ${
                         shippingMethod === "ship"
-                          ? "border-green-500 bg-green-50"
+                          ? "border-green-600 bg-green-50"
                           : "border-gray-200 hover:border-gray-300"
                       }`}
                     >
@@ -436,20 +444,31 @@ const CartPaymentModal = ({
               </div>
 
               <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
-                <Shield className="w-4 h-4 text-green-800" />
+                <Shield className="w-4 h-4 text-green-700" />
                 <span>256-bit SSL encrypted payment</span>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {selectedAddress && (
-                  <div className="relative">
-                    <button
-                      onClick={() => setReloadPaypal((prev) => !prev)}
-                      className="absolute -top-8 right-0 p-1 text-gray-500 hover:text-gray-700 transition"
-                      title="Reload payment"
-                    >
-                      <RefreshCw className="w-4 h-4" />
-                    </button>
+                  <div className="relative bg-gray-50 p-4 rounded-xl">
+                    <div className="flex justify-between items-center mb-3">
+                      <h4 className="font-medium text-gray-900">
+                        Payment Method
+                      </h4>
+                      <button
+                        onClick={handleRefresh}
+                        className="p-2 bg-white rounded-full shadow-sm hover:bg-gray-100 transition-colors"
+                        aria-label="Refresh payment options"
+                        data-tooltip="Refresh payment"
+                        disabled={isRefreshing}
+                      >
+                        <RefreshCw
+                          className={`w-5 h-5 text-gray-600 ${
+                            isRefreshing ? "animate-spin" : ""
+                          }`}
+                        />
+                      </button>
+                    </div>
                     <PaypalPayment
                       key={reloadPaypal}
                       productPrice={finalPrice}
@@ -481,7 +500,7 @@ const CartPaymentModal = ({
             <div className="flex items-center space-x-4">
               <div
                 className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                  step === "address" ? "bg-green-800" : "bg-gray-100"
+                  step === "address" ? "bg-green-700" : "bg-gray-100"
                 }`}
               >
                 {step === "address" ? (
@@ -515,13 +534,13 @@ const CartPaymentModal = ({
             {step === "address" ? (
               <div className="space-y-6">
                 <div className="bg-gray-50 rounded-2xl p-6">
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-6">
                     <h4 className="font-medium text-lg text-gray-900">
                       Your Addresses
                     </h4>
                     <button
                       onClick={() => navigate("/my-account/addresses")}
-                      className="text-green-800 font-medium flex items-center"
+                      className="text-green-700 hover:text-green-800 font-medium flex items-center transition-colors"
                     >
                       <Plus className="w-4 h-4 mr-1" /> Add New Address
                     </button>
@@ -533,13 +552,13 @@ const CartPaymentModal = ({
                         key={address._id}
                         className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${
                           selectedAddress?._id === address._id
-                            ? "border-green-500 bg-green-50"
+                            ? "border-green-600 bg-green-50"
                             : "border-gray-200 hover:border-gray-300"
                         }`}
                         onClick={() => setSelectedAddress(address)}
                       >
                         <div className="flex items-start">
-                          <MapPin className="w-5 h-5 text-green-800 mr-3 mt-0.5 flex-shrink-0" />
+                          <MapPin className="w-5 h-5 text-green-700 mr-3 mt-0.5 flex-shrink-0" />
                           <div>
                             <p className="font-medium text-gray-900">
                               {user.FullName}
@@ -567,7 +586,7 @@ const CartPaymentModal = ({
 
                   <button
                     onClick={handleContinueToPayment}
-                    className="w-full bg-green-800 text-white rounded-xl py-3 font-medium mt-6 hover:bg-green-700 transition"
+                    className="w-full bg-green-700 hover:bg-green-800 text-white rounded-xl py-3 font-medium mt-6 transition-colors duration-200 shadow-sm hover:shadow-md"
                     disabled={!selectedAddress}
                   >
                     Continue to Payment
@@ -589,13 +608,13 @@ const CartPaymentModal = ({
                         </h5>
                         <button
                           onClick={() => setStep("address")}
-                          className="text-green-800 text-sm"
+                          className="text-green-700 hover:text-green-800 text-sm transition-colors"
                         >
                           Change
                         </button>
                       </div>
                       <div className="flex items-start">
-                        <MapPin className="w-5 h-5 text-green-800 mr-3 mt-0.5 flex-shrink-0" />
+                        <MapPin className="w-5 h-5 text-green-700 mr-3 mt-0.5 flex-shrink-0" />
                         <div>
                           <p className="font-medium text-gray-900">
                             {user?.FullName}
@@ -674,7 +693,7 @@ const CartPaymentModal = ({
                         <label
                           className={`flex flex-col space-y-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
                             shippingMethod === "air"
-                              ? "border-green-500 bg-green-50"
+                              ? "border-green-600 bg-green-50"
                               : "border-gray-200 hover:border-gray-300"
                           }`}
                         >
@@ -685,7 +704,7 @@ const CartPaymentModal = ({
                               value="air"
                               checked={shippingMethod === "air"}
                               onChange={() => handleShippingChange("air")}
-                              className="w-4 h-4 text-green-800"
+                              className="w-4 h-4 text-green-700"
                             />
                             <div>
                               <div className="font-medium text-sm">
@@ -707,7 +726,7 @@ const CartPaymentModal = ({
                           <label
                             className={`flex flex-col space-y-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
                               shippingMethod === "ship"
-                                ? "border-green-500 bg-green-50"
+                                ? "border-green-600 bg-green-50"
                                 : "border-gray-200 hover:border-gray-300"
                             }`}
                           >
@@ -718,7 +737,7 @@ const CartPaymentModal = ({
                                 value="ship"
                                 checked={shippingMethod === "ship"}
                                 onChange={() => handleShippingChange("ship")}
-                                className="w-4 h-4 text-green-800"
+                                className="w-4 h-4 text-green-700"
                               />
                               <div>
                                 <div className="font-medium text-sm">
@@ -767,7 +786,7 @@ const CartPaymentModal = ({
                       </div>
                       <div className="flex justify-between text-xl font-bold pt-3 border-t border-gray-200">
                         <span>Total</span>
-                        <span className="text-green-800">
+                        <span className="text-green-700">
                           ${formatPrice(finalPrice)}
                         </span>
                       </div>
@@ -775,7 +794,7 @@ const CartPaymentModal = ({
                   </div>
 
                   <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
-                    <Shield className="w-5 h-5 text-green-800" />
+                    <Shield className="w-5 h-5 text-green-700" />
                     <span>
                       Your payment information is secure and encrypted
                     </span>
@@ -789,14 +808,25 @@ const CartPaymentModal = ({
 
                   <div className="space-y-4">
                     {selectedAddress && (
-                      <div className="relative">
-                        <button
-                          onClick={() => setReloadPaypal((prev) => !prev)}
-                          className="absolute -top-8 right-0 p-2 text-gray-500 hover:text-gray-700 transition"
-                          title="Reload payment"
-                        >
-                          <RefreshCw className="w-5 h-5" />
-                        </button>
+                      <div className="relative bg-gray-50 p-6 rounded-2xl">
+                        <div className="flex justify-between items-center mb-4">
+                          <h5 className="font-medium text-gray-900">
+                            Complete Payment
+                          </h5>
+                          <button
+                            onClick={handleRefresh}
+                            className="p-2 bg-white rounded-full shadow-sm hover:bg-gray-100 transition-colors group"
+                            aria-label="Refresh payment options"
+                            disabled={isRefreshing}
+                          >
+                            <RefreshCw
+                              className={`w-5 h-5 text-gray-600 group-hover:text-gray-800 transition-colors ${
+                                isRefreshing ? "animate-spin" : ""
+                              }`}
+                            />
+                            <span className="sr-only">Refresh payment</span>
+                          </button>
+                        </div>
                         <PaypalPayment
                           key={reloadPaypal}
                           productPrice={finalPrice}
@@ -817,9 +847,11 @@ const CartPaymentModal = ({
                         />
                       </div>
                     )}
-                    <div className="text-xs text-gray-500 text-center mt-4">
+                    <div className="text-xs text-gray-500 text-center mt-2">
                       By completing your purchase, you agree to our Terms of
-                      Service and Privacy Policy.
+                      Service and Privacy Policy. Having issues with payment?
+                      Click the refresh button to reload the PayPal checkout and
+                      ensure your order details are up to date.
                     </div>
                   </div>
                 </div>
@@ -840,6 +872,49 @@ const CartPaymentModal = ({
           width: 0;
           height: 0;
           background: transparent;
+        }
+
+        [data-tooltip] {
+          position: relative;
+        }
+
+        [data-tooltip]:hover::after {
+          content: attr(data-tooltip);
+          position: absolute;
+          bottom: 100%;
+          left: 50%;
+          transform: translateX(-50%);
+          background: #333;
+          color: white;
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 12px;
+          white-space: nowrap;
+          margin-bottom: 5px;
+        }
+
+        [data-tooltip]:hover::before {
+          content: "";
+          position: absolute;
+          bottom: calc(100% - 5px);
+          left: 50%;
+          transform: translateX(-50%);
+          border-width: 5px;
+          border-style: solid;
+          border-color: #333 transparent transparent transparent;
+        }
+
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+
+        .animate-spin {
+          animation: spin 1s linear infinite;
         }
       `}</style>
     </>

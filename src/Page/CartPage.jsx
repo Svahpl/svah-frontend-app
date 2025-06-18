@@ -7,6 +7,7 @@ import {
 } from "../components/compIndex";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useAppContext } from "../context/AppContext";
 
 const CartPage = () => {
   UseTitle("Your Cart");
@@ -17,6 +18,8 @@ const CartPage = () => {
   const [subtotalPrice, setSubtotalPrice] = useState(null);
   const [refresh, setRefresh] = useState(0);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+
+  const { setCartCounter } = useAppContext();
 
   const userId = localStorage.getItem("uid");
   // fetch user cart from API endpoint
@@ -121,6 +124,7 @@ const CartPage = () => {
       0
     );
     setSubtotalItems(totalItems);
+    setCartCounter(totalItems);
   };
 
   const calculateTotalPrice = () => {

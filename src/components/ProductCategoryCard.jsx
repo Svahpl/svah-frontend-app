@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useUpdateCartCounter } from "../hooks/useUpdateCartCounter";
 
 const ProductCategoryCard = ({ product }) => {
   useEffect(() => {
@@ -24,6 +25,7 @@ const ProductCategoryCard = ({ product }) => {
 
   const roundedRating = Math.round(rating);
   const navigate = useNavigate();
+  const updateCartCounter = useUpdateCartCounter();
 
   const addToCart = async (req, res) => {
     try {
@@ -37,6 +39,7 @@ const ProductCategoryCard = ({ product }) => {
         }
       );
       res.status === 200 ? toast("Added to cart") : null;
+      updateCartCounter();
     } catch (error) {
       console.log("Add to cart error", error);
     }

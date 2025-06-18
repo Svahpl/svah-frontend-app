@@ -10,6 +10,7 @@ import {
 } from "@clerk/clerk-react";
 import axios from "axios";
 import { useAppContext } from "../context/AppContext";
+import { useUpdateCartCounter } from "../hooks/useUpdateCartCounter";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -22,27 +23,16 @@ const Header = () => {
   const { cartCount, setCartCounter } = useAppContext();
   const { isLoaded: userLoaded, user } = useUser();
 
+  const updateCartCounter = useUpdateCartCounter();
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const getCartCounter = async () => {
-    try {
-      const res = await axios.get(
-        `${
-          import.meta.env.VITE_BACKEND_URL
-        }/api/cart/getcart/${localStorage.getItem("uid")}`
-      );
-      setCartCounter(res?.data?.items?.length);
-    } catch (error) {
-      console.log("Error getting cart", error);
-    }
-  };
-
   useEffect(() => {
-    getCartCounter();
+    updateCartCounter();
   }, []);
 
   const handleSearch = (e) => {

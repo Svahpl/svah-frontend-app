@@ -7,20 +7,22 @@ const CartProduct = ({
   onAddToWishlist,
   cartItemId,
 }) => {
+  const handleDelete = () => {
+    // id, qty, action, cartItemId
+    onDelete?.(product._id, null, "delete", "");
+    // onDelete?.(product.id);
+  };
+
   const handleQuantityDecrease = () => {
     if (product.quantity > 1) {
       onQuantityChange?.(cartItemId, "decrease");
+    } else if (product.quantity === 1) {
+      handleDelete();
     }
   };
 
   const handleQuantityIncrease = () => {
     onQuantityChange?.(cartItemId, "increase");
-  };
-
-  const handleDelete = () => {
-    // id, qty, action, cartItemId
-    onDelete?.(product._id, null, "delete", "");
-    // onDelete?.(product.id);
   };
 
   const handleAddToWishlist = () => {
