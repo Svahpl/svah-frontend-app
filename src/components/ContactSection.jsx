@@ -7,289 +7,313 @@ import { countries } from '../data/countries';
 const ContactSection = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [formType, setFormType] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const [selectedCountryCode, setSelectedCountryCode] = useState(null);
-  const [formType, setFormType] = useState(null); // Track whether it's 'requirements' or 'sales'
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+    clearErrors,
+  } = useForm();
 
-  const onSubmit = (data) => {
-    const fullMobileNumber = selectedCountryCode ? `${selectedCountryCode.phoneCode}${data.mobileNumber}` : data.mobileNumber;
-    console.log({ ...data, country: selectedCountry?.value, mobileNumber: fullMobileNumber, formType });
-    setIsSubmitted(true);
+  const resetForm = () => {
     reset();
     setSelectedCountry(null);
-    setSelectedCountryCode(null);
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setIsFormVisible(false);
-      setFormType(null); // Reset form type after submission
-    }, 5000);
+    clearErrors();
   };
 
   const handleButtonClick = (type) => {
-    setFormType(type);
-    setIsFormVisible(!isFormVisible);
+    if (formType === type) {
+      setIsFormVisible(!isFormVisible);
+    } else {
+      setFormType(type);
+      setIsFormVisible(true);
+      setIsSubmitted(false);
+      resetForm();
+    }
   };
 
+ const handleCountryChange = (option) => {
+  setSelectedCountry(option);
+  setValue('country', option?.value || '');
+  if (option) {
+    clearErrors('country');
+  } else {
+    setError('country', { type: 'required', message: 'Country is required' });
+  }
+};
+
+const onSubmit = async (formData) => {
+  setIsLoading(true);
+  try {
+    console.log('Form Submission Started:', {
+      formType,
+      formData,
+      selectedCountry,
+    });
+
+    if (!selectedCountry || !selectedCountry.value || !selectedCountry.phoneCode) {
+      throw new Error('Please select a valid country with value and phone code');
+    }
+
+    const payload = {
+      fullName: formData.fullName,
+      companyName: formData.companyName,
+      companyEmail: formData.companyEmail,
+      country: selectedCountry.value,
+      companyAddress: formData.companyAddress,
+      websiteLink: formData.websiteLink || undefined,
+      code: selectedCountry.phoneCode,
+      number: formData.mobileNumber,
+      additionalMessage: formData.message || undefined,
+      requirements: formData.requirements,
+    };
+
+    console.log('Payload to Send:', payload);
+    const endpoint = formType === 'sales'
+      ? 'http://localhost:8000/api/form/salesform'
+      : 'http://localhost:8000/api/form/requirementform';
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    console.log('Response:', {
+      status: response.status,
+      statusText: response.statusText,
+      headers: Object.fromEntries(response.headers),
+    });
+
+    if (!response.ok) {
+      let errorData;
+      try {
+        errorData = await response.json();
+        console.log('Error Response Data:', errorData);
+      } catch (jsonError) {
+        console.error('Failed to parse error response:', jsonError);
+        errorData = { message: 'No error details available' };
+      }
+      throw new Error(errorData.message || `Server responded with status ${response.status}`);
+    }
+
+    const responseData = await response.json();
+    console.log('Success Response:', responseData);
+
+    setIsSubmitted(true);
+    resetForm();
+  } catch (error) {
+    console.error('Submission Error:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+    });
+    alert(`Submission failed: ${error.message}`);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+  const InputField = ({ id, label, type = 'text', placeholder, required = true, validation = {} }) => (
+    <div className="mb-4">
+      <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
+        {label} {required && <span className="text-red-500">*</span>}
+      </label>
+      <input
+        id={id}
+        type={type}
+        placeholder={placeholder}
+        className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 ${
+          errors[id] ? 'border-red-500' : 'border-gray-300'
+        }`}
+        {...register(id, {
+          required: required && `${label} is required`,
+          ...validation,
+        })}
+      />
+      {errors[id] && <p className="mt-1 text-sm text-red-600">{errors[id].message}</p>}
+    </div>
+  );
+
+  const TextAreaField = ({ id, label, rows = 3, placeholder, required = true }) => (
+    <div className="mb-4">
+      <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
+        {label} {required && <span className="text-red-500">*</span>}
+      </label>
+      <textarea
+        id={id}
+        rows={rows}
+        placeholder={placeholder}
+        className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 ${
+          errors[id] ? 'border-red-500' : 'border-gray-300'
+        }`}
+        {...register(id, { required: required && `${label} is required` })}
+      />
+      {errors[id] && <p className="mt-1 text-sm text-red-600">{errors[id].message}</p>}
+    </div>
+  );
+
   return (
-    <section className="py-12 bg-gradient-to-b from-gray-50 to-emerald-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Buttons for Requirement and Sales */}
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mb-12">
+    <section className="py-12 bg-gray-50">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
           <button
+            type="button"
             onClick={() => handleButtonClick('requirements')}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-amber-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-emerald-700 hover:to-amber-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 shadow-md"
+            className={`px-6 py-3 rounded-md font-medium flex items-center gap-2 ${
+              formType === 'requirements'
+                ? 'bg-emerald-600 text-white'
+                : 'bg-white text-emerald-600 border border-emerald-600'
+            }`}
           >
-            <Mail size={20} className="text-white" />
-            DROP US A MESSAGE FOR REQUIREMENT
+            <Mail size={18} /> Requirements Form
           </button>
+
           <button
+            type="button"
             onClick={() => handleButtonClick('sales')}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-amber-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-emerald-700 hover:to-amber-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 shadow-md"
+            className={`px-6 py-3 rounded-md font-medium flex items-center gap-2 ${
+              formType === 'sales'
+                ? 'bg-emerald-600 text-white'
+                : 'bg-white text-emerald-600 border border-emerald-600'
+            }`}
           >
-            <Mail size={20} className="text-white" />
-            DROP US A MESSAGE FOR SALES
+            <Mail size={18} /> Sales Form
           </button>
         </div>
 
-        {/* Form */}
-        <div
-          className={`transition-all duration-500 ease-in-out ${
-            isFormVisible ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
-          }`}
-        >
-          <div className="bg-white rounded-xl shadow-lg p-8 transform transition-all duration-300">
-            <h3 className="text-2xl font-heading font-bold text-emerald-800 mb-6">
-              {formType === 'sales' ? 'Please provide your sales details' : 'DROP US A MESSAGE'}
-            </h3>
-            {isSubmitted ? (
-              <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg p-4 mb-6 animate-fade-in">
-                <p className="font-medium">Thank you. One of our representatives will get back to you within 24 hours.</p>
-              </div>
-            ) : null}
+        <div className={`transition-all duration-300 ${
+          isFormVisible ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
+        }`}>
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+              {formType === 'sales' ? 'Sales Inquiry' : 'Requirements Form'}
+            </h2>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              <div>
-                <label htmlFor="fullName" className="block text-sm font-medium text-emerald-700 mb-2">
-                  Full Name
-                </label>
-                <input
-                  id="fullName"
-                  type="text"
-                  className={`w-full px-4 py-3 border ${
-                    errors.fullName ? 'border-red-500' : 'border-emerald-300'
-                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/80 text-emerald-800 placeholder-emerald-400 shadow-sm hover:shadow-md transition-all duration-300`}
-                  placeholder="Enter full name"
-                  {...register('fullName', { required: 'Full name is required' })}
-                />
-                {errors.fullName && (
-                  <p className="mt-1 text-sm text-red-600">{errors.fullName.message}</p>
-                )}
+            {isSubmitted && (
+              <div className="mb-6 p-4 bg-emerald-100 border border-emerald-200 text-emerald-800 rounded-md">
+                Thank you! We'll contact you soon.
               </div>
+            )}
 
-              <div>
-                <label htmlFor="companyName" className="block text-sm font-medium text-emerald-700 mb-2">
-                  Company Name
-                </label>
-                <input
-                  id="companyName"
-                  type="text"
-                  className={`w-full px-4 py-3 border ${
-                    errors.companyName ? 'border-red-500' : 'border-emerald-300'
-                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/80 text-emerald-800 placeholder-emerald-400 shadow-sm hover:shadow-md transition-all duration-300`}
-                  placeholder="Enter company name"
-                  {...register('companyName', { required: 'Company name is required' })}
-                />
-                {errors.companyName && (
-                  <p className="mt-1 text-sm text-red-600">{errors.companyName.message}</p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="companyEmail" className="block text-sm font-medium text-emerald-700 mb-2">
-                  Company Email
-                </label>
-                <input
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <InputField id="fullName" label="Full Name" placeholder="John Doe" />
+                <InputField id="companyName" label="Company Name" placeholder="Acme Inc." />
+                <InputField
                   id="companyEmail"
+                  label="Company Email"
                   type="email"
-                  className={`w-full px-4 py-3 border ${
-                    errors.companyEmail ? 'border-red-500' : 'border-emerald-300'
-                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/80 text-emerald-800 placeholder-emerald-400 shadow-sm hover:shadow-md transition-all duration-300`}
-                  placeholder="Enter company email"
-                  {...register('companyEmail', {
-                    required: 'Email is required',
+                  placeholder="contact@company.com"
+                  validation={{
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                       message: 'Invalid email address',
                     },
-                  })}
-                />
-                {errors.companyEmail && (
-                  <p className="mt-1 text-sm text-red-600">{errors.companyEmail.message}</p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="country" className="block text-sm font-medium text-emerald-700 mb-2">
-                  Country
-                </label>
-                <Select
-                  id="country"
-                  options={countries}
-                  value={selectedCountry}
-                  onChange={(option) => {
-                    setSelectedCountry(option);
-                    setSelectedCountryCode(option);
                   }}
-                  placeholder="Select country"
-                  className="text-base"
-                  classNames={{
-                    control: (state) =>
-                      `!border ${
-                        state.isFocused
-                          ? '!border-emerald-500 !shadow-md !ring-2 !ring-emerald-200'
-                          : errors.country
-                          ? '!border-red-500'
-                          : '!border-emerald-300'
-                      } !rounded-lg !bg-white`,
-                  }}
-                  {...register('country', { required: 'Country is required' })}
                 />
-                {errors.country && (
-                  <p className="mt-1 text-sm text-red-600">{errors.country.message}</p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="companyAddress" className="block text-sm font-medium text-emerald-700 mb-2">
-                  Company Address
-                </label>
-                <textarea
-                  id="companyAddress"
-                  rows={2}
-                  className={`w-full px-4 py-3 border ${
-                    errors.companyAddress ? 'border-red-500' : 'border-emerald-300'
-                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/80 text-emerald-800 placeholder-emerald-400 shadow-sm hover:shadow-md transition-all duration-300`}
-                  placeholder="Enter company address"
-                  {...register('companyAddress', { required: 'Company address is required' })}
-                />
-                {errors.companyAddress && (
-                  <p className="mt-1 text-sm text-red-600">{errors.companyAddress.message}</p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="websiteLink" className="block text-sm font-medium text-emerald-700 mb-2">
-                  Website Link (Optional)
-                </label>
-                <input
-                  id="websiteLink"
-                  type="url"
-                  className="w-full px-4 py-3 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/80 text-emerald-800 placeholder-emerald-400 shadow-sm hover:shadow-md transition-all duration-300"
-                  placeholder="Enter website link"
-                  {...register('websiteLink')}
-                />
-              </div>
-
-              <div>
-                <label htmlFor="mobileNumber" className="block text-sm font-medium text-emerald-700 mb-2">
-                  Mobile Number
-                </label>
-                <div className="flex gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Country <span className="text-red-500">*</span>
+                  </label>
                   <Select
-                    id="countryCode"
                     options={countries}
-                    value={selectedCountryCode}
-                    onChange={setSelectedCountryCode}
-                    placeholder="Code"
-                    getOptionLabel={(option) => option.phoneCode}
-                    getOptionValue={(option) => option.phoneCode}
-                    className="w-1/4 text-base"
-                    classNames={{
-                      control: (state) =>
-                        `!border ${
-                          state.isFocused
-                            ? '!border-emerald-500 !shadow-md !ring-2 !ring-emerald-200'
-                            : errors.countryCode
-                            ? '!border-red-500'
-                            : '!border-emerald-300'
-                        } !rounded-lg !bg-white`,
-                    }}
-                    {...register('countryCode', { required: 'Country code is required' })}
+                    value={selectedCountry}
+                    onChange={handleCountryChange}
+                    placeholder="Select country"
+                    isSearchable
+                    classNamePrefix="select"
                   />
-                  <input
-                    id="mobileNumber"
-                    type="tel"
-                    className={`w-3/4 px-4 py-3 border ${
-                      errors.mobileNumber ? 'border-red-500' : 'border-emerald-300'
-                    } rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/80 text-emerald-800 placeholder-emerald-400 shadow-sm hover:shadow-md transition-all duration-300`}
-                    placeholder="Enter mobile number"
-                    {...register('mobileNumber', {
-                      required: 'Mobile number is required',
-                      pattern: {
-                        value: /^\d{7,15}$/,
-                        message: 'Mobile number must be 7-15 digits',
-                      },
-                    })}
-                  />
+                  {!selectedCountry && errors.country && (
+                    <p className="mt-1 text-sm text-red-600">Country is required</p>
+                  )}
                 </div>
-                {errors.countryCode && (
-                  <p className="mt-1 text-sm text-red-600">{errors.countryCode.message}</p>
-                )}
-                {errors.mobileNumber && (
-                  <p className="mt-1 text-sm text-red-600">{errors.mobileNumber.message}</p>
-                )}
               </div>
 
-              <div>
-                <label htmlFor="requirements" className="block text-sm font-medium text-emerald-700 mb-2">
-                  {formType === 'sales' ? 'Sales Details' : 'Requirements'}
-                </label>
-                <textarea
-                  id="requirements"
-                  rows={3}
-                  className={`w-full px-4 py-3 border ${
-                    errors.requirements ? 'border-red-500' : 'border-emerald-300'
-                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/80 text-emerald-800 placeholder-emerald-400 shadow-sm hover:shadow-md transition-all duration-300`}
-                  placeholder={formType === 'sales' ? 'Please describe your sales details' : 'Please describe your requirements'}
-                  {...register('requirements', { required: formType === 'sales' ? 'Sales details are required' : 'Requirements description is required' })}
-                />
-                {errors.requirements && (
-                  <p className="mt-1 text-sm text-red-600">{errors.requirements.message}</p>
-                )}
+              <TextAreaField
+                id="companyAddress"
+                label="Company Address"
+                placeholder="123 Business Rd, City, Country"
+              />
+
+              <InputField
+                id="websiteLink"
+                label="Website (Optional)"
+                placeholder="https://company.com"
+                required={false}
+                type="url"
+              />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={selectedCountry?.phoneCode || ''}
+                      readOnly
+                      className="w-1/4 px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100"
+                    />
+                    <input
+                      type="tel"
+                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 ${
+                        errors.mobileNumber ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                      placeholder="9876543210"
+                      {...register('mobileNumber', {
+                        required: 'Phone number is required',
+                        pattern: {
+                          value: /^\d{7,15}$/,
+                          message: 'Invalid phone number format',
+                        },
+                      })}
+                    />
+                  </div>
+                  {errors.mobileNumber && (
+                    <p className="mt-1 text-sm text-red-600">{errors.mobileNumber.message}</p>
+                  )}
+                </div>
               </div>
 
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-emerald-700 mb-2">
-                  Additional Message (Optional)
-                </label>
-                <textarea
-                  id="message"
-                  rows={3}
-                  className="w-full px-4 py-3 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/80 text-emerald-800 placeholder-emerald-400 shadow-sm hover:shadow-md transition-all duration-300"
-                  placeholder="Enter your message"
-                  {...register('message')}
-                />
-              </div>
+              <TextAreaField
+                id="requirements"
+                label={formType === 'sales' ? 'Sales Details' : 'Requirements'}
+                rows={4}
+                placeholder={formType === 'sales' ? 'Describe your sales inquiry...' : 'Describe your requirements...'}
+              />
 
-              <button
-                type="submit"
-                className="w-full bg-gradient-to-r from-emeraldSARS
-                to-emerald-600 from-amber-600 text-white font-semibold py-3 px-6 rounded-lg hover:to-emerald-700 hover:from-amber-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 shadow-md"
-              >
-                SUBMIT
-              </button>
+              <TextAreaField
+                id="message"
+                label="Additional Message (Optional)"
+                placeholder="Any additional information..."
+                required={false}
+              />
+
+              <div className="mt-6">
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className={`w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-white font-medium bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 ${
+                    isLoading ? 'opacity-70 cursor-not-allowed' : ''
+                  }`}
+                >
+                  {isLoading ? 'Submitting...' : 'Submit'}
+                </button>
+              </div>
             </form>
           </div>
         </div>
       </div>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
     </section>
   );
 };
