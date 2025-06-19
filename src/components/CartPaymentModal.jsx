@@ -12,6 +12,7 @@ import PaypalPayment from "./PaypalPayment";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import PaypalCartPayment from "./PaypalCartPayment";
 
 const CartPaymentModal = ({
   showPaymentModal,
@@ -469,12 +470,13 @@ const CartPaymentModal = ({
                         />
                       </button>
                     </div>
-                    <PaypalPayment
+                    <PaypalCartPayment
                       key={reloadPaypal}
                       productPrice={finalPrice}
                       uid={localStorage.getItem("uid")}
                       num={selectedAddress.phone || user?.phoneNumber}
                       sha={formatAddress(selectedAddress)}
+                      totalItemsArray={cartItems}
                       dmode={shippingMethod}
                       products={cartItems}
                       weight={totalWeight}
@@ -827,13 +829,14 @@ const CartPaymentModal = ({
                             <span className="sr-only">Refresh payment</span>
                           </button>
                         </div>
-                        <PaypalPayment
+                        <PaypalCartPayment
                           key={reloadPaypal}
                           productPrice={finalPrice}
                           uid={localStorage.getItem("uid")}
                           num={selectedAddress.phone || user?.phoneNumber}
                           sha={formatAddress(selectedAddress)}
                           dmode={shippingMethod}
+                          totalItemsArray={cartItems}
                           products={cartItems}
                           weight={totalWeight}
                           userSelectedWeight={cartItems.reduce(

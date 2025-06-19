@@ -1,11 +1,12 @@
 import { Package, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const CartProduct = ({
   product,
   onQuantityChange,
   onDelete,
   onAddToWishlist,
+  totalItemsArray,
   cartItemId,
 }) => {
   const [isQuantityLoading, setIsQuantityLoading] = useState(false);
@@ -48,6 +49,10 @@ const CartProduct = ({
       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
     </div>
   );
+
+  useEffect(() => {
+    console.log("totalItemsArray", totalItemsArray);
+  }, []);
 
   return (
     <>

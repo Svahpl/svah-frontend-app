@@ -211,6 +211,7 @@ const CartPage = () => {
                     onDelete={deleteCartItem}
                     onAddToWishlist={addToWishList}
                     cartItemId={item.cartId}
+                    totalItemsArray={userCartItems}
                   />
                 );
               })
