@@ -862,18 +862,25 @@ const CartPaymentModal = ({
       </div>
 
       <style jsx global>{`
-        .no-visible-scrollbar {
-          scrollbar-width: none;
-          -ms-overflow-style: none;
+        /* For WebKit browsers (Chrome, Safari, Edge) */
+        ::-webkit-scrollbar {
+          width: 1px;
+          height: 1px;
         }
 
-        .no-visible-scrollbar::-webkit-scrollbar {
-          display: none;
-          width: 0;
-          height: 0;
+        ::-webkit-scrollbar-track {
           background: transparent;
         }
 
+        ::-webkit-scrollbar-thumb {
+          background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        /* For Firefox */
+        * {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+        }
         [data-tooltip] {
           position: relative;
         }
