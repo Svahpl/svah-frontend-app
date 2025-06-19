@@ -1,4 +1,5 @@
 import { Package, Trash2 } from "lucide-react";
+import { useState } from "react";
 
 const CartProduct = ({
   product,
@@ -7,27 +8,46 @@ const CartProduct = ({
   onAddToWishlist,
   cartItemId,
 }) => {
+  const [isQuantityLoading, setIsQuantityLoading] = useState(false);
+
   const handleDelete = () => {
     // id, qty, action, cartItemId
     onDelete?.(product._id, null, "delete", "");
     // onDelete?.(product.id);
   };
 
-  const handleQuantityDecrease = () => {
+  const handleQuantityDecrease = async () => {
     if (product.quantity > 1) {
-      onQuantityChange?.(cartItemId, "decrease");
+      setIsQuantityLoading(true);
+      try {
+        await onQuantityChange?.(cartItemId, "decrease");
+      } finally {
+        setIsQuantityLoading(false);
+      }
     } else if (product.quantity === 1) {
       handleDelete();
     }
   };
 
-  const handleQuantityIncrease = () => {
-    onQuantityChange?.(cartItemId, "increase");
+  const handleQuantityIncrease = async () => {
+    setIsQuantityLoading(true);
+    try {
+      await onQuantityChange?.(cartItemId, "increase");
+    } finally {
+      setIsQuantityLoading(false);
+    }
   };
 
   const handleAddToWishlist = () => {
     onAddToWishlist?.(product._id);
   };
+
+  // Spinner component for loading animation
+  const LoadingSpinner = () => (
+    <div className="flex items-center justify-center">
+      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  );
 
   return (
     <>
@@ -108,35 +128,47 @@ const CartProduct = ({
           <div className="flex mt-2 h-20 ml-2 gap-4 items-center">
             <div className="relative w-32 ml-1 border-none bg-green-800 rounded-lg py-2 px-2 text-center">
               <button
-                className="absolute text-white left-2 text-2xl px-2 top-1/2 -translate-y-1/2 cursor-pointer  transition-colors duration-200"
+                className="absolute text-white left-2 text-2xl px-2 top-1/2 -translate-y-1/2 cursor-pointer transition-colors duration-200 hover:bg-green-700 rounded disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleQuantityDecrease}
-                disabled={product.quantity <= 1}
+                disabled={product.quantity <= 1 || isQuantityLoading}
               >
                 -
               </button>
-              <span className="block text-white text-sm">
-                {product.quantity}
-              </span>
+
+              {/* Quantity display with loader */}
+              <div className="flex items-center justify-center h-6">
+                {isQuantityLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  <span className="block text-white text-sm font-medium">
+                    {product.quantity}
+                  </span>
+                )}
+              </div>
+
               <button
-                className="absolute text-white right-2 top-1/2 -translate-y-1/2 font-bold text-lg cursor-pointer transition-colors duration-200"
+                className="absolute text-white right-2 top-1/2 -translate-y-1/2 font-bold text-lg cursor-pointer transition-colors duration-200 hover:bg-green-700 rounded disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleQuantityIncrease}
+                disabled={isQuantityLoading}
               >
                 +
               </button>
             </div>
 
             <div
-              className="relative ml-2 w-20 border-none bg-green-800 text-white rounded-lg py-2 px-2 text-center flex items-center justify-center cursor-pointer transition-colors duration-200"
+              className="relative ml-2 w-20 border-none bg-green-800 text-white rounded-lg py-2 px-2 text-center flex items-center justify-center cursor-pointer transition-colors duration-200 hover:bg-green-700"
               onClick={handleDelete}
             >
-              <span className="block text-sm">Delete</span>
+              <span className="block text-sm font-medium">Delete</span>
             </div>
 
             <div
-              className="ml-2 bg-green-800 text-white w-32 mx-2 border-none rounded-lg py-2 px-2  text-center flex items-center justify-center cursor-pointer  transition-colors duration-200"
+              className="ml-2 bg-green-800 text-white w-32 mx-2 border-none rounded-lg py-2 px-2 text-center flex items-center justify-center cursor-pointer transition-colors duration-200 hover:bg-green-700"
               onClick={handleAddToWishlist}
             >
-              <span className="capitalize text-sm">add to wishlist</span>
+              <span className="capitalize text-sm font-medium">
+                add to wishlist
+              </span>
             </div>
           </div>
         </div>

@@ -84,7 +84,8 @@ const CartPage = () => {
           action: value,
         }
       );
-      if (res.status === 200) toast.success("Updated");
+      if (res.status === 200)
+        toast.success(value === "increase" ? "Added" : "Deleted");
       refreshComponent();
     } catch (error) {
       console.error(`ERROR From handle Quantity API: ${error}`);
