@@ -8,7 +8,6 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { useEffect, useState, useMemo, useCallback } from "react";
-import PaypalPayment from "./PaypalPayment";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -23,12 +22,13 @@ const CartPaymentModal = ({
   const [user, setUser] = useState();
   const [finalPrice, setFinalPrice] = useState(0);
   const [shippingCost, setShippingCost] = useState(0);
-  const [dollar, setDollar] = useState(85.567517);
+  const [dollar, setDollar] = useState(null);
   const [finalWeight, setFinalWeight] = useState(0);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [step, setStep] = useState("address");
   const [reloadPaypal, setReloadPaypal] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
@@ -52,6 +52,8 @@ const CartPaymentModal = ({
 
   const handleShippingCharges = useCallback(
     (method) => {
+      if (!dollar) return; // Don't calculate if dollar rate isn't available
+
       let shippingPrice = 0;
 
       if (method === "ship") {
@@ -68,25 +70,39 @@ const CartPaymentModal = ({
 
   const getCurrentDollarinInr = useCallback(async () => {
     try {
+      setIsInitializing(true);
       const res = await axios.get(`https://open.er-api.com/v6/latest/USD`);
       const inr = res.data.rates.INR;
       setDollar(inr);
+      console.log("Current dollar rate in INR:", inr);
+      setIsInitializing(false);
     } catch (error) {
-      console.log(`Error fetching current dollar price in inr: ${error}`);
+      console.error(`Error fetching current dollar price in INR: ${error}`);
+      // Fallback to a reasonable rate if API fails
+      setDollar(83.5); // Average rate as fallback
+      setIsInitializing(false);
     }
   }, []);
 
   const handleRefresh = useCallback(() => {
     setIsRefreshing(true);
-    setReloadPaypal((prev) => !prev);
-    setTimeout(() => setIsRefreshing(false), 1000);
-  }, []);
-
-  useEffect(() => {
-    getCurrentDollarinInr();
+    getCurrentDollarinInr().finally(() => {
+      setReloadPaypal((prev) => !prev);
+      setIsRefreshing(false);
+    });
   }, [getCurrentDollarinInr]);
 
+  // Initialize with dollar rate
   useEffect(() => {
+    if (showPaymentModal) {
+      getCurrentDollarinInr();
+    }
+  }, [showPaymentModal, getCurrentDollarinInr]);
+
+  // Calculate shipping and final price when dollar rate or other dependencies change
+  useEffect(() => {
+    if (!dollar) return; // Don't proceed if dollar rate isn't available
+
     setFinalWeight(totalWeight);
 
     if (shippingMethod === "ship" && totalWeight < 100) {
@@ -94,9 +110,12 @@ const CartPaymentModal = ({
     }
 
     handleShippingCharges(shippingMethod);
-  }, [totalWeight, shippingMethod, handleShippingCharges]);
+  }, [totalWeight, shippingMethod, handleShippingCharges, dollar]);
 
+  // Fetch user data after dollar rate is initialized
   useEffect(() => {
+    if (!showPaymentModal || isInitializing) return;
+
     const fetchUser = async () => {
       try {
         const res = await axios.get(
@@ -117,10 +136,8 @@ const CartPaymentModal = ({
       }
     };
 
-    if (showPaymentModal) {
-      fetchUser();
-    }
-  }, [backendUrl, navigate, showPaymentModal]);
+    fetchUser();
+  }, [backendUrl, navigate, showPaymentModal, isInitializing]);
 
   const formatPrice = (price) => {
     return typeof price === "number" ? price.toFixed(2) : "0.00";
@@ -206,6 +223,23 @@ const CartPaymentModal = ({
   );
 
   if (!showPaymentModal) return null;
+
+  if (isInitializing) {
+    return (
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div className="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-700 mx-auto mb-4"></div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            Loading Current Exchange Rates
+          </h3>
+          <p className="text-gray-600">
+            Please wait while we fetch the latest dollar to INR conversion
+            rate...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -403,7 +437,7 @@ const CartPaymentModal = ({
                     <div className="text-center">
                       <div className="font-medium text-sm">Air Shipping</div>
                       <div className="text-xs text-gray-500">
-                        ${formatPrice(totalWeight * 11.7)}
+                        ${formatPrice(totalWeight * (1000 / dollar))}
                       </div>
                       <div className="text-xs text-gray-500">5-7 days</div>
                     </div>
@@ -428,7 +462,7 @@ const CartPaymentModal = ({
                       <div className="text-center">
                         <div className="font-medium text-sm">Sea Shipping</div>
                         <div className="text-xs text-gray-500">
-                          ${formatPrice(totalWeight * 8.19)}
+                          ${formatPrice(totalWeight * (700 / dollar))}
                         </div>
                         <div className="text-xs text-gray-500">15-25 days</div>
                       </div>
@@ -719,7 +753,7 @@ const CartPaymentModal = ({
                           </div>
                           <div className="text-right">
                             <span className="text-sm font-semibold text-gray-900">
-                              ${formatPrice(totalWeight * 11.7)}
+                              ${formatPrice(totalWeight * (1000 / dollar))}
                             </span>
                           </div>
                         </label>
@@ -752,7 +786,7 @@ const CartPaymentModal = ({
                             </div>
                             <div className="text-right">
                               <span className="text-sm font-semibold text-gray-900">
-                                ${formatPrice(totalWeight * 8.19)}
+                                ${formatPrice(totalWeight * (700 / dollar))}
                               </span>
                             </div>
                           </label>

@@ -29,12 +29,13 @@ const PaymentModal = ({
   const [user, setUser] = useState();
   const [finalPrice, setFinalPrice] = useState(0);
   const [shippingCost, setShippingCost] = useState(0);
-  const [dollar, setDollar] = useState(85.567517);
+  const [dollar, setDollar] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [finalWeight, setFinalWeight] = useState();
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [showAddressModal, setShowAddressModal] = useState(false);
-  const [step, setStep] = useState("address"); // 'address' or 'payment'
+  const [step, setStep] = useState("address");
+  const [loading, setLoading] = useState(true);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
@@ -61,6 +62,8 @@ const PaymentModal = ({
     qty = 1,
     productWeight
   ) => {
+    if (!dollar) return;
+
     let shippingPrice = 0;
     const totalWeight = productWeight * qty;
 
@@ -79,49 +82,83 @@ const PaymentModal = ({
       const res = await axios.get(`https://open.er-api.com/v6/latest/USD`);
       const inr = res.data.rates.INR;
       setDollar(inr);
+      return inr;
     } catch (error) {
       console.log(`Error fetching current dollar price in inr: ${error}`);
+      const fallbackRate = 85.567517;
+      setDollar(fallbackRate);
+      return fallbackRate;
     }
   };
 
   useEffect(() => {
-    getCurrentDollarinInr();
-    const totalWeight = selectedWeight * quantity;
-    setFinalWeight(totalWeight);
+    const initializeData = async () => {
+      try {
+        setLoading(true);
 
-    if (shippingMethod === "ship" && totalWeight < 100) {
-      setShippingMethod("air");
-    }
+        const rate = await getCurrentDollarinInr();
 
-    if (product && selectedWeight) {
-      handleShippingCharges(
-        product.price,
-        shippingMethod,
-        quantity,
-        selectedWeight
-      );
-    }
-  }, [product, selectedWeight, shippingMethod, quantity]);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const res = await axios.get(
-        `${backendUrl}/api/auth/user/${localStorage.getItem("uid")}`
-      );
-      setUser(res.data.user);
-
-      if (res.data.user.address.length === 0) {
-        toast(
-          "Please add your address/phone in your profile before making a purchase"
+        const userRes = await axios.get(
+          `${backendUrl}/api/auth/user/${localStorage.getItem("uid")}`
         );
-        navigate("/my-account/addresses");
-      } else {
-        // Set first address as default selection
-        setSelectedAddress(res.data.user.address[0]);
+        setUser(userRes.data.user);
+
+        if (userRes.data.user.address.length === 0) {
+          toast(
+            "Please add your address/phone in your profile before making a purchase"
+          );
+          navigate("/my-account/addresses");
+        } else {
+          setSelectedAddress(userRes.data.user.address[0]);
+        }
+
+        const totalWeight = selectedWeight * quantity;
+        setFinalWeight(totalWeight);
+
+        if (shippingMethod === "ship" && totalWeight < 100) {
+          setShippingMethod("air");
+        }
+
+        if (product && selectedWeight) {
+          handleShippingCharges(
+            product.price,
+            shippingMethod,
+            quantity,
+            selectedWeight
+          );
+        }
+      } catch (error) {
+        console.error("Initialization error:", error);
+        toast.error("Failed to initialize payment data");
+      } finally {
+        setLoading(false);
       }
     };
-    fetchUser();
-  }, []);
+
+    if (showPaymentModal) {
+      initializeData();
+    }
+  }, [showPaymentModal, product, selectedWeight]);
+
+  useEffect(() => {
+    if (!loading && dollar) {
+      const totalWeight = selectedWeight * quantity;
+      setFinalWeight(totalWeight);
+
+      if (shippingMethod === "ship" && totalWeight < 100) {
+        setShippingMethod("air");
+      }
+
+      if (product && selectedWeight) {
+        handleShippingCharges(
+          product.price,
+          shippingMethod,
+          quantity,
+          selectedWeight
+        );
+      }
+    }
+  }, [shippingMethod, quantity, dollar, loading]);
 
   const formatPrice = (price) => {
     return typeof price === "number" ? price.toFixed(2) : "0.00";
@@ -197,6 +234,17 @@ const PaymentModal = ({
     </div>
   );
 
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div className="bg-white rounded-2xl p-8 flex flex-col items-center">
+          <Loader2 className="w-8 h-8 text-green-800 animate-spin mb-4" />
+          <p className="text-gray-700">Loading payment details...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       {/* Backdrop */}
@@ -247,7 +295,10 @@ const PaymentModal = ({
                 </p>
               </div>
             </div>
-            <button onClick={closePaymentModal} className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition">
+            <button
+              onClick={closePaymentModal}
+              className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition"
+            >
               <X className="w-4 h-4 text-gray-600" />
             </button>
           </div>
