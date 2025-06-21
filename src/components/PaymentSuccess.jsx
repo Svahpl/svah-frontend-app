@@ -1,5 +1,6 @@
 import { CheckCircle, Home, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useUpdateCartCounter } from "../hooks/useUpdateCartCounter";
 
 const PaymentSuccess = () => {
   const [orderDetails] = useState({
@@ -18,6 +19,12 @@ const PaymentSuccess = () => {
         "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400",
     },
   });
+
+  const updateCounter = useUpdateCartCounter();
+
+  useEffect(() => {
+    updateCounter();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">

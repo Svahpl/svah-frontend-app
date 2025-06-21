@@ -9,6 +9,7 @@ import {
   CreditCard,
   Shield,
   MessageSquare,
+  Bell,
   User,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -372,13 +373,27 @@ const ProductScreen = () => {
           </div>
 
           <div className="space-y-3">
-            <button
-              onClick={() => addToCart()}
-              className="w-full  bg-green-800 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition shadow hover:shadow-lg transform hover:scale-105"
-            >
-              <ShoppingBag className="w-4 h-4" />
-              <span className="text-sm">Add To Bag</span>
-            </button>
+            {product.quantity <= 0 ? (
+              <>
+                <button
+                  onClick={() => addToCart()}
+                  className="w-full  bg-green-800 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition shadow hover:shadow-lg transform hover:scale-105"
+                >
+                  <Bell className="w-5 h-5" />
+                  <span className="text-sm">Notify</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => addToCart()}
+                  className="w-full  bg-green-800 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition shadow hover:shadow-lg transform hover:scale-105"
+                >
+                  <ShoppingBag className="w-4 h-4" />
+                  <span className="text-sm">Add To Bag</span>
+                </button>
+              </>
+            )}
             {product.quantity <= 0 ? (
               <>
                 <button
@@ -633,13 +648,27 @@ const ProductScreen = () => {
             </div>
 
             <div className="space-y-4">
-              <button
-                onClick={() => addToCart()}
-                className="w-full bg-green-800 text-white font-semibold py-4 px-6 rounded-lg flex items-center justify-center space-x-3 transition shadow hover:shadow-xl transform hover:scale-105"
-              >
-                <ShoppingBag className="w-5 h-5" />
-                <span>Add To Bag</span>
-              </button>
+              {product.quantity <= 0 ? (
+                <>
+                  <button
+                    onClick={() => addToCart()}
+                    className="w-full bg-green-800 text-white font-semibold py-4 px-6 rounded-lg flex items-center justify-center space-x-3 transition shadow hover:shadow-xl transform hover:scale-105"
+                  >
+                    <Bell className="w-5 h-5" />
+                    <span>Notify</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => addToCart()}
+                    className="w-full bg-green-800 text-white font-semibold py-4 px-6 rounded-lg flex items-center justify-center space-x-3 transition shadow hover:shadow-xl transform hover:scale-105"
+                  >
+                    <ShoppingBag className="w-5 h-5" />
+                    <span>Add To Bag</span>
+                  </button>
+                </>
+              )}
               {product.quantity <= 0 ? (
                 <>
                   <button
