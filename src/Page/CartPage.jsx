@@ -131,11 +131,19 @@ const CartPage = () => {
   };
 
   const calculateTotalPrice = () => {
-    const totalPrice = userCartItems.reduce(
-      (sum, item) => sum + item.quantity * item.price * item.weight,
-      0
-    );
-    setSubtotalPrice(totalPrice?.toFixed(2));
+    const totalPrice = userCartItems.reduce((sum, item) => {
+      const quantity = Number(item.quantity) || 0;
+      const price = Number(item.price) || 0;
+      const weight = Number(item.weight) || 1; // default to 1 if weight is undefined or 0
+
+      if (isNaN(quantity) || isNaN(price) || isNaN(weight)) {
+        return sum; // skip invalid items
+      }
+
+      return sum + quantity * price * weight;
+    }, 0);
+
+    setSubtotalPrice(totalPrice.toFixed(2));
   };
 
   useEffect(() => {
