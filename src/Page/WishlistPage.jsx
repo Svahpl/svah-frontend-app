@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { LocationUI, UseTitle } from "../components/compIndex";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useUpdateCartCounter } from "../hooks/useUpdateCartCounter";
 
 // Wishlist Product Component
 const WishlistProduct = ({ product, onDelete, onAddToCart }) => {
@@ -137,7 +138,7 @@ const WishlistProduct = ({ product, onDelete, onAddToCart }) => {
 
 const WishlistPage = () => {
   UseTitle("Your Wishlist");
-
+  const updateCounter = useUpdateCartCounter();
   const [userWishlistItems, setUserWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -244,14 +245,20 @@ const WishlistPage = () => {
 
     try {
       const res = await axios.post(
-        `${
-          import.meta.env.VITE_BACKEND_URL
-        }/api/cart/add-to-cart/${userId}/${productId}`,
-        { quantity: 1 }
+        `${import.meta.env.VITE_BACKEND_URL}/api/wishlist/movetocart`,
+
+        {
+          userId: userId,
+          productId,
+        }
       );
 
       if (res.status === 200 || res.data.success) {
+        updateCounter();
         toast("Added to cart!");
+        setUserWishlistItems((prev) =>
+          prev.filter((item) => item?._id !== productId)
+        );
       } else {
         throw new Error("Failed to add to cart");
       }

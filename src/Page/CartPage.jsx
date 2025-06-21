@@ -53,6 +53,7 @@ const CartPage = () => {
         );
         toast("Deleted");
         refreshComponent();
+        return res.status;
       }
     } catch (error) {
       console.log("Cart Item Deletion error", error);
@@ -66,7 +67,8 @@ const CartPage = () => {
           import.meta.env.VITE_BACKEND_URL
         }/api/wishlist/add-to-wishlist/${userId}/${productId}`
       );
-      if (res.status === 200) toast("Added to wishlist!");
+      const res2 = await deleteCartItem(productId, 0, "delete", null);
+      if (res.status === 200 && res2 === 200) toast("Added to wishlist!");
     } catch (error) {
       console.log("Error adding item to wishlist", error);
       toast("Internal Error");
