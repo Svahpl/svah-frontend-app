@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useAppContext } from "../context/AppContext";
+import { Link } from "react-router-dom";
 
 const CartPage = () => {
   UseTitle("Your Cart");
@@ -158,9 +159,15 @@ const CartPage = () => {
       {/* Cart Links */}
       <div className="bg-gray-100 lg:bg-white h-9 font-medium text-black lg:max-w-7xl lg:mx-auto lg:px-4 sm:px-6">
         <ul className="flex content-center">
-          <li className="mx-2 lg:underline lg:text-blue-500 mt-1">Cart</li>
-          <li className="mx-2 lg:underline lg:text-blue-500 mt-1">Lists</li>
-          <li className="mx-2 lg:underline lg:text-blue-500 mt-1">Buy Again</li>
+          <li className="mx-2 cursor-pointer lg:underline lg:text-blue-500 mt-1">
+            <Link to="/my-account/orders"> Orders </Link>
+          </li>
+          <li className="mx-2 cursor-pointer lg:underline lg:text-blue-500 mt-1">
+            <Link to="/my-account/wishlist"> Wishlist </Link>
+          </li>
+          <li className="mx-2 cursor-pointer lg:underline lg:text-blue-500 mt-1">
+            <Link to="/my-account/addresses"> Addresses </Link>
+          </li>
         </ul>
       </div>
 

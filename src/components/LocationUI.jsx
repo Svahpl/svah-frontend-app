@@ -64,7 +64,7 @@ const LocationUI = () => {
   }, [userLatitude, userLongitude]); // <- This effect runs when lat/lon changes
 
   return (
-    <div className="bg-mobile-green lg:bg-white lg:text-black mui-white h-10 content-center lg:max-w-7xl lg:mx-auto lg:px-4 sm:px-6">
+    <div className="bg-mobile-green lg:bg-white lg:text-black mui-white h-10 mt-3 content-center lg:max-w-7xl lg:mx-auto lg:px-4 sm:px-6">
       <span className="flex">
         <MapPin className="mx-2" size={20} /> Deliver to{" "}
         {`${removeDiacritics(city)}`}

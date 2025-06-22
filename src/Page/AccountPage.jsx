@@ -68,13 +68,13 @@ const AccountPage = () => {
       icon: <Package className="w-6 h-6 md:w-8 md:h-8" />,
       title: "Your Orders",
       description: "Track, return, or buy things again",
-      link: "/orders",
+      link: "/my-account/orders",
     },
     {
       icon: <ShoppingCart />,
       title: "Your Cart",
       description: "Your cart. Review and edit selections.",
-      link: "/cart",
+      link: "/my-account/cart",
     },
     {
       icon: <Settings className="w-6 h-6 md:w-8 md:h-8" />,
@@ -92,7 +92,7 @@ const AccountPage = () => {
       icon: <Heart className="w-6 h-6 md:w-8 md:h-8" />,
       title: "Your Wishlist",
       description: "Save items. Keep track of what you love.",
-      link: "/wishlist",
+      link: "/my-account/wishlist",
     },
   ];
 

@@ -20,6 +20,7 @@ import {
   InvoiceTemplate,
   WishlistPage,
   MyOrdersPage,
+  Invoice,
 } from "./Page/pageIndex";
 import ProductScreen from "./Page/ProductScreen";
 import { AddressManager } from "./components/compIndex";
@@ -48,11 +49,12 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/wishlist" element={<WishlistPage />} />
+          <Route path="/my-account/cart" element={<CartPage />} />
+          <Route path="/my-account/wishlist" element={<WishlistPage />} />
           <Route path="/view-product/:id" element={<ProductScreen />} />
           <Route path="/view-products" element={<CategoryProducts />} />
-          <Route path="/orders" element={<MyOrdersPage />} />
+          <Route path="/my-account/orders" element={<MyOrdersPage />} />
+          <Route path="/my-account/orders/view-invoice/:id" element={<Invoice />}/>
           <Route path="/my-account" element={<AccountPage />} />
           <Route path="/my-account/addresses" element={<AddressManager />} />
           <Route path="/invoice-template" element={<InvoiceTemplate />} />

@@ -6,6 +6,7 @@ import CategoryProducts from "./CategoryProducts";
 import InvoiceTemplate from "./InvoiceTemplate";
 import WishlistPage from "./WishlistPage";
 import MyOrdersPage from "./MyOrdersPage";
+import Invoice from "./Invoice";
 export {
   HomePage,
   CartPage,
@@ -14,5 +15,6 @@ export {
   CategoryProducts,
   InvoiceTemplate,
   WishlistPage,
-  MyOrdersPage
+  MyOrdersPage,
+  Invoice
 };

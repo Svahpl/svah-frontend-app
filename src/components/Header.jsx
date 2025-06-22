@@ -185,7 +185,7 @@ const Header = () => {
               </div>
 
               <a
-                href="/cart"
+                href="/my-account/cart"
                 className="relative text-gray-600 hover:text-primary-700"
               >
                 <ShoppingCart size={20} />
@@ -254,7 +254,7 @@ const Header = () => {
             <AuthComponent isMobile={false} />
 
             <a
-              href="/cart"
+              href="/my-account/cart"
               className="relative group flex flex-col items-center transition hover:scale-105"
             >
               <div className="p-2.5 rounded-full bg-gradient-to-br from-primary-50 to-primary-100 group-hover:shadow-lg transition">
@@ -280,6 +280,12 @@ const Header = () => {
               className="px-4 py-2 font-medium text-gray-700 hover:text-primary-700 hover:bg-primary-50/60 rounded-md transition"
             >
               Home
+            </a>
+            <a
+              href="/view-products"
+              className="px-4 py-2 font-medium text-gray-700 hover:text-primary-700 hover:bg-primary-50/60 rounded-md transition"
+            >
+              Products
             </a>
             <a
               href="/my-account"
