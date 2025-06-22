@@ -1,102 +1,66 @@
-import { CheckCircle, Home, ArrowRight } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useUpdateCartCounter } from "../hooks/useUpdateCartCounter";
+import React from "react";
+import { CheckCircle, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const PaymentSuccess = () => {
-  const [orderDetails] = useState({
-    orderId:
-      "ORD-2025-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
-    amount: 1247.85,
-    orderDate: new Date().toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }),
-    product: {
-      title: "Dev Mode Testing",
-      weight: "eg. 25kg × 2 = 50kg",
-      image:
-        "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400",
-    },
-  });
-
-  const updateCounter = useUpdateCartCounter();
-
-  useEffect(() => {
-    updateCounter();
-  }, []);
+export default function PaymentSuccess() {
+  const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
-        {/* Success Card */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-          {/* Success Icon */}
-          <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
-            <CheckCircle className="w-10 h-10 text-green-600" />
-          </div>
+        {/* Success Animation Container */}
+        <div className="text-center mb-8">
+          <div className="relative inline-block">
+            {/* Animated Success Icon */}
+            <div className="animate-bounce">
+              <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-4" />
+            </div>
 
-          {/* Success Message */}
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Payment Successful!
-          </h1>
-          <p className="text-gray-600 mb-6">Thank you for your order</p>
-
-          {/* Order Info */}
-          <div className="bg-gray-50 rounded-xl p-4 mb-6">
-            <div className="flex items-center space-x-3">
-              <img
-                src={orderDetails.product.image}
-                alt={orderDetails.product.title}
-                className="w-12 h-12 object-cover rounded-lg"
-              />
-              <div className="text-left flex-1">
-                <h3 className="font-medium text-gray-900 text-sm">
-                  {orderDetails.product.title}
-                </h3>
-                <p className="text-xs text-gray-500">
-                  {orderDetails.product.weight}
-                </p>
-              </div>
-              <div className="text-right">
-                <p className="font-bold text-gray-900">
-                  ${orderDetails.amount}
-                </p>
-              </div>
+            {/* Celebratory Rings */}
+            <div className="absolute inset-0 -m-4">
+              <div className="w-28 h-28 border-4 border-green-200 rounded-full animate-ping opacity-30"></div>
+            </div>
+            <div className="absolute inset-0 -m-2">
+              <div className="w-24 h-24 border-2 border-green-300 rounded-full animate-ping opacity-40 animation-delay-200"></div>
             </div>
           </div>
-
-          {/* Order Details */}
-          <div className="space-y-2 mb-8">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-600">Order ID:</span>
-              <span className="font-medium text-gray-900">
-                {orderDetails.orderId}
-              </span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-600">Date:</span>
-              <span className="font-medium text-gray-900">
-                {orderDetails.orderDate}
-              </span>
-            </div>
-          </div>
-
-          {/* Action Button */}
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-xl transition flex items-center justify-center space-x-2">
-            <Home className="w-4 h-4" />
-            <span>Continue Shopping</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
         </div>
 
-        {/* Simple Footer Message */}
-        <p className="text-center text-sm text-gray-500 mt-6">
-          We'll send you an email confirmation shortly
+        {/* Success Card */}
+        <div className="bg-white rounded-2xl shadow-xl p-8 text-center transform hover:scale-105 transition-transform duration-300">
+          <h1 className="text-3xl font-bold text-gray-900 mb-3">
+            Payment Complete!
+          </h1>
+
+          <p className="text-gray-600 mb-8 text-lg">
+            Thank you for your purchase. Your payment has been processed
+            successfully.
+          </p>
+
+          {/* View Order Button */}
+          <button
+            onClick={() => navigate("/orders")}
+            className="group w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-green-200"
+          >
+            <span className="flex items-center justify-center">
+              View Your Order
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+            </span>
+          </button>
+
+          {/* Decorative Elements */}
+          <div className="mt-8 flex justify-center space-x-2">
+            <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
+            <div className="w-2 h-2 bg-emerald-300 rounded-full animate-pulse animation-delay-100"></div>
+            <div className="w-2 h-2 bg-teal-300 rounded-full animate-pulse animation-delay-200"></div>
+          </div>
+        </div>
+
+        {/* Subtle Footer Message */}
+        <p className="text-center text-gray-500 text-sm mt-6">
+          A confirmation email has been sent to your inbox
         </p>
       </div>
     </div>
   );
-};
-
-export default PaymentSuccess;
+}
