@@ -3,22 +3,24 @@ import {
   CategorySection,
   Certificates,
   ContactSection,
+  UseTitle,
 } from "../components/compIndex";
 import { useState, useEffect } from "react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from "axios";
-import { UseTitle } from "../components/compIndex";
 import { useAuthContext } from "../context/AuthContext";
 
 const HomePage = () => {
   UseTitle("SVAH | Agros & Herbs");
-  const { isLoaded, isSignedIn, userId, sessionId, getToken } = useAuth();
+
+  const { isLoaded, isSignedIn, getToken } = useAuth();
   const { user, isLoaded: userLoaded } = useUser();
+
   const [token, setToken] = useState("");
 
   const { storeTokenInLocalStorage, storeUser } = useAuthContext();
 
-  // Get token once auth is loaded and user is signed in
+  // STEP 1: Get token once auth is loaded and user is signed in
   useEffect(() => {
     if (isLoaded && isSignedIn) {
       getToken()
@@ -30,49 +32,48 @@ const HomePage = () => {
           console.error("Failed to get token:", err);
         });
     }
-  }, [isLoaded, isSignedIn, getToken]);
+  }, [isLoaded, isSignedIn, getToken, storeTokenInLocalStorage]);
 
-  const getMongoUserId = async () => {
-    // Add safety checks
-    if (!user || !user.id) {
-      console.log("User or user.id is not available yet");
+  // STEP 2: Get Mongo User ID by Clerk ID
+  const getMongoUserId = async (clerkUserId) => {
+    if (!clerkUserId) {
+      console.warn("Clerk user ID is not available yet");
       return;
     }
 
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/auth/map/clerk/${user.id}`
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/map/clerk/${clerkUserId}`
       );
-      console.log('user id', res?.data?.user[0]?._id);
-      
-      // Check if we actually got a user ID before storing
-      if (res?.data?.user[0]?._id) {
-        storeUser(res.data.user[0]._id);
+
+      const mongoUserId = res?.data?.user?.[0]?._id;
+
+      if (mongoUserId) {
+        console.log("MongoDB User ID:", mongoUserId);
+        storeUser(mongoUserId);
       } else {
         console.warn("No MongoDB user ID found in response");
       }
     } catch (error) {
-      console.log(`Error getting MONGOUSER Id`, error);
+      console.error("Error getting MongoDB user ID:", error);
     }
   };
 
+  // STEP 3: Send user data to backend
   useEffect(() => {
     const sendUserData = async () => {
-      // Add comprehensive checks
       if (!token || !user || !userLoaded || !isSignedIn) {
-        console.log("Missing required data:", { token: !!token, user: !!user, userLoaded, isSignedIn });
+        console.log("Waiting for user/token to be ready", {
+          token: !!token,
+          user: !!user,
+          userLoaded,
+          isSignedIn,
+        });
         return;
       }
 
       try {
-        // Remove the localhost call that's being blocked
-        // const response = await fetch("http://localhost:8000/api/protected", {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // });
-
-        // Signup API call
+        // Signup call to backend
         const signupResponse = await axios.post(
           `${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`,
           {
@@ -83,9 +84,10 @@ const HomePage = () => {
             ProfileImage: user.imageUrl,
           }
         );
+
         console.log("Signup response:", signupResponse.data);
 
-        // Protected API call - use the same backend URL
+        // Protected call example
         const protectedResponse = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/protected`,
           {
@@ -94,21 +96,19 @@ const HomePage = () => {
             },
           }
         );
-        console.log("Protected response:", protectedResponse.data);
+        console.log("Protected API response:", protectedResponse.data);
 
-        // Call getMongoUserId after successful signup
-        await getMongoUserId();
-        
+        // Get MongoDB user ID after signup
+        if (user.id) {
+          await getMongoUserId(user.id);
+        }
       } catch (error) {
         console.error("API call failed:", error);
       }
     };
 
-    // Only run when all required data is available
-    if (isLoaded && userLoaded && isSignedIn && token && user) {
-      sendUserData();
-    }
-  }, [token, user, isLoaded, userLoaded, isSignedIn]);
+    sendUserData();
+  }, [token, user, userLoaded, isSignedIn]);
 
   return (
     <>
