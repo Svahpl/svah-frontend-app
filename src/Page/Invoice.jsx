@@ -3,14 +3,12 @@ import { Download } from "lucide-react";
 import { useParams } from "react-router-dom";
 import logo from "../../public/images/LOGO.png";
 import html2pdf from "html2pdf.js";
-import { QRCode } from "react-qr-code";
 import UseTitle from "../components/UseTitle";
 
 const Invoice = () => {
   const [invoiceData, setInvoiceData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentUrl, setCurrentUrl] = useState("");
   const { id } = useParams();
   const orderId = id;
   const backendUrl =
@@ -27,22 +25,6 @@ const Invoice = () => {
     if (urlUid && !localStorage.getItem("uid")) {
       localStorage.setItem("uid", urlUid);
     }
-
-    // Generate QR code value with UID parameter
-    const generateQrValue = () => {
-      const url = new URL(window.location.href);
-      const uid = localStorage.getItem("uid");
-
-      if (uid) {
-        url.searchParams.set("uid", uid);
-        setCurrentUrl(url.toString());
-        return true;
-      }
-      setCurrentUrl(window.location.href);
-      return false;
-    };
-
-    const hasUid = generateQrValue();
 
     const fetchOrderData = async () => {
       try {
@@ -88,10 +70,7 @@ const Invoice = () => {
     };
 
     if (orderId) {
-      // Only fetch if we have a UID or retry is scheduled
-      if (localStorage.getItem("uid") || !hasUid) {
-        fetchOrderData();
-      }
+      fetchOrderData();
     }
   }, [orderId, backendUrl]);
 
@@ -257,27 +236,6 @@ const Invoice = () => {
           min-height: 297mm;
           position: relative;
         }
-        .qr-container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 6px;
-        }
-        .qr-code {
-          width: 80px;
-          height: 80px;
-          padding: 4px;
-          background: white;
-          border: 1px solid #d1d5db;
-          border-radius: 4px;
-        }
-        .qr-note {
-          font-size: 0.65rem;
-          max-width: 90px;
-          color: #6b7280;
-          text-align: center;
-          line-height: 1.1;
-        }
         .header-border {
           border-bottom: 3px solid #111827;
           padding-bottom: 1rem;
@@ -316,53 +274,31 @@ const Invoice = () => {
       >
         <div className="max-w-4xl mx-auto print-container">
           <div className="p-8 print:p-0 avoid-break invoice-container">
-            {/* Top Header with QR Code */}
+            {/* Top Header - QR code removed */}
             <div className="header-border avoid-break">
-              <div className="grid grid-cols-12 gap-4 items-start">
-                {/* Left - QR Code */}
-                <div className="col-span-2 flex justify-start">
-                  {localStorage.getItem("uid") ? (
-                    <div className="qr-container">
-                      <div className="qr-code">
-                        <QRCode
-                          value={currentUrl}
-                          size={72}
-                          level="H"
-                          bgColor="#ffffff"
-                          fgColor="#000000"
-                        />
-                      </div>
-                      <p className="qr-note">Scan to verify authenticity</p>
-                    </div>
-                  ) : (
-                    <div className="text-center p-2 text-gray-500 text-xs">
-                      Verification QR unavailable
-                    </div>
-                  )}
-                </div>
-
+              <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                 {/* Center - Invoice Title and Details */}
-                <div className="col-span-6 text-center">
-                  <h1 className="text-4xl font-bold text-gray-900 mb-4 tracking-wide">
+                <div className="text-center md:text-left">
+                  <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-wide">
                     INVOICE
                   </h1>
                   <div className="space-y-2 text-gray-700">
-                    <p className="text-lg font-semibold">
+                    <p className="text-base md:text-lg font-semibold">
                       Invoice:{" "}
                       <span className="font-bold text-gray-900">
                         {invoiceNumber}
                       </span>
                     </p>
-                    <p className="text-base">Date: {invoiceDate}</p>
+                    <p className="text-sm md:text-base">Date: {invoiceDate}</p>
                   </div>
                 </div>
 
-                {/* Right - Updated Company Info */}
-                <div className="col-span-4 text-right">
-                  <div className="mb-3 flex justify-end">
+                {/* Right - Company Info */}
+                <div className="text-center md:text-right">
+                  <div className="mb-3 flex justify-center md:justify-end">
                     <img src={logo} alt="Company Logo" className="w-12" />
                   </div>
-                  <h2 className="text-lg font-bold text-gray-900 mb-2">
+                  <h2 className="text-base md:text-lg font-bold text-gray-900 mb-2">
                     Sri Venkateswara Agros And Herbs
                   </h2>
                   <div className="text-xs text-gray-600 space-y-1">
@@ -385,14 +321,14 @@ const Invoice = () => {
                   BILL TO
                 </h3>
                 <div className="text-gray-700 space-y-1">
-                  <p className="font-bold text-gray-900 text-lg">
+                  <p className="font-bold text-gray-900 text-base md:text-lg">
                     {invoiceData.userName}
                   </p>
-                  <p className="text-sm">{invoiceData.userEmail}</p>
-                  <p className="text-sm font-medium">
+                  <p className="text-xs md:text-sm">{invoiceData.userEmail}</p>
+                  <p className="text-xs md:text-sm font-medium">
                     {invoiceData.phoneNumber}
                   </p>
-                  <p className="text-sm leading-relaxed mt-2">
+                  <p className="text-xs md:text-sm leading-relaxed mt-2">
                     {invoiceData.shippingAddress}
                   </p>
                 </div>
@@ -413,32 +349,35 @@ const Invoice = () => {
               </div>
             </div>
 
-            {/* Items Table with Fixed Layout and Pagination */}
+            {/* Items Table */}
             <div className="mb-8 avoid-break table-container">
               <table className="invoice-table">
                 <thead>
                   <tr className="avoid-break">
-                    <th className="text-left text-sm description-column">
+                    <th className="text-left text-xs md:text-sm description-column">
                       DESCRIPTION
                     </th>
-                    <th className="text-center text-sm quantity-column">QTY</th>
-                    <th className="text-right text-sm price-column">
+                    <th className="text-center text-xs md:text-sm quantity-column">
+                      QTY
+                    </th>
+                    <th className="text-right text-xs md:text-sm price-column">
                       UNIT PRICE
                     </th>
-                    <th className="text-right text-sm amount-column">AMOUNT</th>
+                    <th className="text-right text-xs md:text-sm amount-column">
+                      AMOUNT
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {invoiceData.items && invoiceData.items.length > 0 ? (
                     invoiceData.items.map((item, index) => (
                       <React.Fragment key={item._id || index}>
-                        {/* Add page break after every 10 items */}
                         {index > 0 && index % 10 === 0 && (
                           <tr className="page-break"></tr>
                         )}
 
                         <tr className="avoid-break">
-                          <td className="text-gray-700 description-column">
+                          <td className="text-gray-700 text-xs md:text-sm description-column">
                             <div className="font-semibold text-gray-900">
                               {item.title}
                             </div>
@@ -448,13 +387,13 @@ const Invoice = () => {
                               </div>
                             )}
                           </td>
-                          <td className="text-center text-gray-700 font-medium quantity-column">
+                          <td className="text-center text-gray-700 font-medium text-xs md:text-sm quantity-column">
                             {item.quantity}
                           </td>
-                          <td className="text-right text-gray-700 price-column">
+                          <td className="text-right text-gray-700 text-xs md:text-sm price-column">
                             ${item.price.toFixed(2)}
                           </td>
-                          <td className="text-right font-bold text-gray-900 amount-column">
+                          <td className="text-right font-bold text-gray-900 text-xs md:text-sm amount-column">
                             ${(item.price * item.quantity).toFixed(2)}
                           </td>
                         </tr>
@@ -476,22 +415,22 @@ const Invoice = () => {
 
             {/* Totals Section */}
             <div className="flex justify-end mb-8 avoid-break">
-              <div className="w-80">
+              <div className="w-full md:w-80">
                 <div className="space-y-2 total-section">
-                  <div className="flex justify-between py-2 text-gray-700">
+                  <div className="flex justify-between py-2 text-gray-700 text-sm md:text-base">
                     <span className="font-medium">Subtotal:</span>
                     <span className="font-semibold">
                       ${subtotal.toFixed(2)}
                     </span>
                   </div>
-                  <div className="flex justify-between py-2 text-gray-700">
+                  <div className="flex justify-between py-2 text-gray-700 text-sm md:text-base">
                     <span className="font-medium">Shipping:</span>
                     <span className="font-semibold">
                       ${shipping.toFixed(2)}
                     </span>
                   </div>
                   <div className="border-t-2 border-gray-900 pt-3 mt-3">
-                    <div className="flex justify-between py-2 text-xl font-bold text-gray-900">
+                    <div className="flex justify-between py-2 text-lg md:text-xl font-bold text-gray-900">
                       <span>TOTAL:</span>
                       <span>${total.toFixed(2)}</span>
                     </div>
@@ -502,9 +441,9 @@ const Invoice = () => {
 
             {/* Footer Section */}
             <div className="section-divider"></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm avoid-break">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-xs md:text-sm avoid-break">
               <div>
-                <h4 className="font-bold text-gray-900 mb-2 text-base">
+                <h4 className="font-bold text-gray-900 mb-2 text-sm md:text-base">
                   SECURE PAYMENTS
                 </h4>
                 <p className="text-gray-700 leading-relaxed">
@@ -513,7 +452,7 @@ const Invoice = () => {
                 </p>
               </div>
               <div>
-                <h4 className="font-bold text-gray-900 mb-2 text-base">
+                <h4 className="font-bold text-gray-900 mb-2 text-sm md:text-base">
                   NOTES
                 </h4>
                 <p className="text-gray-700 leading-relaxed">
@@ -530,10 +469,10 @@ const Invoice = () => {
             >
               <button
                 onClick={handleOnclick}
-                className="flex items-center gap-3 bg-gray-900 hover:bg-gray-800 text-white px-8 py-3 rounded-lg font-semibold transition-colors shadow-lg"
+                className="flex items-center gap-3 bg-gray-900 hover:bg-gray-800 text-white px-6 py-2 md:px-8 md:py-3 rounded-lg font-semibold transition-colors shadow-lg text-sm md:text-base"
               >
-                <Download size={20} />
-                Download Invoice
+                <Download size={18} className="hidden md:block" />
+                <span>Download Invoice</span>
               </button>
             </div>
           </div>
