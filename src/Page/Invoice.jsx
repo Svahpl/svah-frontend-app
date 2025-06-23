@@ -19,14 +19,40 @@ const Invoice = () => {
   UseTitle(`Invoice | ${orderId?.slice(0, 10).toUpperCase()}`);
 
   useEffect(() => {
-    setCurrentUrl(window.location.href);
+    // Extract UID from URL parameters if present
+    const queryParams = new URLSearchParams(window.location.search);
+    const urlUid = queryParams.get("uid");
+
+    // Store UID from URL if it doesn't exist in localStorage
+    if (urlUid && !localStorage.getItem("uid")) {
+      localStorage.setItem("uid", urlUid);
+    }
+
+    // Generate QR code value with UID parameter
+    const generateQrValue = () => {
+      const url = new URL(window.location.href);
+      const uid = localStorage.getItem("uid");
+
+      if (uid) {
+        url.searchParams.set("uid", uid);
+        setCurrentUrl(url.toString());
+        return true;
+      }
+      setCurrentUrl(window.location.href);
+      return false;
+    };
+
+    const hasUid = generateQrValue();
+
     const fetchOrderData = async () => {
       try {
         setLoading(true);
         const uid = localStorage.getItem("uid");
 
+        // Handle missing UID gracefully
         if (!uid) {
-          setError("User ID not found in localStorage");
+          // First-time load might have UID in URL but not processed yet
+          setTimeout(fetchOrderData, 300);
           return;
         }
 
@@ -62,7 +88,10 @@ const Invoice = () => {
     };
 
     if (orderId) {
-      fetchOrderData();
+      // Only fetch if we have a UID or retry is scheduled
+      if (localStorage.getItem("uid") || !hasUid) {
+        fetchOrderData();
+      }
     }
   }, [orderId, backendUrl]);
 
@@ -292,18 +321,24 @@ const Invoice = () => {
               <div className="grid grid-cols-12 gap-4 items-start">
                 {/* Left - QR Code */}
                 <div className="col-span-2 flex justify-start">
-                  <div className="qr-container">
-                    <div className="qr-code">
-                      <QRCode
-                        value={currentUrl}
-                        size={72}
-                        level="H"
-                        bgColor="#ffffff"
-                        fgColor="#000000"
-                      />
+                  {localStorage.getItem("uid") ? (
+                    <div className="qr-container">
+                      <div className="qr-code">
+                        <QRCode
+                          value={currentUrl}
+                          size={72}
+                          level="H"
+                          bgColor="#ffffff"
+                          fgColor="#000000"
+                        />
+                      </div>
+                      <p className="qr-note">Scan to verify authenticity</p>
                     </div>
-                    <p className="qr-note">Scan to verify authenticity</p>
-                  </div>
+                  ) : (
+                    <div className="text-center p-2 text-gray-500 text-xs">
+                      Verification QR unavailable
+                    </div>
+                  )}
                 </div>
 
                 {/* Center - Invoice Title and Details */}
