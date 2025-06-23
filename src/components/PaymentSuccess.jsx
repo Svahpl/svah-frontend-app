@@ -39,7 +39,7 @@ export default function PaymentSuccess() {
 
           {/* View Order Button */}
           <button
-            onClick={() => navigate("/orders")}
+            onClick={() => navigate("/my-account/orders")}
             className="group w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-green-200"
           >
             <span className="flex items-center justify-center">

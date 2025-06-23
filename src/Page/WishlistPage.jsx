@@ -3,6 +3,8 @@ import { LocationUI, UseTitle } from "../components/compIndex";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useUpdateCartCounter } from "../hooks/useUpdateCartCounter";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 // Wishlist Product Component
 const WishlistProduct = ({ product, onDelete, onAddToCart }) => {
@@ -353,6 +355,7 @@ const WishlistPage = () => {
 
   return (
     <>
+    <Header />
       <LocationUI />
 
       {/* Wishlist Navigation Links */}
@@ -576,6 +579,7 @@ const WishlistPage = () => {
           )}
         </div>
       </div>
+      <Footer />
     </>
   );
 };

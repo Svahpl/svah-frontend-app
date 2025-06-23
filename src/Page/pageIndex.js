@@ -7,8 +7,10 @@ import InvoiceTemplate from "./InvoiceTemplate";
 import WishlistPage from "./WishlistPage";
 import MyOrdersPage from "./MyOrdersPage";
 import Invoice from "./Invoice";
+import Logout from "./Logout";
 export {
   HomePage,
+  Logout,
   CartPage,
   AccountPage,
   ProductPage,

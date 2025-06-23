@@ -9,6 +9,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useAppContext } from "../context/AppContext";
 import { Link } from "react-router-dom";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const CartPage = () => {
   UseTitle("Your Cart");
@@ -155,6 +157,7 @@ const CartPage = () => {
 
   return (
     <>
+      <Header />
       <LocationUI />
       {/* Cart Links */}
       <div className="bg-gray-100 lg:bg-white h-9 font-medium text-black lg:max-w-7xl lg:mx-auto lg:px-4 sm:px-6">
@@ -298,6 +301,7 @@ const CartPage = () => {
         {/* Payment Modal */}
         <HandlePaymentModal />
       </div>
+      <Footer />
     </>
   );
 };

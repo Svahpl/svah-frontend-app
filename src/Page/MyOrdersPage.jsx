@@ -14,6 +14,8 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
 
 const MyOrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -176,208 +178,214 @@ Thank you for shopping with Natural Store!
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-green-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">My Orders</h1>
-            <p className="text-gray-600">
-              Track and manage your natural store orders
-            </p>
+    <>
+      <Header />
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+        {/* Header */}
+        <div className="bg-white shadow-sm border-b border-green-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                My Orders
+              </h1>
+              <p className="text-gray-600">
+                Track and manage your natural store orders
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {orders.length === 0 ? (
-          <div className="text-center bg-white rounded-2xl shadow-lg p-12">
-            <Package className="w-24 h-24 text-green-300 mx-auto mb-6" />
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              No Orders Found
-            </h2>
-            <p className="text-gray-600 mb-6">
-              You haven't placed any orders yet. Start shopping to see your
-              orders here!
-            </p>
-            <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-semibold transition-colors">
-              Start Shopping
-            </button>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {orders.map((order) => (
-              <div
-                key={order._id}
-                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
-              >
-                {/* Order Header */}
-                <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-6">
-                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className="bg-white/20 rounded-full p-3">
-                        <Package className="w-6 h-6" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {orders.length === 0 ? (
+            <div className="text-center bg-white rounded-2xl shadow-lg p-12">
+              <Package className="w-24 h-24 text-green-300 mx-auto mb-6" />
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                No Orders Found
+              </h2>
+              <p className="text-gray-600 mb-6">
+                You haven't placed any orders yet. Start shopping to see your
+                orders here!
+              </p>
+              <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-semibold transition-colors">
+                Start Shopping
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {orders.map((order) => (
+                <div
+                  key={order._id}
+                  className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
+                >
+                  {/* Order Header */}
+                  <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-6">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="bg-white/20 rounded-full p-3">
+                          <Package className="w-6 h-6" />
+                        </div>
+                        <div className="capitalize">
+                          <h3 className="text-xl font-bold">
+                            Order ID #{order._id.slice(-8)}
+                          </h3>
+                          <p className="text-green-100">
+                            Placed on {formatDate(order.placedAt)}
+                          </p>
+                        </div>
                       </div>
-                      <div className="capitalize">
-                        <h3 className="text-xl font-bold">
-                          Order ID #{order._id.slice(-8)}
-                        </h3>
-                        <p className="text-green-100">
-                          Placed on {formatDate(order.placedAt)}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div
-                        className={`px-4 py-2 rounded-full flex items-center gap-2 ${getStatusColor(
-                          order.orderStatus
-                        )} bg-white/20 text-white`}
-                      >
-                        {getStatusIcon(order.orderStatus)}
-                        <span className="font-semibold">
-                          {order.orderStatus}
-                        </span>
-                      </div>
-                      <button
-                        onClick={() =>
-                          navigate(
-                            `/my-account/orders/view-invoice/${order._id}`
-                          )
-                        }
-                        className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-full flex items-center gap-2 transition-colors"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                        Invoice
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Order Content */}
-                <div className="p-6">
-                  {/* Customer Info */}
-                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                    <div className="flex items-center gap-3 p-4 bg-green-50 rounded-xl">
-                      <User className="w-5 h-5 text-green-600" />
-                      <div>
-                        <p className="text-sm text-gray-500">Customer</p>
-                        <p className="font-semibold text-gray-800">
-                          {order.userName}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-xl">
-                      <Phone className="w-5 h-5 text-blue-600" />
-                      <div>
-                        <p className="text-sm text-gray-500">Phone</p>
-                        <p className="font-semibold text-gray-800">
-                          {order.phoneNumber}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3 p-4 bg-purple-50 rounded-xl">
-                      <CreditCard className="w-5 h-5 text-purple-600" />
-                      <div>
-                        <p className="text-sm text-gray-500">Payment</p>
-                        <p
-                          className={`font-semibold ${
-                            order.paymentStatus === "Success"
-                              ? "text-green-600"
-                              : "text-amber-600"
-                          }`}
-                        >
-                          {order.paymentStatus}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3 p-4 bg-amber-50 rounded-xl">
-                      <Calendar className="w-5 h-5 text-amber-600" />
-                      <div>
-                        <p className="text-sm text-gray-500">
-                          Expected Delivery
-                        </p>
-                        <p className="font-semibold text-gray-800">
-                          {order.expectedDelivery
-                            ? formatDate(order.expectedDelivery)
-                            : "TBD"}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Shipping Address */}
-                  <div className="mb-6">
-                    <div className="flex items-center gap-3 mb-3">
-                      <MapPin className="w-5 h-5 text-green-600" />
-                      <h4 className="font-semibold text-gray-800">
-                        Shipping Address
-                      </h4>
-                    </div>
-                    <div className="bg-gray-50 rounded-xl p-4">
-                      <p className="text-gray-700">{order.shippingAddress}</p>
-                    </div>
-                  </div>
-
-                  {/* Order Items */}
-                  <div className="mb-6">
-                    <h4 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                      <Package className="w-5 h-5 text-green-600" />
-                      Order Items ({order.items.length})
-                    </h4>
-                    <div className="space-y-4">
-                      {order.items.map((item) => (
+                      <div className="flex items-center gap-4">
                         <div
-                          key={item._id}
-                          className="flex items-center gap-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl"
+                          className={`px-4 py-2 rounded-full flex items-center gap-2 ${getStatusColor(
+                            order.orderStatus
+                          )} bg-white/20 text-white`}
                         >
-                          <img
-                            src={item.images[0]}
-                            alt={item.title}
-                            className="w-20 h-20 object-cover rounded-lg shadow-md"
-                          />
-                          <div className="flex-1">
-                            <h5 className="font-semibold text-gray-800 text-lg">
-                              {item.title}
-                            </h5>
-                            <p className="text-gray-600">
-                              Weight: {item.weight}kg
-                            </p>
-                            <div className="flex items-center gap-4 mt-2">
-                              <span className="text-green-600 font-semibold">
-                                ${item.price?.toFixed(2)}
-                              </span>
-                              <span className="text-gray-500">
-                                Qty: {item.quantity}
-                              </span>
-                              <span className="text-gray-800 font-semibold">
-                                Total: $
-                                {(item.price * item.quantity).toFixed(2)}
-                              </span>
+                          {getStatusIcon(order.orderStatus)}
+                          <span className="font-semibold">
+                            {order.orderStatus}
+                          </span>
+                        </div>
+                        <button
+                          onClick={() =>
+                            navigate(
+                              `/my-account/orders/view-invoice/${order._id}`
+                            )
+                          }
+                          className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-full flex items-center gap-2 transition-colors"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          Invoice
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Order Content */}
+                  <div className="p-6">
+                    {/* Customer Info */}
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                      <div className="flex items-center gap-3 p-4 bg-green-50 rounded-xl">
+                        <User className="w-5 h-5 text-green-600" />
+                        <div>
+                          <p className="text-sm text-gray-500">Customer</p>
+                          <p className="font-semibold text-gray-800">
+                            {order.userName}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-xl">
+                        <Phone className="w-5 h-5 text-blue-600" />
+                        <div>
+                          <p className="text-sm text-gray-500">Phone</p>
+                          <p className="font-semibold text-gray-800">
+                            {order.phoneNumber}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 p-4 bg-purple-50 rounded-xl">
+                        <CreditCard className="w-5 h-5 text-purple-600" />
+                        <div>
+                          <p className="text-sm text-gray-500">Payment</p>
+                          <p
+                            className={`font-semibold ${
+                              order.paymentStatus === "Success"
+                                ? "text-green-600"
+                                : "text-amber-600"
+                            }`}
+                          >
+                            {order.paymentStatus}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 p-4 bg-amber-50 rounded-xl">
+                        <Calendar className="w-5 h-5 text-amber-600" />
+                        <div>
+                          <p className="text-sm text-gray-500">
+                            Expected Delivery
+                          </p>
+                          <p className="font-semibold text-gray-800">
+                            {order.expectedDelivery
+                              ? formatDate(order.expectedDelivery)
+                              : "TBD"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Shipping Address */}
+                    <div className="mb-6">
+                      <div className="flex items-center gap-3 mb-3">
+                        <MapPin className="w-5 h-5 text-green-600" />
+                        <h4 className="font-semibold text-gray-800">
+                          Shipping Address
+                        </h4>
+                      </div>
+                      <div className="bg-gray-50 rounded-xl p-4">
+                        <p className="text-gray-700">{order.shippingAddress}</p>
+                      </div>
+                    </div>
+
+                    {/* Order Items */}
+                    <div className="mb-6">
+                      <h4 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <Package className="w-5 h-5 text-green-600" />
+                        Order Items ({order.items.length})
+                      </h4>
+                      <div className="space-y-4">
+                        {order.items.map((item) => (
+                          <div
+                            key={item._id}
+                            className="flex items-center gap-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl"
+                          >
+                            <img
+                              src={item.images[0]}
+                              alt={item.title}
+                              className="w-20 h-20 object-cover rounded-lg shadow-md"
+                            />
+                            <div className="flex-1">
+                              <h5 className="font-semibold text-gray-800 text-lg">
+                                {item.title}
+                              </h5>
+                              <p className="text-gray-600">
+                                Weight: {item.weight}kg
+                              </p>
+                              <div className="flex items-center gap-4 mt-2">
+                                <span className="text-green-600 font-semibold">
+                                  ${item.price?.toFixed(2)}
+                                </span>
+                                <span className="text-gray-500">
+                                  Qty: {item.quantity}
+                                </span>
+                                <span className="text-gray-800 font-semibold">
+                                  Total: $
+                                  {(item.price * item.quantity).toFixed(2)}
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Order Total */}
-                  <div className="border-t border-gray-200 pt-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-xl font-bold text-gray-800">
-                        Total Amount:
-                      </span>
-                      <span className="text-2xl font-bold text-green-600">
-                        ${order.totalAmount.toFixed(2)}
-                      </span>
+                    {/* Order Total */}
+                    <div className="border-t border-gray-200 pt-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xl font-bold text-gray-800">
+                          Total Amount:
+                        </span>
+                        <span className="text-2xl font-bold text-green-600">
+                          ${order.totalAmount.toFixed(2)}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

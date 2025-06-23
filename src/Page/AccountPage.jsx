@@ -22,6 +22,8 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { UseTitle } from "../components/compIndex";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const AccountPage = () => {
   UseTitle("Your Account");
@@ -214,43 +216,50 @@ const AccountPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-6 md:py-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8">
-          Your Account
-        </h1>
+    <>
+      <Header />
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 py-6 md:py-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8">
+            Your Account
+          </h1>
 
-        {/* Quick Access Grid - Mobile */}
-        <div className="md:hidden space-y-4 mb-8">
-          <AccountSection title="Orders" items={quickAccessItems.slice(0, 3)} />
-          <AccountSection
-            title="Account Settings"
-            items={quickAccessItems.slice(3)}
-          />
-        </div>
+          {/* Quick Access Grid - Mobile */}
+          <div className="md:hidden space-y-4 mb-8">
+            <AccountSection
+              title="Orders"
+              items={quickAccessItems.slice(0, 3)}
+            />
+            <AccountSection
+              title="Account Settings"
+              items={quickAccessItems.slice(3)}
+            />
+          </div>
 
-        {/* Desktop Quick Access Grid */}
-        <div className="hidden md:grid md:grid-cols-3 gap-6 mb-8">
-          {quickAccessItems.map((item, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
-              onClick={() => item.link && navigate(item.link)}
-            >
-              <div className="flex items-start space-x-4">
-                <div className="font-green">{item.icon}</div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-gray-600">{item.description}</p>
+          {/* Desktop Quick Access Grid */}
+          <div className="hidden md:grid md:grid-cols-3 gap-6 mb-8">
+            {quickAccessItems.map((item, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => item.link && navigate(item.link)}
+              >
+                <div className="flex items-start space-x-4">
+                  <div className="font-green">{item.icon}</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-gray-600">{item.description}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

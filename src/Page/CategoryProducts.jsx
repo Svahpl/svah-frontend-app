@@ -4,6 +4,8 @@ import { ProductCategoryCard, ScreenLoaders } from "../components/compIndex";
 import { dummyProducts as products } from "../data/dummyProduct.js";
 import { X } from "lucide-react";
 import axios from "axios";
+import Header from "../components/Header.jsx";
+import Footer from "../components/Footer.jsx";
 
 const CategoryProducts = () => {
   const [price, setPrice] = useState(1000);
@@ -110,6 +112,7 @@ const CategoryProducts = () => {
 
   return (
     <>
+      <Header />
       {isLoading && <LoadingOverlay />}
       <div className="categorySearchContainer mb-16 px-4 lg:px-24">
         <div className="flex flex-col lg:flex-row gap-8">
@@ -221,6 +224,7 @@ const CategoryProducts = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

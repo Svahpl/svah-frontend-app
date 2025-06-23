@@ -9,6 +9,8 @@ import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from "axios";
 import { UseTitle } from "../components/compIndex";
 import { useAuthContext } from "../context/AuthContext";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const HomePage = () => {
   UseTitle("SVAH | Agros & Herbs");
@@ -168,10 +170,12 @@ const HomePage = () => {
 
   return (
     <>
+      <Header />
       <Slideshow />
       <CategorySection />
       <Certificates />
       <ContactSection />
+      <Footer />
     </>
   );
 };

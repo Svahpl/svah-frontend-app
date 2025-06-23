@@ -9,7 +9,7 @@ import UseTitle from "./UseTitle";
 import ProductCategoryCard from "./ProductCategoryCard";
 import ScreenLoaders from "./ScreenLoaders";
 import CartPaymentModal from "./CartPaymentModal";
-
+import SignOutWatcher from "./SignOutWatcher";
 export {
   UseTitle,
   AddressManager,
@@ -22,4 +22,5 @@ export {
   ProductCategoryCard,
   ScreenLoaders,
   CartPaymentModal,
+  SignOutWatcher
 };
