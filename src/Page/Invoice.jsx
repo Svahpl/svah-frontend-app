@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Download, Building2 } from "lucide-react";
+import { Download } from "lucide-react";
 import { useParams } from "react-router-dom";
 import logo from "../../public/images/LOGO.png";
 import html2pdf from "html2pdf.js";
+import { QRCode } from "react-qr-code";
+import UseTitle from "../components/UseTitle";
 
 const Invoice = () => {
   const [invoiceData, setInvoiceData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentUrl, setCurrentUrl] = useState("");
   const { id } = useParams();
   const orderId = id;
   const backendUrl =
     import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
+  UseTitle(`Invoice | ${orderId?.slice(0, 10).toUpperCase()}`);
+
   useEffect(() => {
+    setCurrentUrl(window.location.href);
     const fetchOrderData = async () => {
       try {
         setLoading(true);
@@ -35,7 +41,6 @@ const Invoice = () => {
         const data = await response.json();
 
         if (data && data.OrdersFound) {
-          // Find the specific order by orderId
           const specificOrder = data.OrdersFound.find(
             (order) => order._id === orderId
           );
@@ -63,7 +68,31 @@ const Invoice = () => {
 
   async function handleOnclick() {
     const element = document.querySelector("#invoice");
-    html2pdf(element);
+
+    const options = {
+      margin: [5, 5, 5, 5],
+      filename: `invoice_${invoiceNumber}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        letterRendering: true,
+        allowTaint: true,
+      },
+      jsPDF: {
+        unit: "mm",
+        format: "a4",
+        orientation: "portrait",
+      },
+      pagebreak: {
+        mode: ["avoid-all", "css", "legacy"],
+        before: ".page-break-before",
+        after: ".page-break-after",
+        avoid: [".avoid-break", "tr", "td", "th"],
+      },
+    };
+
+    html2pdf().set(options).from(element).save();
   }
 
   if (loading) {
@@ -103,20 +132,13 @@ const Invoice = () => {
     );
   }
 
-  // Generate invoice number from order ID
   const invoiceNumber = `INV-${invoiceData._id.slice(-8).toUpperCase()}`;
-
-  // Calculate subtotal from items
   const subtotal = invoiceData.items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-
-  // Calculate shipping and total (no tax)
   const shipping = 15;
   const total = subtotal + shipping;
-
-  // Format date
   const invoiceDate = new Date(invoiceData.placedAt).toLocaleDateString(
     "en-US",
     {
@@ -126,13 +148,8 @@ const Invoice = () => {
     }
   );
 
-  const handleDownloadPDF = () => {
-    window.print();
-  };
-
   return (
     <>
-      {/* Print-specific styles */}
       <style jsx>{`
         @media print {
           body {
@@ -140,6 +157,7 @@ const Invoice = () => {
             padding: 0;
             -webkit-print-color-adjust: exact;
             color-adjust: exact;
+            font-family: Arial, sans-serif;
           }
           .no-print {
             display: none !important;
@@ -148,200 +166,297 @@ const Invoice = () => {
             width: 100% !important;
             max-width: none !important;
             margin: 0 !important;
-            padding: 20px !important;
+            padding: 5mm !important;
             box-shadow: none !important;
           }
-          .print-break {
+          .avoid-break {
+            page-break-inside: avoid !important;
+          }
+          tr {
             page-break-inside: avoid;
+            page-break-after: auto;
+          }
+          table {
+            page-break-inside: auto;
+          }
+          .page-break-before {
+            page-break-before: always;
+          }
+          .page-break-after {
+            page-break-after: always;
           }
         }
         @media screen {
           .print-container {
             background: white;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
           }
+        }
+
+        .table-container {
+          overflow: hidden;
+          break-inside: avoid;
+        }
+
+        .invoice-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-bottom: 20px;
+          table-layout: fixed;
+        }
+        .invoice-table th {
+          background-color: #f8f9fa;
+          padding: 12px 8px;
+          text-align: left;
+          border-bottom: 2px solid #111827;
+          font-weight: 700;
+        }
+        .invoice-table td {
+          padding: 10px 8px;
+          border-bottom: 1px solid #e5e7eb;
+          word-wrap: break-word;
+        }
+        .invoice-table tr:last-child td {
+          border-bottom: none;
+        }
+        .total-section {
+          border-top: 2px solid #111827;
+          margin-top: 15px;
+          padding-top: 12px;
+        }
+        .invoice-container {
+          min-height: 297mm;
+          position: relative;
+        }
+        .qr-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+        }
+        .qr-code {
+          width: 80px;
+          height: 80px;
+          padding: 4px;
+          background: white;
+          border: 1px solid #d1d5db;
+          border-radius: 4px;
+        }
+        .qr-note {
+          font-size: 0.65rem;
+          max-width: 90px;
+          color: #6b7280;
+          text-align: center;
+          line-height: 1.1;
+        }
+        .header-border {
+          border-bottom: 3px solid #111827;
+          padding-bottom: 1rem;
+          margin-bottom: 2rem;
+        }
+        .section-divider {
+          border-bottom: 1px solid #e5e7eb;
+          margin: 1.5rem 0;
+        }
+
+        .description-column {
+          width: 50%;
+        }
+        .quantity-column {
+          width: 15%;
+          text-align: center;
+        }
+        .price-column {
+          width: 17.5%;
+          text-align: right;
+        }
+        .amount-column {
+          width: 17.5%;
+          text-align: right;
+        }
+
+        .page-break {
+          page-break-before: always;
+          margin-top: 20px;
         }
       `}</style>
 
       <div
         id="invoice"
-        className="min-h-screen bg-gray-100 py-8 px-4 print:bg-white print:py-0 print:px-0"
+        className="min-h-screen bg-gray-50 py-8 px-4 print:bg-white print:py-0 print:px-0"
       >
         <div className="max-w-4xl mx-auto print-container">
-          <div className="p-8 print:p-6">
-            {/* Header Section */}
-            <div className="flex flex-col sm:flex-row justify-between items-start mb-12 print-break">
-              <div className="mb-6 sm:mb-0">
-                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 tracking-wide">
-                  INVOICE
-                </h1>
-                <div className="space-y-1 text-gray-700">
-                  <p className="text-sm font-medium">
-                    Invoice Number:{" "}
-                    <span className="font-bold">{invoiceNumber}</span>
-                  </p>
-                  <p className="text-sm">Invoice Date: {invoiceDate}</p>
-                </div>
-              </div>
-
-              <div className="text-left sm:text-right">
-                {/* Logo Section */}
-                <div className="mb-6 flex justify-start sm:justify-end">
-                  <div className="w-16 mt-3 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-                    <img src={logo} />
+          <div className="p-8 print:p-0 avoid-break invoice-container">
+            {/* Top Header with QR Code */}
+            <div className="header-border avoid-break">
+              <div className="grid grid-cols-12 gap-4 items-start">
+                {/* Left - QR Code */}
+                <div className="col-span-2 flex justify-start">
+                  <div className="qr-container">
+                    <div className="qr-code">
+                      <QRCode
+                        value={currentUrl}
+                        size={72}
+                        level="H"
+                        bgColor="#ffffff"
+                        fgColor="#000000"
+                      />
+                    </div>
+                    <p className="qr-note">Scan to verify authenticity</p>
                   </div>
-                  <span className="ml-2 text-xs text-gray-500"></span>
                 </div>
 
-                <div className="text-left sm:text-right">
-                  <h2 className="text-xl font-bold text-gray-900 mb-2">
-                    Your Company Name
+                {/* Center - Invoice Title and Details */}
+                <div className="col-span-6 text-center">
+                  <h1 className="text-4xl font-bold text-gray-900 mb-4 tracking-wide">
+                    INVOICE
+                  </h1>
+                  <div className="space-y-2 text-gray-700">
+                    <p className="text-lg font-semibold">
+                      Invoice:{" "}
+                      <span className="font-bold text-gray-900">
+                        {invoiceNumber}
+                      </span>
+                    </p>
+                    <p className="text-base">Date: {invoiceDate}</p>
+                  </div>
+                </div>
+
+                {/* Right - Updated Company Info */}
+                <div className="col-span-4 text-right">
+                  <div className="mb-3 flex justify-end">
+                    <img src={logo} alt="Company Logo" className="w-12" />
+                  </div>
+                  <h2 className="text-lg font-bold text-gray-900 mb-2">
+                    Sri Venkateswara Agros And Herbs
                   </h2>
-                  <div className="text-sm text-gray-700 space-y-1">
-                    <p>123 Business Street</p>
-                    <p>City, State 12345</p>
-                    <p>Phone: +1 (555) 123-4567</p>
-                    <p>Email: contact@company.com</p>
+                  <div className="text-xs text-gray-600 space-y-1">
+                    <p>3-1/A, Veerabhadravaram Village</p>
+                    <p>Venkatapuram Mandal</p>
+                    <p>Mulugu District, Telangana, India</p>
+                    <p>PIN: 507136</p>
+                    <p className="font-semibold text-gray-800 mt-2">
+                      GSTIN: 36AEOFS5894Q1ZO
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Billing Information */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-12 print-break">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 avoid-break">
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-4 border-b-2 border-gray-900 pb-2">
+                <h3 className="text-lg font-bold text-gray-900 mb-3 border-b-2 border-gray-900 pb-2">
                   BILL TO
                 </h3>
                 <div className="text-gray-700 space-y-1">
-                  <p className="font-semibold text-gray-900">
+                  <p className="font-bold text-gray-900 text-lg">
                     {invoiceData.userName}
                   </p>
-                  <p>{invoiceData.userEmail}</p>
-                  <p>{invoiceData.phoneNumber}</p>
-                  <p className="leading-relaxed">
+                  <p className="text-sm">{invoiceData.userEmail}</p>
+                  <p className="text-sm font-medium">
+                    {invoiceData.phoneNumber}
+                  </p>
+                  <p className="text-sm leading-relaxed mt-2">
                     {invoiceData.shippingAddress}
                   </p>
                 </div>
               </div>
 
               <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-4 border-b-2 border-gray-900 pb-2">
+                <h3 className="text-lg font-bold text-gray-900 mb-3 border-b-2 border-gray-900 pb-2">
                   PAYMENT STATUS
                 </h3>
                 <div className="text-gray-700">
-                  <p className="text-sm">
+                  <p className="text-base">
                     Status:{" "}
-                    <span
-                      className={`font-semibold ${
-                        invoiceData.paymentStatus === "Success"
-                          ? "text-green-700"
-                          : invoiceData.paymentStatus === "Pending"
-                          ? "text-yellow-700"
-                          : "text-red-700"
-                      }`}
-                    >
+                    <span className={`font-bold text-sm`}>
                       {invoiceData.paymentStatus.toUpperCase()}
                     </span>
                   </p>
-                  {/* <p className="text-sm mt-2">
-                    Order Status:{" "}
-                    <span
-                      className={`font-semibold ${
-                        invoiceData.orderStatus === "Delivered"
-                          ? "text-green-700"
-                          : invoiceData.orderStatus === "Shipped"
-                          ? "text-blue-700"
-                          : invoiceData.orderStatus === "Cancelled"
-                          ? "text-red-700"
-                          : "text-yellow-700"
-                      }`}
-                    >
-                      {invoiceData.orderStatus.toUpperCase()}
-                    </span>
-                  </p> */}
                 </div>
               </div>
             </div>
 
-            {/* Items Table */}
-            <div className="mb-8 print-break">
-              <div className="block">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b-2 border-gray-900">
-                      <th className="text-left py-3 px-2 font-bold text-gray-900">
-                        DESCRIPTION
-                      </th>
-                      <th className="text-center py-3 px-2 font-bold text-gray-900 hidden sm:table-cell">
-                        QTY
-                      </th>
-                      <th className="text-right py-3 px-2 font-bold text-gray-900 hidden sm:table-cell">
-                        UNIT PRICE
-                      </th>
-                      <th className="text-right py-3 px-2 font-bold text-gray-900">
-                        AMOUNT
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {invoiceData.items && invoiceData.items.length > 0 ? (
-                      invoiceData.items.map((item, index) => (
-                        <tr
-                          key={item._id || index}
-                          className="border-b border-gray-200"
-                        >
-                          <td className="py-4 px-2 text-gray-700">
-                            <div className="font-medium">{item.title}</div>
+            {/* Items Table with Fixed Layout and Pagination */}
+            <div className="mb-8 avoid-break table-container">
+              <table className="invoice-table">
+                <thead>
+                  <tr className="avoid-break">
+                    <th className="text-left text-sm description-column">
+                      DESCRIPTION
+                    </th>
+                    <th className="text-center text-sm quantity-column">QTY</th>
+                    <th className="text-right text-sm price-column">
+                      UNIT PRICE
+                    </th>
+                    <th className="text-right text-sm amount-column">AMOUNT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {invoiceData.items && invoiceData.items.length > 0 ? (
+                    invoiceData.items.map((item, index) => (
+                      <React.Fragment key={item._id || index}>
+                        {/* Add page break after every 10 items */}
+                        {index > 0 && index % 10 === 0 && (
+                          <tr className="page-break"></tr>
+                        )}
+
+                        <tr className="avoid-break">
+                          <td className="text-gray-700 description-column">
+                            <div className="font-semibold text-gray-900">
+                              {item.title}
+                            </div>
                             {item.weight && (
-                              <div className="text-sm text-gray-500">
+                              <div className="text-xs text-gray-500 mt-1">
                                 Weight: {item.weight}kg
                               </div>
                             )}
-                            <div className="sm:hidden text-sm text-gray-600 mt-1">
-                              Qty: {item.quantity} × ${item.price.toFixed(2)}
-                            </div>
                           </td>
-                          <td className="py-4 px-2 text-center text-gray-700 hidden sm:table-cell">
+                          <td className="text-center text-gray-700 font-medium quantity-column">
                             {item.quantity}
                           </td>
-                          <td className="py-4 px-2 text-right text-gray-700 hidden sm:table-cell">
+                          <td className="text-right text-gray-700 price-column">
                             ${item.price.toFixed(2)}
                           </td>
-                          <td className="py-4 px-2 text-right font-medium text-gray-900">
+                          <td className="text-right font-bold text-gray-900 amount-column">
                             ${(item.price * item.quantity).toFixed(2)}
                           </td>
                         </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan="4"
-                          className="py-8 px-2 text-center text-gray-500"
-                        >
-                          No items found
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="4"
+                        className="py-8 px-4 text-center text-gray-500"
+                      >
+                        No items found
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
 
             {/* Totals Section */}
-            <div className="flex justify-end mb-8 print-break">
-              <div className="w-full sm:w-80">
-                <div className="space-y-2">
+            <div className="flex justify-end mb-8 avoid-break">
+              <div className="w-80">
+                <div className="space-y-2 total-section">
                   <div className="flex justify-between py-2 text-gray-700">
-                    <span>Subtotal:</span>
-                    <span>${subtotal.toFixed(2)}</span>
+                    <span className="font-medium">Subtotal:</span>
+                    <span className="font-semibold">
+                      ${subtotal.toFixed(2)}
+                    </span>
                   </div>
                   <div className="flex justify-between py-2 text-gray-700">
-                    <span>Shipping:</span>
-                    <span>${shipping.toFixed(2)}</span>
+                    <span className="font-medium">Shipping:</span>
+                    <span className="font-semibold">
+                      ${shipping.toFixed(2)}
+                    </span>
                   </div>
-                  <div className="border-t-2 border-gray-900 pt-2 mt-2">
-                    <div className="flex justify-between py-2 text-lg font-bold text-gray-900">
+                  <div className="border-t-2 border-gray-900 pt-3 mt-3">
+                    <div className="flex justify-between py-2 text-xl font-bold text-gray-900">
                       <span>TOTAL:</span>
                       <span>${total.toFixed(2)}</span>
                     </div>
@@ -350,25 +465,26 @@ const Invoice = () => {
               </div>
             </div>
 
-            {/* Terms and Notes */}
-            <div className="border-t border-gray-200 pt-8 print-break">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                <div>
-                  <h4 className="font-bold text-gray-900 mb-2">
-                    PAYMENT TERMS
-                  </h4>
-                  <p className="text-sm text-gray-700">
-                    Payment is due within 30 days of invoice date. Late payments
-                    may be subject to fees.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-bold text-gray-900 mb-2">NOTES</h4>
-                  <p className="text-sm text-gray-700">
-                    Thank you for your business! For questions about this
-                    invoice, please contact us at contact@company.com
-                  </p>
-                </div>
+            {/* Footer Section */}
+            <div className="section-divider"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm avoid-break">
+              <div>
+                <h4 className="font-bold text-gray-900 mb-2 text-base">
+                  SECURE PAYMENTS
+                </h4>
+                <p className="text-gray-700 leading-relaxed">
+                  All transactions are protected by PayPal. Your financial
+                  information is never shared with sellers.
+                </p>
+              </div>
+              <div>
+                <h4 className="font-bold text-gray-900 mb-2 text-base">
+                  NOTES
+                </h4>
+                <p className="text-gray-700 leading-relaxed">
+                  Thank you for your business! For questions about this invoice,
+                  please contact us at contact@company.com
+                </p>
               </div>
             </div>
 
@@ -379,10 +495,10 @@ const Invoice = () => {
             >
               <button
                 onClick={handleOnclick}
-                className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                className="flex items-center gap-3 bg-gray-900 hover:bg-gray-800 text-white px-8 py-3 rounded-lg font-semibold transition-colors shadow-lg"
               >
                 <Download size={20} />
-                Print Invoice
+                Download Invoice
               </button>
             </div>
           </div>

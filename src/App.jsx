@@ -17,7 +17,6 @@ import {
   AccountPage,
   ProductPage,
   CategoryProducts,
-  InvoiceTemplate,
   WishlistPage,
   MyOrdersPage,
   Invoice,
@@ -61,7 +60,6 @@ function App() {
           />
           <Route path="/my-account" element={<AccountPage />} />
           <Route path="/my-account/addresses" element={<AddressManager />} />
-          <Route path="/invoice-template" element={<InvoiceTemplate />} />
           {/* -------- IMPORTANT PAYMENT ROUTES DO NOT TOUCH ---------- */}
           <Route path="/paypal-test" element={<PaypalPayment />} />
           <Route path="/complete-payment" element={<PaymentSuccess />} />
