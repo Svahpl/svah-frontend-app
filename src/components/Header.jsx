@@ -300,12 +300,12 @@ const Header = () => {
             >
               Products
             </Link>
-            <Link
+            {/* <Link
               to="/my-account"
               className="px-4 py-2 font-medium text-gray-700 hover:text-primary-700 hover:bg-primary-50/60 rounded-md transition"
             >
-              My Account
-            </Link>
+              Account
+            </Link> */}
             <Link
               to="/About"
               className="px-4 py-2 font-medium text-gray-700 hover:text-primary-700 hover:bg-primary-50/60 rounded-md transition"
@@ -359,13 +359,13 @@ const Header = () => {
               >
                 Products
               </Link>
-              <Link
+              {/* <Link
                 to="/my-account"
                 onClick={() => setMenuOpen(false)}
                 className="py-3 px-4 text-gray-700 hover:bg-primary-50 rounded-md font-medium transition-colors"
               >
-                My Account
-              </Link>
+                Account
+              </Link> */}
               <Link
                 to="/About"
                 onClick={() => setMenuOpen(false)}
