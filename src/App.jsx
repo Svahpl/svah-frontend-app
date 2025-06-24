@@ -70,6 +70,7 @@ function App() {
           {/* <Route path="/privacy-policy" element={<PrivacyPolicy />} /> */}
           <Route path="/about" element={<About />} />
           <Route path="/Contact" element={<Contact />} />
+          <Route path="/blog" element={<></>} />
           <Route
             path="*"
             element={

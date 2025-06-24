@@ -313,7 +313,7 @@ const Header = () => {
               About Us
             </Link>
             <Link
-              to="#blog"
+              to="/blog"
               className="px-4 py-2 font-medium text-gray-700 hover:text-primary-700 hover:bg-primary-50/60 rounded-md transition"
             >
               Blog
@@ -374,7 +374,7 @@ const Header = () => {
                 About Us
               </Link>
               <Link
-                to="#blog"
+                to="/blog"
                 onClick={() => setMenuOpen(false)}
                 className="py-3 px-4 text-gray-700 hover:bg-primary-50 rounded-md font-medium transition-colors"
               >

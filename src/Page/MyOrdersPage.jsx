@@ -100,7 +100,6 @@ const MyOrdersPage = () => {
       );
 
       if (response.status === 200) {
-        // Refresh orders after successful cancellation
         await fetchOrders();
         setShowCancelModal(false);
         setCancelReason("");
@@ -140,7 +139,6 @@ const MyOrdersPage = () => {
   const applyFiltersAndSort = () => {
     let filtered = [...orders];
 
-    // Apply order status filter
     if (orderStatusFilter !== "all") {
       filtered = filtered.filter(
         (order) =>
@@ -148,7 +146,6 @@ const MyOrdersPage = () => {
       );
     }
 
-    // Apply payment status filter
     if (paymentStatusFilter !== "all") {
       filtered = filtered.filter(
         (order) =>
@@ -157,7 +154,6 @@ const MyOrdersPage = () => {
       );
     }
 
-    // Apply search filter
     if (searchTerm) {
       filtered = filtered.filter(
         (order) =>
@@ -170,7 +166,6 @@ const MyOrdersPage = () => {
       );
     }
 
-    // Apply sorting
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "recent":
@@ -266,7 +261,6 @@ const MyOrdersPage = () => {
       const orderData = orders.find((order) => order._id === orderId);
       if (!orderData) return;
 
-      // Prevent downloading invoice for cancelled orders
       if (orderData.orderStatus.toLowerCase() === "cancelled") {
         alert("Cannot download invoice for cancelled orders");
         return;
@@ -363,50 +357,48 @@ Thank you for shopping with Natural Store!
     <>
       <Header />
       <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
-        {/* Header */}
         <div className="bg-white shadow-sm border-b border-green-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
                 My Orders
               </h1>
-              <p className="text-gray-600">
+              <p className="text-gray-600 text-sm md:text-base">
                 Track and manage your natural store orders
               </p>
             </div>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-6 md:py-8">
           {/* Search and Filter Section */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-            <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+          <div className="bg-white rounded-xl md:rounded-2xl shadow-lg p-4 md:p-6 mb-6">
+            <div className="flex flex-col gap-4">
               {/* Search Bar */}
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <div className="relative w-full">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 md:w-5 md:h-5" />
                 <input
                   type="text"
-                  placeholder="Search orders by ID, name, email, or item..."
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  placeholder="Search orders..."
+                  className="w-full pl-10 pr-4 py-2.5 md:py-3 text-sm md:text-base border border-gray-200 rounded-lg md:rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
 
-              {/* Filter Toggle & Sort */}
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className="flex items-center gap-2 px-4 py-3 bg-green-100 text-green-700 rounded-xl hover:bg-green-200 transition-colors"
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm md:text-base bg-green-100 text-green-700 rounded-lg md:rounded-xl hover:bg-green-200 transition-colors"
                 >
-                  <Filter className="w-5 h-5" />
+                  <Filter className="w-4 h-4 md:w-5 md:h-5" />
                   Filters
                 </button>
 
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="px-4 py-2.5 text-sm md:text-base border border-gray-200 rounded-lg md:rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 >
                   <option value="recent">Recent First</option>
                   <option value="oldest">Oldest First</option>
@@ -418,16 +410,16 @@ Thank you for shopping with Natural Store!
 
             {/* Filter Options */}
             {showFilters && (
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="grid md:grid-cols-3 gap-4">
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1 md:mb-2">
                       Order Status
                     </label>
                     <select
                       value={orderStatusFilter}
                       onChange={(e) => setOrderStatusFilter(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     >
                       <option value="all">All Statuses</option>
                       {getUniqueOrderStatuses().map((status) => (
@@ -439,13 +431,13 @@ Thank you for shopping with Natural Store!
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1 md:mb-2">
                       Payment Status
                     </label>
                     <select
                       value={paymentStatusFilter}
                       onChange={(e) => setPaymentStatusFilter(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     >
                       <option value="all">All Payment Status</option>
                       {getUniquePaymentStatuses().map((status) => (
@@ -459,7 +451,7 @@ Thank you for shopping with Natural Store!
                   <div className="flex items-end">
                     <button
                       onClick={resetFilters}
-                      className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                      className="w-full px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                     >
                       Reset Filters
                     </button>
@@ -468,8 +460,7 @@ Thank you for shopping with Natural Store!
               </div>
             )}
 
-            {/* Results Summary */}
-            <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
+            <div className="mt-3 flex items-center justify-between text-xs md:text-sm text-gray-600">
               <span>
                 Showing {filteredOrders.length} of {orders.length} orders
               </span>
@@ -484,149 +475,148 @@ Thank you for shopping with Natural Store!
           </div>
 
           {filteredOrders.length === 0 ? (
-            <div className="text-center bg-white rounded-2xl shadow-lg p-12">
-              <Package className="w-24 h-24 text-green-300 mx-auto mb-6" />
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            <div className="text-center bg-white rounded-xl md:rounded-2xl shadow-lg p-6 md:p-12">
+              <Package className="w-16 h-16 md:w-24 md:h-24 text-green-300 mx-auto mb-4" />
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-3">
                 {orders.length === 0 ? "No Orders Found" : "No Matching Orders"}
               </h2>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-600 text-sm md:text-base mb-5">
                 {orders.length === 0
                   ? "You haven't placed any orders yet. Start shopping to see your orders here!"
                   : "No orders match your current filters. Try adjusting your search criteria."}
               </p>
               {orders.length === 0 ? (
-                <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-semibold transition-colors">
+                <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 text-sm md:text-base rounded-full font-medium transition-colors">
                   Start Shopping
                 </button>
               ) : (
                 <button
                   onClick={resetFilters}
-                  className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-semibold transition-colors"
+                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 text-sm md:text-base rounded-full font-medium transition-colors"
                 >
                   Clear Filters
                 </button>
               )}
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-5">
               {filteredOrders.map((order) => (
                 <div
                   key={order._id}
-                  className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
+                  className="bg-white rounded-xl md:rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
                 >
-                  {/* Order Header */}
-                  <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-6">
-                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                      <div className="flex items-center gap-4">
-                        <div className="bg-white/20 rounded-full p-3">
-                          <Package className="w-6 h-6" />
+                  {/* Order Header - Responsive Stack */}
+                  <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-4 md:p-6">
+                    <div className="flex flex-col gap-3 md:gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="bg-white/20 rounded-full p-2">
+                          <Package className="w-5 h-5 md:w-6 md:h-6" />
                         </div>
-                        <div className="capitalize">
-                          {/* Order ID in uppercase */}
-                          <h3 className="text-xl font-bold">
-                            Order ID #{order._id.slice(-8).toUpperCase()}
+                        <div>
+                          <h3 className="text-base md:text-xl font-bold">
+                            Order #{order._id.slice(-8).toUpperCase()}
                           </h3>
-                          <p className="text-green-100">
+                          <p className="text-green-100 text-xs md:text-sm">
                             Placed on {formatDate(order.placedAt)}
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-4">
+
+                      <div className="flex flex-wrap items-center gap-2">
                         <div
-                          className={`px-4 py-2 rounded-full flex items-center gap-2 ${getStatusColor(
+                          className={`px-3 py-1.5 text-xs md:text-sm rounded-full flex items-center gap-1.5 ${getStatusColor(
                             order.orderStatus
                           )} bg-white/20 text-white`}
                         >
                           {getStatusIcon(order.orderStatus)}
-                          <span className="font-semibold">
-                            {order.orderStatus}
-                          </span>
+                          <span>{order.orderStatus}</span>
                         </div>
 
-                        {/* Invoice button with validation */}
-                        {order.orderStatus.toLowerCase() !== "cancelled" ? (
-                          <button
-                            onClick={() =>
-                              navigate(
-                                `/my-account/orders/view-invoice/${order._id}`
-                              )
-                            }
-                            className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-full flex items-center gap-2 transition-colors"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                            Invoice
-                          </button>
-                        ) : (
-                          <button
-                            disabled
-                            className="bg-gray-300 text-gray-500 px-4 py-2 rounded-full flex items-center gap-2 cursor-not-allowed"
-                            title="Cannot view invoice for cancelled orders"
-                          >
-                            <XCircle className="w-4 h-4" />
-                            Invoice Unavailable
-                          </button>
-                        )}
-
-                        {/* Cancel button with validation */}
-                        {canCancelOrder(
-                          order.orderStatus,
-                          order.paymentStatus
-                        ) ? (
-                          <button
-                            onClick={() => openCancelModal(order._id)}
-                            className="bg-red-500/20 hover:bg-red-500/30 text-white px-4 py-2 rounded-full flex items-center gap-2 transition-colors"
-                          >
-                            <XCircle className="w-4 h-4" />
-                            Cancel
-                          </button>
-                        ) : (
-                          order.orderStatus.toLowerCase() !== "cancelled" && (
+                        <div className="flex flex-wrap gap-2">
+                          {order.orderStatus.toLowerCase() !== "cancelled" ? (
+                            <button
+                              onClick={() =>
+                                navigate(
+                                  `/my-account/orders/view-invoice/${order._id}`
+                                )
+                              }
+                              className="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 text-xs md:text-sm rounded-full flex items-center gap-1.5 transition-colors"
+                            >
+                              <ExternalLink className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                              <span>Invoice</span>
+                            </button>
+                          ) : (
                             <button
                               disabled
-                              className="bg-gray-300 text-gray-500 px-4 py-2 rounded-full flex items-center gap-2 cursor-not-allowed"
-                              title={
-                                order.paymentStatus.toLowerCase() !== "success"
-                                  ? "Only orders with successful payment can be cancelled"
-                                  : "This order cannot be cancelled"
-                              }
+                              className="bg-gray-300 text-gray-500 px-3 py-1.5 text-xs md:text-sm rounded-full flex items-center gap-1.5 cursor-not-allowed"
+                              title="Cannot view invoice for cancelled orders"
                             >
-                              <XCircle className="w-4 h-4" />
-                              Cancel Unavailable
+                              <XCircle className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                              <span>Unavailable</span>
                             </button>
-                          )
-                        )}
+                          )}
+
+                          {canCancelOrder(
+                            order.orderStatus,
+                            order.paymentStatus
+                          ) ? (
+                            <button
+                              onClick={() => openCancelModal(order._id)}
+                              className="bg-red-500/20 hover:bg-red-500/30 text-white px-3 py-1.5 text-xs md:text-sm rounded-full flex items-center gap-1.5 transition-colors"
+                            >
+                              <XCircle className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                              <span>Cancel</span>
+                            </button>
+                          ) : (
+                            order.orderStatus.toLowerCase() !== "cancelled" && (
+                              <button
+                                disabled
+                                className="bg-gray-300 text-gray-500 px-3 py-1.5 text-xs md:text-sm rounded-full flex items-center gap-1.5 cursor-not-allowed"
+                                title={
+                                  order.paymentStatus.toLowerCase() !==
+                                  "success"
+                                    ? "Only successful payments can be cancelled"
+                                    : "This order cannot be cancelled"
+                                }
+                              >
+                                <XCircle className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                                <span>Unavailable</span>
+                              </button>
+                            )
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Order Content */}
-                  <div className="p-6">
-                    {/* Customer Info */}
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                      <div className="flex items-center gap-3 p-4 bg-green-50 rounded-xl">
-                        <User className="w-5 h-5 text-green-600" />
+                  <div className="p-4 md:p-6">
+                    {/* Customer Info - Responsive Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+                      <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
+                        <User className="w-4 h-4 md:w-5 md:h-5 text-green-600" />
                         <div>
-                          <p className="text-sm text-gray-500">Customer</p>
-                          <p className="font-semibold text-gray-800">
+                          <p className="text-xs text-gray-500">Customer</p>
+                          <p className="text-sm font-semibold text-gray-800 truncate">
                             {order.userName}
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-xl">
-                        <Phone className="w-5 h-5 text-blue-600" />
+                      <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
+                        <Phone className="w-4 h-4 md:w-5 md:h-5 text-blue-600" />
                         <div>
-                          <p className="text-sm text-gray-500">Phone</p>
-                          <p className="font-semibold text-gray-800">
+                          <p className="text-xs text-gray-500">Phone</p>
+                          <p className="text-sm font-semibold text-gray-800">
                             {order.phoneNumber}
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 p-4 bg-purple-50 rounded-xl">
-                        <CreditCard className="w-5 h-5 text-purple-600" />
+                      <div className="flex items-center gap-2 p-3 bg-purple-50 rounded-lg">
+                        <CreditCard className="w-4 h-4 md:w-5 md:h-5 text-purple-600" />
                         <div>
-                          <p className="text-sm text-gray-500">Payment</p>
+                          <p className="text-xs text-gray-500">Payment</p>
                           <p
-                            className={`font-semibold ${getPaymentStatusColor(
+                            className={`text-sm font-semibold ${getPaymentStatusColor(
                               order.paymentStatus
                             )}`}
                           >
@@ -634,13 +624,11 @@ Thank you for shopping with Natural Store!
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 p-4 bg-amber-50 rounded-xl">
-                        <Calendar className="w-5 h-5 text-amber-600" />
+                      <div className="flex items-center gap-2 p-3 bg-amber-50 rounded-lg">
+                        <Calendar className="w-4 h-4 md:w-5 md:h-5 text-amber-600" />
                         <div>
-                          <p className="text-sm text-gray-500">
-                            Expected Delivery
-                          </p>
-                          <p className="font-semibold text-gray-800">
+                          <p className="text-xs text-gray-500">Delivery</p>
+                          <p className="text-sm font-semibold text-gray-800 truncate">
                             {order.expectedDelivery
                               ? formatDate(order.expectedDelivery)
                               : "TBD"}
@@ -650,43 +638,43 @@ Thank you for shopping with Natural Store!
                     </div>
 
                     {/* Shipping Address */}
-                    <div className="mb-6">
-                      <div className="flex items-center gap-3 mb-3">
-                        <MapPin className="w-5 h-5 text-green-600" />
-                        <h4 className="font-semibold text-gray-800">
+                    <div className="mb-5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <MapPin className="w-4 h-4 md:w-5 md:h-5 text-green-600" />
+                        <h4 className="text-sm md:text-base font-semibold text-gray-800">
                           Shipping Address
                         </h4>
                       </div>
-                      <div className="bg-gray-50 rounded-xl p-4">
-                        <p className="text-gray-700">{order.shippingAddress}</p>
+                      <div className="bg-gray-50 rounded-lg p-3 text-sm text-gray-700">
+                        {order.shippingAddress}
                       </div>
                     </div>
 
-                    {/* Order Items */}
-                    <div className="mb-6">
-                      <h4 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                        <Package className="w-5 h-5 text-green-600" />
+                    {/* Order Items - Responsive Stack */}
+                    <div className="mb-5">
+                      <h4 className="text-sm md:text-base font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                        <Package className="w-4 h-4 md:w-5 md:h-5 text-green-600" />
                         Order Items ({order.items.length})
                       </h4>
-                      <div className="space-y-4">
+                      <div className="space-y-3">
                         {order.items.map((item) => (
                           <div
                             key={item._id}
-                            className="flex items-center gap-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl"
+                            className="flex flex-col sm:flex-row items-start gap-3 p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg"
                           >
                             <img
                               src={item.images[0]}
                               alt={item.title}
-                              className="w-20 h-20 object-cover rounded-lg shadow-md"
+                              className="w-full sm:w-16 h-16 object-cover rounded-lg shadow"
                             />
-                            <div className="flex-1">
-                              <h5 className="font-semibold text-gray-800 text-lg">
+                            <div className="flex-1 w-full">
+                              <h5 className="text-sm md:text-base font-semibold text-gray-800">
                                 {item.title}
                               </h5>
-                              <p className="text-gray-600">
+                              <p className="text-xs md:text-sm text-gray-600">
                                 Weight: {item.weight}kg
                               </p>
-                              <div className="flex items-center gap-4 mt-2">
+                              <div className="flex flex-wrap gap-2 mt-1.5 text-xs md:text-sm">
                                 <span className="text-green-600 font-semibold">
                                   ${item.price?.toFixed(2)}
                                 </span>
@@ -699,33 +687,18 @@ Thank you for shopping with Natural Store!
                                 </span>
                               </div>
                             </div>
-                            {/* <button
-                              onClick={() => downloadInvoice(order._id)}
-                              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                              disabled={
-                                order.orderStatus.toLowerCase() === "cancelled"
-                              }
-                              title={
-                                order.orderStatus.toLowerCase() === "cancelled"
-                                  ? "Cannot download invoice for cancelled orders"
-                                  : "Download invoice"
-                              }
-                            >
-                              <Download className="w-4 h-4" />
-                              Invoice
-                            </button> */}
                           </div>
                         ))}
                       </div>
                     </div>
 
                     {/* Order Total */}
-                    <div className="border-t border-gray-200 pt-4">
+                    <div className="border-t border-gray-200 pt-3">
                       <div className="flex justify-between items-center">
-                        <span className="text-xl font-bold text-gray-800">
+                        <span className="text-base md:text-xl font-bold text-gray-800">
                           Total Amount:
                         </span>
-                        <span className="text-2xl font-bold text-green-600">
+                        <span className="text-lg md:text-2xl font-bold text-green-600">
                           ${order.totalAmount.toFixed(2)}
                         </span>
                       </div>
@@ -737,17 +710,17 @@ Thank you for shopping with Natural Store!
           )}
         </div>
 
-        {/* Cancel Order Modal */}
+        {/* Cancel Order Modal - Responsive */}
         {showCancelModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full">
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-red-100 rounded-full p-2">
-                      <AlertTriangle className="w-6 h-6 text-red-600" />
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3 sm:p-4">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-md">
+              <div className="p-5 md:p-6">
+                <div className="flex items-center justify-between mb-3 md:mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-red-100 rounded-full p-1.5">
+                      <AlertTriangle className="w-5 h-5 md:w-6 md:h-6 text-red-600" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-800">
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800">
                       Cancel Order
                     </h3>
                   </div>
@@ -755,50 +728,50 @@ Thank you for shopping with Natural Store!
                     onClick={closeCancelModal}
                     className="text-gray-400 hover:text-gray-600 transition-colors"
                   >
-                    <X className="w-6 h-6" />
+                    <X className="w-5 h-5 md:w-6 md:h-6" />
                   </button>
                 </div>
 
-                <p className="text-gray-600 mb-4">
+                <p className="text-gray-600 text-sm md:text-base mb-3 md:mb-4">
                   Are you sure you want to cancel this order? Please provide a
                   reason for cancellation.
                 </p>
 
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="mb-4 md:mb-5">
+                  <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1.5">
                     Cancellation Reason *
                   </label>
                   <textarea
                     value={cancelReason}
                     onChange={(e) => setCancelReason(e.target.value)}
-                    placeholder="Please provide a reason for cancellation..."
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none"
-                    rows="4"
+                    placeholder="Reason for cancellation..."
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none"
+                    rows="3"
                     required
                   />
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex gap-2 md:gap-3">
                   <button
                     onClick={closeCancelModal}
-                    className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                     disabled={cancelLoading}
+                    className="flex-1 px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                   >
                     Keep Order
                   </button>
                   <button
                     onClick={handleCancelOrder}
                     disabled={cancelLoading || !cancelReason.trim()}
-                    className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="flex-1 px-3 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
                   >
                     {cancelLoading ? (
                       <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                        <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent"></div>
                         Cancelling...
                       </>
                     ) : (
                       <>
-                        <XCircle className="w-4 h-4" />
+                        <XCircle className="w-3.5 h-3.5" />
                         Cancel Order
                       </>
                     )}

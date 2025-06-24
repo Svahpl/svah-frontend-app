@@ -57,6 +57,10 @@ const PaypalCartPayment = ({
     console.log("CREATING ORDER FOR THE FOLLOWING:", paypalOid);
 
     try {
+      const expectedDeliveryDate = new Date();
+      expectedDeliveryDate.setDate(
+        expectedDeliveryDate.getDate() + dmode === "air" ? 50 : 100
+      );
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/order/create-cart-order`,
         {
@@ -66,7 +70,7 @@ const PaypalCartPayment = ({
           totalAmount: productPrice,
           shipThrough: dmode,
           items: totalItemsArray,
-          expectedDelivery: new Date(),
+          expectedDelivery: expectedDeliveryDate,
           paypalOid: paypalOid,
         }
       );

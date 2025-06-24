@@ -55,24 +55,28 @@ const PaypalPayment = ({
     console.log("CREATING ORDER FOR THE FOLLOWING:", paypalOid);
 
     try {
+      const expectedDeliveryDate = new Date();
+      expectedDeliveryDate.setDate(
+        expectedDeliveryDate.getDate() + dmode === "air" ? 50 : 100
+      );
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/order/create-order`,
         {
           user: uid,
           phoneNumber: num,
-          shippingAddress: sha, 
+          shippingAddress: sha,
           totalAmount: productPrice,
           shipThrough: dmode,
           items: [
             {
-              product: products[0]?._id, 
+              product: products[0]?._id,
               price: products[0]?.price,
-              quantity: quantity, 
+              quantity: quantity,
               weight: userSelectedWeight,
             },
           ],
-          expectedDelivery: new Date(),
-          paypalOid:paypalOid, 
+          expectedDelivery: expectedDeliveryDate,
+          paypalOid: paypalOid,
         }
       );
 
