@@ -17,6 +17,8 @@ import {
   Search,
   AlertTriangle,
   X,
+  Headset,
+  Star,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -41,6 +43,14 @@ const MyOrdersPage = () => {
   const [selectedOrderId, setSelectedOrderId] = useState("");
   const [cancelReason, setCancelReason] = useState("");
   const [cancelLoading, setCancelLoading] = useState(false);
+
+  // Rating states
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState(null);
+  const [newRating, setNewRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [ratingLoading, setRatingLoading] = useState(false);
+  const [ratingError, setRatingError] = useState("");
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -134,6 +144,55 @@ const MyOrdersPage = () => {
       cancelableStatuses.includes(orderStatus.toLowerCase()) &&
       paymentStatus.toLowerCase() === "success"
     );
+  };
+
+  const openRatingModal = (product) => {
+    setCurrentProduct(product);
+    setNewRating(0);
+    setHoverRating(0);
+    setRatingError("");
+    setShowRatingModal(true);
+  };
+
+  const submitRating = async () => {
+    if (!currentProduct || newRating === 0) {
+      setRatingError("Please select a rating");
+      return;
+    }
+
+    try {
+      setRatingLoading(true);
+      setRatingError("");
+      const uid = localStorage.getItem("uid");
+
+      if (!uid) {
+        throw new Error("User ID not found");
+      }
+
+      const response = await axios.put(
+        `${backendUrl}/api/product/rate/${currentProduct.product}`,
+        {
+          userId: uid,
+          newRating: newRating,
+        }
+      );
+
+      if (response.status === 200) {
+        // Success - close modal and reset
+        setShowRatingModal(false);
+        setCurrentProduct(null);
+        setNewRating(0);
+        alert("Rating submitted successfully!");
+      }
+    } catch (error) {
+      console.error("Error submitting rating:", error);
+      setRatingError(
+        error.response?.data?.message ||
+          "Failed to submit rating. Please try again."
+      );
+    } finally {
+      setRatingLoading(false);
+    }
   };
 
   const applyFiltersAndSort = () => {
@@ -585,6 +644,13 @@ Thank you for shopping with Natural Store!
                             )
                           )}
                         </div>
+                        <div
+                          onClick={() => navigate("/Contact")}
+                          className={`cursor-pointer px-3 py-1.5 text-xs md:text-sm rounded-full flex items-center gap-1.5 bg-white/20 text-white`}
+                        >
+                          <Headset className="w-3.5 h-3.5 md:w-4 md:h-4" />{" "}
+                          Contact Support
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -686,6 +752,20 @@ Thank you for shopping with Natural Store!
                                   {(item.price * item.quantity).toFixed(2)}
                                 </span>
                               </div>
+
+                              {/* Add rating button for delivered orders */}
+                              {order.orderStatus.toLowerCase() ===
+                                "delivered" && (
+                                <div className="mt-2 flex justify-end">
+                                  <button
+                                    onClick={() => openRatingModal(item)}
+                                    className="text-xs md:text-sm bg-amber-500 text-white px-2 py-1 rounded-lg hover:bg-amber-600 transition-colors flex items-center gap-1"
+                                  >
+                                    <Star className="w-3 h-3" />
+                                    Rate Product
+                                  </button>
+                                </div>
+                              )}
                             </div>
                           </div>
                         ))}
@@ -773,6 +853,101 @@ Thank you for shopping with Natural Store!
                       <>
                         <XCircle className="w-3.5 h-3.5" />
                         Cancel Order
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Rating Modal */}
+        {showRatingModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3 sm:p-4">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-md">
+              <div className="p-5 md:p-6">
+                <div className="flex items-center justify-between mb-3 md:mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-amber-100 rounded-full p-1.5">
+                      <Star className="w-5 h-5 text-amber-600" />
+                    </div>
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800">
+                      Rate Product
+                    </h3>
+                  </div>
+                  <button
+                    onClick={() => setShowRatingModal(false)}
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    <X className="w-5 h-5 md:w-6 md:h-6" />
+                  </button>
+                </div>
+
+                <p className="text-gray-600 text-sm md:text-base mb-1">
+                  How would you rate:
+                </p>
+                <p className="text-gray-800 font-medium mb-3 md:mb-4">
+                  {currentProduct?.title}
+                </p>
+
+                <div className="flex justify-center mb-4">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      onClick={() => setNewRating(star)}
+                      onMouseEnter={() => setHoverRating(star)}
+                      onMouseLeave={() => setHoverRating(0)}
+                      className="text-3xl mx-1 focus:outline-none transition-transform hover:scale-110"
+                    >
+                      {star <= (hoverRating || newRating) ? (
+                        <Star className="text-amber-500 fill-current" />
+                      ) : (
+                        <Star className="text-amber-500" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="text-center mb-2">
+                  <span className="text-amber-600 font-bold">
+                    {hoverRating > 0
+                      ? hoverRating
+                      : newRating > 0
+                      ? newRating
+                      : "0"}
+                    /5
+                  </span>
+                </div>
+
+                {ratingError && (
+                  <p className="text-red-500 text-sm text-center mb-3">
+                    {ratingError}
+                  </p>
+                )}
+
+                <div className="flex gap-2 md:gap-3">
+                  <button
+                    onClick={() => setShowRatingModal(false)}
+                    disabled={ratingLoading}
+                    className="flex-1 px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={submitRating}
+                    disabled={ratingLoading || newRating === 0}
+                    className="flex-1 px-3 py-2 text-sm bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
+                  >
+                    {ratingLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent"></div>
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        <Star className="w-4 h-4" />
+                        Submit Rating
                       </>
                     )}
                   </button>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Phone,
   Mail,
@@ -16,6 +16,9 @@ import Header from "./Header";
 import Footer from "./Footer";
 
 const Contact = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   UseTitle("SVAH | Contact Us");
   return (
     <>
