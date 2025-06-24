@@ -615,7 +615,7 @@ const ProductScreen = () => {
                     {renderStarRating(product.rating, "w-5 h-5")}
                   </div>
                   <span className="ml-3 text-gray-600">
-                    {product.rating} ({product.ratingCount} reviews)
+                    {product.rating.toFixed(1)} ({product.ratingCount} reviews)
                   </span>
                 </div>
 
