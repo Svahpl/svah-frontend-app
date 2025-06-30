@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Select from 'react-select';
-import { Mail } from 'lucide-react';
 import { countries } from '../data/countries';
 
 const ContactSection = () => {
@@ -144,7 +143,7 @@ const ContactSection = () => {
                 : 'bg-white text-emerald-600 border border-emerald-600'
             }`}
           >
-            <Mail size={18} /> Drop us a message for requirement
+            Drop us a message for requirement
           </button>
 
           <button
@@ -156,7 +155,7 @@ const ContactSection = () => {
                 : 'bg-white text-emerald-600 border border-emerald-600'
             }`}
           >
-            <Mail size={18} /> Drop us a message for sale
+            Drop us a message for sale
           </button>
         </div>
 
@@ -164,10 +163,6 @@ const ContactSection = () => {
           isFormVisible ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
         }`}>
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
-              {formType === 'sales' ? 'Drop us a message for sale' : 'Drop us a message for requirement'}
-            </h2>
-
             {isSubmitted && (
               <div className="mb-6 p-4 bg-emerald-100 border border-emerald-200 text-emerald-800 rounded-md">
                 Thank you! One of our representative will get back to you within 24 hours.
@@ -253,7 +248,7 @@ const ContactSection = () => {
 
               <TextAreaField
                 id="requirements"
-                label={formType === 'sales' ? 'Sales details' : 'Please describe your requirements'}
+                label={formType === 'sales' ? 'Please provide your sales details' : 'Please describe your requirements'}
                 rows={4}
               />
 
