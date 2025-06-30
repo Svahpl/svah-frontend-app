@@ -37,93 +37,64 @@ const ContactSection = () => {
     }
   };
 
- const handleCountryChange = (option) => {
-  setSelectedCountry(option);
-  setValue('country', option?.value || '');
-  if (option) {
-    clearErrors('country');
-  } 
-};
+  const handleCountryChange = (option) => {
+    setSelectedCountry(option);
+    setValue('country', option?.value || '');
+    if (option) {
+      clearErrors('country');
+    } 
+  };
 
-const onSubmit = async (formData) => {
-  setIsLoading(true);
-  try {
-    console.log('Form Submission Started:', {
-      formType,
-      formData,
-      selectedCountry,
-    });
-
-    if (!selectedCountry || !selectedCountry.value || !selectedCountry.phoneCode) {
-      throw new Error('Please select a valid country with value and phone code');
-    }
-
-    const payload = {
-      fullName: formData.fullName,
-      companyName: formData.companyName,
-      companyEmail: formData.companyEmail,
-      country: selectedCountry.value,
-      companyAddress: formData.companyAddress,
-      websiteLink: formData.websiteLink || undefined,
-      code: selectedCountry.phoneCode,
-      number: formData.mobileNumber,
-      additionalMessage: formData.message || undefined,
-      ...(formType === 'sales'
-        ? { SalesDetails: formData.requirements }
-        : { requirements: formData.requirements }),
-    };
-    
-    
-    console.log('Payload to Send:', payload);
-    const endpoint = formType === 'sales'
-      ? `${import.meta.env.VITE_BACKEND_URL}/api/form/salseform`
-      : `${import.meta.env.VITE_BACKEND_URL}/api/form/requirementform`;
-
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
-
-    console.log('Response:', {
-      status: response.status,
-      statusText: response.statusText,
-      headers: Object.fromEntries(response.headers),
-    });
-
-    if (!response.ok) {
-      let errorData;
-      try {
-        errorData = await response.json();
-        console.log('Error Response Data:', errorData);
-      } catch (jsonError) {
-        console.error('Failed to parse error response:', jsonError);
-        errorData = { message: 'No error details available' };
+  const onSubmit = async (formData) => {
+    setIsLoading(true);
+    try {
+      if (!selectedCountry || !selectedCountry.value || !selectedCountry.phoneCode) {
+        throw new Error('Please select a valid country');
       }
-      throw new Error(errorData.message || `Server responded with status ${response.status}`);
+
+      const payload = {
+        fullName: formData.fullName,
+        companyName: formData.companyName,
+        companyEmail: formData.companyEmail,
+        country: selectedCountry.value,
+        companyAddress: formData.companyAddress,
+        websiteLink: formData.websiteLink || undefined,
+        code: selectedCountry.phoneCode,
+        number: formData.mobileNumber,
+        additionalMessage: formData.message || undefined,
+        ...(formType === 'sales'
+          ? { SalesDetails: formData.requirements }
+          : { requirements: formData.requirements }),
+      };
+      
+      const endpoint = formType === 'sales'
+        ? `${import.meta.env.VITE_BACKEND_URL}/api/form/salesform`
+        : `${import.meta.env.VITE_BACKEND_URL}/api/form/requirementform`;
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Submission failed');
+      }
+
+      setIsSubmitted(true);
+      resetForm();
+    } catch (error) {
+      alert(`Submission failed: ${error.message}`);
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    const responseData = await response.json();
-    console.log('Success Response:', responseData);
-
-    setIsSubmitted(true);
-    resetForm();
-  } catch (error) {
-    console.error('Submission Error:', {
-      message: error.message,
-      stack: error.stack,
-      name: error.name,
-    });
-    alert(`Submission failed: ${error.message}`);
-  } finally {
-    setIsLoading(false);
-  }
-};
-
-  const InputField = ({ id, label, type = 'text', placeholder, required = true, validation = {} }) => (
+  const InputField = ({ id, label, type = 'text', required = true, validation = {} }) => (
     <div className="mb-4">
       <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
         {label} {required && <span className="text-red-500">*</span>}
@@ -131,7 +102,6 @@ const onSubmit = async (formData) => {
       <input
         id={id}
         type={type}
-        placeholder={placeholder}
         className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 ${
           errors[id] ? 'border-red-500' : 'border-gray-300'
         }`}
@@ -144,7 +114,7 @@ const onSubmit = async (formData) => {
     </div>
   );
 
-  const TextAreaField = ({ id, label, rows = 3, placeholder, required = true }) => (
+  const TextAreaField = ({ id, label, rows = 3, required = true }) => (
     <div className="mb-4">
       <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
         {label} {required && <span className="text-red-500">*</span>}
@@ -152,7 +122,6 @@ const onSubmit = async (formData) => {
       <textarea
         id={id}
         rows={rows}
-        placeholder={placeholder}
         className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 ${
           errors[id] ? 'border-red-500' : 'border-gray-300'
         }`}
@@ -175,7 +144,7 @@ const onSubmit = async (formData) => {
                 : 'bg-white text-emerald-600 border border-emerald-600'
             }`}
           >
-            <Mail size={18} /> Requirements Form
+            <Mail size={18} /> Drop us a message for requirement
           </button>
 
           <button
@@ -187,7 +156,7 @@ const onSubmit = async (formData) => {
                 : 'bg-white text-emerald-600 border border-emerald-600'
             }`}
           >
-            <Mail size={18} /> Sales Form
+            <Mail size={18} /> Drop us a message for sale
           </button>
         </div>
 
@@ -196,24 +165,23 @@ const onSubmit = async (formData) => {
         }`}>
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">
-              {formType === 'sales' ? 'Sales Inquiry' : 'Requirements Form'}
+              {formType === 'sales' ? 'Drop us a message for sale' : 'Drop us a message for requirement'}
             </h2>
 
             {isSubmitted && (
               <div className="mb-6 p-4 bg-emerald-100 border border-emerald-200 text-emerald-800 rounded-md">
-                Thank you! We'll contact you soon.
+                Thank you! One of our representative will get back to you within 24 hours.
               </div>
             )}
 
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <InputField id="fullName" label="Full Name" placeholder="John Doe" />
-                <InputField id="companyName" label="Company Name" placeholder="Acme Inc." />
+                <InputField id="fullName" label="Enter full name" />
+                <InputField id="companyName" label="Enter company name" />
                 <InputField
                   id="companyEmail"
-                  label="Company Email"
+                  label="Enter company email"
                   type="email"
-                  placeholder="contact@company.com"
                   validation={{
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -223,7 +191,7 @@ const onSubmit = async (formData) => {
                 />
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Country <span className="text-red-500">*</span>
+                    Select country <span className="text-red-500">*</span>
                   </label>
                   <Select
                     options={countries}
@@ -241,14 +209,12 @@ const onSubmit = async (formData) => {
 
               <TextAreaField
                 id="companyAddress"
-                label="Company Address"
-                placeholder="123 Business Rd, City, Country"
+                label="Enter company address"
               />
 
               <InputField
                 id="websiteLink"
-                label="Website (Optional)"
-                placeholder="https://company.com"
+                label="Enter website link"
                 required={false}
                 type="url"
               />
@@ -256,7 +222,7 @@ const onSubmit = async (formData) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Phone Number <span className="text-red-500">*</span>
+                    Enter mobile number <span className="text-red-500">*</span>
                   </label>
                   <div className="flex gap-2">
                     <input
@@ -266,11 +232,10 @@ const onSubmit = async (formData) => {
                       className="w-1/4 px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100"
                     />
                     <input
-                      type="tel"
+                      type="number"
                       className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 ${
                         errors.mobileNumber ? 'border-red-500' : 'border-gray-300'
                       }`}
-                      placeholder="9876543210"
                       {...register('mobileNumber', {
                         required: 'Phone number is required',
                         pattern: {
@@ -288,15 +253,13 @@ const onSubmit = async (formData) => {
 
               <TextAreaField
                 id="requirements"
-                label={formType === 'sales' ? 'SalesDetails' : 'Requirements'}
+                label={formType === 'sales' ? 'Sales details' : 'Please describe your requirements'}
                 rows={4}
-                placeholder={formType === 'sales' ? 'Describe your sales inquiry...' : 'Describe your requirements...'}
               />
 
               <TextAreaField
                 id="message"
-                label="Additional Message (Optional)"
-                placeholder="Any additional information..."
+                label="Message"
                 required={false}
               />
 
