@@ -95,9 +95,7 @@ export const productCategories = [
     name: 'SVAH - SRI VENKATESWARA PLANT NURSERY',
     subcategories: [
       { id: 1101, name: 'PLANTS', image: '/images/PLANTS.jpg' },
-      { id: 1102, name: 'SAPLINGS', image: '/images/SAPLINGS.jpg' },
-      { id: 1103, name: 'GRASS AND STUMPS', image: '/images/GRASS.jpg' },
-      { id: 1104, name: 'COMPOST AND NATURAL INSECT CONTROL PRODUCTS', image: '/images/COMPOST.jpg' }
+      { id: 1102, name: 'COMPOST AND NATURAL INSECT CONTROL PRODUCTS', image: '/images/COMPOST.jpg' }
     ]
   }
 ];
