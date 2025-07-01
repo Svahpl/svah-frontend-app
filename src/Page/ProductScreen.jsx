@@ -149,7 +149,7 @@ const ProductScreen = () => {
         <PaymentModal
           showPaymentModal={showPaymentModal}
           closePaymentModal={closePaymentModal}
-          product={product}
+          product={[product]}
           selectedWeight={selectedWeight}
         />
       </>

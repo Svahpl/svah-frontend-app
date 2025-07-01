@@ -89,7 +89,7 @@ const PaymentModal = ({
       return inr;
     } catch (error) {
       console.log(`Error fetching current dollar price in inr: ${error}`);
-      const fallbackRate = 85.567517;
+      const fallbackRate = 85.56;
       setDollar(fallbackRate);
       return fallbackRate;
     }
