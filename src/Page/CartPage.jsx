@@ -52,7 +52,7 @@ const CartPage = () => {
         const res = await axios.delete(
           `${
             import.meta.env.VITE_BACKEND_URL
-          }/api/cart/delete-cart-item?userId=${userId}&productId=${id}`
+          }/api/cart/delete-cart-item?userId=${userId}&cartItemId=${id}`
         );
         toast("Deleted");
         refreshComponent();
