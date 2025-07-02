@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { useUpdateCartCounter } from "../hooks/useUpdateCartCounter";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
 
 // Wishlist Product Component
 const WishlistProduct = ({ product, onDelete, onAddToCart }) => {
@@ -105,7 +106,8 @@ const WishlistProduct = ({ product, onDelete, onAddToCart }) => {
                   </svg>
                 ))}
                 <span className="ml-2 text-sm text-gray-600">
-                  {product.rating} ({product.ratingCount || 0} reviews)
+                  {product.rating.toFixed(2)} ({product.ratingCount || 0}{" "}
+                  reviews)
                 </span>
               </div>
             </div>
@@ -141,6 +143,7 @@ const WishlistProduct = ({ product, onDelete, onAddToCart }) => {
 const WishlistPage = () => {
   UseTitle("Your Wishlist");
   const updateCounter = useUpdateCartCounter();
+  const Navigate = useNavigate();
   const [userWishlistItems, setUserWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -355,17 +358,22 @@ const WishlistPage = () => {
 
   return (
     <>
-    <Header />
+      <Header />
       <LocationUI />
 
       {/* Wishlist Navigation Links */}
       <div className="bg-gray-100 lg:bg-white h-9 font-medium text-black lg:max-w-7xl lg:mx-auto lg:px-4 sm:px-6">
         <ul className="flex content-center">
-          <li className="mx-2 lg:underline lg:text-blue-500 mt-1">Cart</li>
-          <li className="mx-2 lg:underline lg:text-blue-500 mt-1 font-bold">
+          <li
+            onClick={() => Navigate("/my-account/cart")}
+            className="mx-2 cursor-pointer lg:underline lg:text-blue-500 mt-1"
+          >
+            Cart
+          </li>
+          <li className="mx-2 cursor-pointer lg:underline lg:text-blue-500 mt-1 font-bold">
             Wishlist
           </li>
-          <li className="mx-2 lg:underline lg:text-blue-500 mt-1">Buy Again</li>
+          {/* <li className="mx-2 lg:underline lg:text-blue-500 mt-1">Buy Again</li> */}
         </ul>
       </div>
 
