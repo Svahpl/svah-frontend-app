@@ -70,7 +70,7 @@ const ProductScreen = () => {
         console.log(res);
         setComments(res.data.Comments);
       } catch (err) {
-        toast.error("Failed to load comments");
+        // toast.error("Failed to load comments");
         console.error(err);
       } finally {
         setLoadingComments(false);

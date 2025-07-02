@@ -379,43 +379,51 @@ Thank you for shopping with Natural Store!
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-green-500 border-t-transparent mx-auto mb-4"></div>
-          <p className="text-green-700 text-lg font-medium">
-            Loading your orders...
-          </p>
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <div className="flex-grow bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-green-500 border-t-transparent mx-auto mb-4"></div>
+            <p className="text-green-700 text-lg font-medium">
+              Loading your orders...
+            </p>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-md mx-4">
-          <div className="text-center">
-            <XCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">
-              Error Loading Orders
-            </h2>
-            <p className="text-gray-600 mb-4">{error}</p>
-            <button
-              onClick={fetchOrders}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full transition-colors"
-            >
-              Retry
-            </button>
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <div className="flex-grow bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
+          <div className="bg-white rounded-xl shadow-lg p-8 max-w-md mx-4">
+            <div className="text-center">
+              <XCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                Error Loading Orders
+              </h2>
+              <p className="text-gray-600 mb-4">{error}</p>
+              <button
+                onClick={fetchOrders}
+                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full transition-colors"
+              >
+                Retry
+              </button>
+            </div>
           </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+      <div className="flex-grow bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
         <div className="bg-white shadow-sm border-b border-green-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="text-center">
@@ -958,7 +966,7 @@ Thank you for shopping with Natural Store!
         )}
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 
