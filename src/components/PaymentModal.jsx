@@ -12,6 +12,7 @@ import {
   Plus,
   Minus,
   MapPin,
+  RefreshCw, // Added refresh icon
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import PaypalPayment from "./PaypalPayment";
@@ -40,9 +41,16 @@ const PaymentModal = ({
     air: 1000,
     ship: 700,
   });
+  const [paypalKey, setPaypalKey] = useState(0); // Key to force re-render PayPal component
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
+
+  // Function to refresh PayPal component
+  const refreshPaypal = () => {
+    setPaypalKey((prevKey) => prevKey + 1);
+    toast.success("Refreshing payment options");
+  };
 
   const handleShippingChange = (method) => {
     setShippingMethod(method);
@@ -78,7 +86,7 @@ const PaymentModal = ({
     }
 
     setShippingCost(shippingPrice);
-    setFinalPrice(selectedWeight * product.price * quantity + shippingPrice);
+    setFinalPrice(selectedWeight * product[0].price * quantity + shippingPrice);
   };
 
   const getCurrentDollarinInr = async () => {
@@ -144,7 +152,7 @@ const PaymentModal = ({
 
         if (product && selectedWeight) {
           handleShippingCharges(
-            product.price,
+            product[0].price,
             shippingMethod,
             quantity,
             selectedWeight
@@ -174,7 +182,7 @@ const PaymentModal = ({
 
       if (product && selectedWeight) {
         handleShippingCharges(
-          product.price,
+          product[0].price,
           shippingMethod,
           quantity,
           selectedWeight
@@ -188,7 +196,7 @@ const PaymentModal = ({
   };
 
   const isShipShippingAvailable = finalWeight >= 100;
-  const productTotalPrice = selectedWeight * product.price * quantity;
+  const productTotalPrice = selectedWeight * product[0].price * quantity;
 
   const formatAddress = (address) => {
     return `${address.addressLine1}, ${address.addressLine2}, ${address.city}, ${address.state}, ${address.country} - ${address.pinCode}`;
@@ -377,19 +385,19 @@ const PaymentModal = ({
               <div className="bg-gray-50 rounded-2xl p-4">
                 <div className="flex items-center space-x-4">
                   <img
-                    src={product.images[0]}
-                    alt={product.title}
+                    src={product[0].images[0]}
+                    alt={product[0].title}
                     className="w-16 h-16 object-cover rounded-xl"
                   />
                   <div className="flex-1">
                     <h4 className="font-medium text-gray-900 text-sm">
-                      {product.title}
+                      {product[0].title}
                     </h4>
                     <p className="text-xs text-gray-500">
                       Weight: {selectedWeight}kg × {quantity} = {finalWeight}kg
                     </p>
                     <p className="text-lg font-bold text-gray-900">
-                      ${formatPrice(product.price)}/kg
+                      ${formatPrice(product[0].price)}/kg
                     </p>
                   </div>
                 </div>
@@ -425,7 +433,7 @@ const PaymentModal = ({
                 <div className="mt-4 pt-4 border-t border-gray-200 space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">
-                      Product Price (${formatPrice(product.price)}/kg ×{" "}
+                      Product Price (${formatPrice(product[0].price)}/kg ×{" "}
                       {selectedWeight}kg × {quantity})
                     </span>
                     <span className="text-gray-900">
@@ -528,10 +536,19 @@ const PaymentModal = ({
                 <span>256-bit SSL encrypted payment</span>
               </div>
 
-              {/* PayPal Buttons */}
-              <div className="space-y-3">
+              {/* PayPal Buttons with Refresh Button */}
+              <div className="space-y-3 relative">
+                <button
+                  onClick={refreshPaypal}
+                  className="absolute top-0 right-0 flex items-center text-xs text-gray-600 hover:text-green-800 transition"
+                >
+                  <RefreshCw className="w-4 h-4 mr-1" />
+                  Refresh Payment
+                </button>
+
                 {selectedAddress && (
                   <PaypalPayment
+                    key={paypalKey} // Key prop to force re-render
                     productPrice={finalPrice}
                     uid={localStorage.getItem("uid")}
                     num={selectedAddress.phone || user?.phoneNumber}
@@ -701,13 +718,13 @@ const PaymentModal = ({
                   <div className="bg-gray-50 rounded-2xl p-6">
                     <div className="flex items-center space-x-4">
                       <img
-                        src={product.images[0]}
-                        alt={product.title}
+                        src={product[0].images[0]}
+                        alt={product[0].title}
                         className="w-20 h-20 object-cover rounded-xl"
                       />
                       <div className="flex-1">
                         <h5 className="font-medium text-gray-900">
-                          {product.title}
+                          {product[0].title}
                         </h5>
                         <p className="text-sm text-gray-500">
                           Weight: {selectedWeight}kg × {quantity} ={" "}
@@ -719,7 +736,7 @@ const PaymentModal = ({
                       </div>
                       <div className="text-right">
                         <p className="text-xl font-bold text-gray-900">
-                          ${formatPrice(product.price)}/kg
+                          ${formatPrice(product[0].price)}/kg
                         </p>
                       </div>
                     </div>
@@ -845,7 +862,7 @@ const PaymentModal = ({
                     <div className="mt-6 pt-6 border-t border-gray-200 space-y-3">
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-600">
-                          Product Price (${formatPrice(product.price)}/kg ×{" "}
+                          Product Price (${formatPrice(product[0].price)}/kg ×{" "}
                           {selectedWeight}kg × {quantity})
                         </span>
                         <span className="text-gray-900">
@@ -884,19 +901,29 @@ const PaymentModal = ({
 
                 {/* Right - Payment Methods */}
                 <div className="space-y-6">
-                  <h4 className="text-lg font-semibold text-gray-900">
-                    Payment Method
-                  </h4>
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-lg font-semibold text-gray-900">
+                      Payment Method
+                    </h4>
+                    <button
+                      onClick={refreshPaypal}
+                      className="flex items-center text-sm text-gray-600 hover:text-green-800 transition"
+                    >
+                      <RefreshCw className="w-4 h-4 mr-1" />
+                      Refresh
+                    </button>
+                  </div>
 
                   <div className="space-y-4">
                     {selectedAddress && (
                       <PaypalPayment
+                        key={paypalKey} // Key prop to force re-render
                         productPrice={finalPrice}
                         uid={localStorage.getItem("uid")}
                         num={selectedAddress.phone || user?.phoneNumber}
                         sha={formatAddress(selectedAddress)}
                         dmode={shippingMethod}
-                        products={[product]}
+                        products={product}
                         weight={finalWeight}
                         userSelectedWeight={selectedWeight}
                         quantity={quantity}

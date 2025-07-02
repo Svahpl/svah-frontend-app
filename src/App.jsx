@@ -62,7 +62,7 @@ function App() {
           <Route path="/my-account/addresses" element={<AddressManager />} />
           {/* -------- IMPORTANT PAYMENT ROUTES DO NOT TOUCH ---------- */}
           <Route path="/paypal-test" element={<PaypalPayment />} />
-          <Route path="/complete-payment" element={<PaymentSuccess />} />
+          <Route path="/complete-payment/:id" element={<PaymentSuccess />} />
           {/* ----------------- END OF PAYMENT ROUTES ------------ */}
 
           <Route path="/shipping-policy" element={<ShippingPolicy />} />
