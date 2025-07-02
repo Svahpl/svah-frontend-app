@@ -164,9 +164,17 @@ const ContactSection = () => {
         }`}>
           <div className="bg-white p-6 rounded-lg shadow-md">
             {isSubmitted && (
-              <div className="mb-6 p-4 bg-emerald-100 border border-emerald-200 text-emerald-800 rounded-md">
-                Thank you! One of our representative will get back to you within 24 hours.
-              </div>
+              <div className="mb-8 p-6 rounded-xl bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-300 shadow-sm">
+  <div className="flex items-start gap-3">
+    <svg className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+    </svg>
+    <div>
+      <h3 className="font-semibold text-emerald-900 text-lg mb-1">Thank you!</h3>
+      <p className="text-emerald-800">One of our representatives will get back to you within 24 hours.</p>
+    </div>
+  </div>
+</div>
             )}
 
             <form onSubmit={handleSubmit(onSubmit)}>
