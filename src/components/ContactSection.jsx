@@ -164,14 +164,15 @@ const ContactSection = () => {
         }`}>
           <div className="bg-white p-6 rounded-lg shadow-md">
             {isSubmitted && (
-              <div className="mb-8 p-6 rounded-xl bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-300 shadow-sm">
-  <div className="flex items-start gap-3">
-    <svg className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-    </svg>
+<div className="mb-8 p-6 bg-white rounded-lg border border-emerald-200 shadow-md shadow-emerald-100/50 max-w-md mx-auto">
+  <div className="flex items-center gap-4">
+    <div className="bg-emerald-100 p-2 rounded-full">
+      <svg className="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
+      </svg>
+    </div>
     <div>
-      <h3 className="font-semibold text-emerald-900 text-lg mb-1">Thank you!</h3>
-      <p className="text-emerald-800">One of our representatives will get back to you within 24 hours.</p>
+      <p className="font-medium text-emerald-900">Thank you! We'll contact you within <span className="font-semibold">24 hours</span>.</p>
     </div>
   </div>
 </div>
