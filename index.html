@@ -1,20 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Primary Meta Tags -->
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title data-default>SVAH | Agros & Herbs</title>
+    <meta name="description" content="SVAH - Premium quality agricultural products and herbal solutions. Discover our natural, sustainable farming products for health and wellness.">
+    <meta name="keywords" content="agriculture, herbs, organic farming, sustainable agriculture, herbal products, natural remedies, SVAH">
+    <meta name="author" content="SVAH">
+    <meta name="robots" content="index, follow">
+    
+
+    
+    <!-- Favicon and App Icons -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link rel="icon" type="image/x-icon" href="./src/assets/svahLogo.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.svahpl.com/" />
+    
+    <!-- Preconnect and Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Poppins:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
+    
+    <!-- Title with fallback -->
+    <title>SVAH | Premium Agros & Herbs Products</title>
+    
+    <!-- Structured Data / Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "SVAH Agros & Herbs",
+      "url": "https://www.yourdomain.com",
+      "logo": "https://www.yourdomain.com/images/svah-logo.png",
+      "description": "Provider of premium quality agricultural products and herbal solutions",
+      "sameAs": [
+        "https://www.facebook.com/yourpage",
+        "https://www.instagram.com/yourprofile",
+        "https://www.linkedin.com/company/yourcompany"
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/src/main.jsx" as="script">
+    
+    <!-- Noscript fallback -->
+    <noscript>
+      <strong>We're sorry but our website doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
   </body>
 </html>
