@@ -16,6 +16,7 @@ const PaypalCartPayment = ({
   quantity = 1,
 }) => {
   const [paypalOid, setPaypalOid] = useState("");
+  const [orderId, setOrderId] = useState("");
   const navigate = useNavigate();
   const initialOptions = {
     clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID,
@@ -76,7 +77,9 @@ const PaypalCartPayment = ({
       );
 
       console.log(response.data);
-      navigate("/complete-payment");
+      const newOrderId = response.data.orderId.slice(-8).toUpperCase();
+      setOrderId(newOrderId);
+      navigate(`/complete-payment/${newOrderId}`);
     } catch (error) {
       console.log("On approve error", error.response?.data || error.message);
     }
