@@ -131,7 +131,42 @@ const ContactSection = () => {
   );
 
   return (
-    <section className="py-12 bg-gray-50">
+    <section className="py-12 bg-gray-50 relative">
+      {/* Success Modal */}
+      {isSubmitted && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full animate-fadeIn">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                <svg 
+                  className="w-8 h-8 text-emerald-600" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth="2" 
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Thank you!</h3>
+              <p className="text-gray-600 mb-6">
+                One of our representatives will get back to you within 24 hours.
+              </p>
+              <button
+                onClick={() => setIsSubmitted(false)}
+                className="px-6 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition-colors"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
           <button
@@ -163,21 +198,6 @@ const ContactSection = () => {
           isFormVisible ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
         }`}>
           <div className="bg-white p-6 rounded-lg shadow-md">
-            {isSubmitted && (
-<div className="mb-8 p-6 bg-white rounded-lg border border-emerald-200 shadow-md shadow-emerald-100/50 max-w-md mx-auto">
-  <div className="flex items-center gap-4">
-    <div className="bg-emerald-100 p-2 rounded-full">
-      <svg className="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
-        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
-      </svg>
-    </div>
-    <div>
-      <p className="font-medium text-emerald-900">Thank you! We'll contact you within <span className="font-semibold">24 hours</span>.</p>
-    </div>
-  </div>
-</div>
-            )}
-
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <InputField id="fullName" label="Enter full name" />
