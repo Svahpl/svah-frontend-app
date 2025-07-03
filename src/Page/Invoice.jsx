@@ -140,13 +140,21 @@ const Invoice = () => {
     );
   }
 
-  const invoiceNumber = `INV-${invoiceData._id.slice(-8).toUpperCase()}`;
-  const subtotal = invoiceData.items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+  // Calculate item amounts and totals (from Indian site)
+  const itemsWithTotal = invoiceData.items.map((item) => ({
+    ...item,
+    totalPrice: item.price * item.quantity * (item.weight || 1),
+  }));
+
+  const subtotal = itemsWithTotal.reduce(
+    (sum, item) => sum + item.totalPrice,
     0
   );
-  const shipping = 15;
-  const total = subtotal + shipping;
+
+  const shipping = invoiceData.totalAmount - subtotal;
+  const total = invoiceData.totalAmount;
+
+  const invoiceNumber = `INV-${invoiceData._id.slice(-8).toUpperCase()}`;
   const invoiceDate = new Date(invoiceData.placedAt).toLocaleDateString(
     "en-US",
     {
@@ -246,10 +254,15 @@ const Invoice = () => {
           margin: 1.5rem 0;
         }
 
+        /* FIXED COLUMN WIDTHS */
         .description-column {
-          width: 50%;
+          width: 40%;
         }
         .quantity-column {
+          width: 10%;
+          text-align: center;
+        }
+        .weight-column {
           width: 15%;
           text-align: center;
         }
@@ -274,7 +287,7 @@ const Invoice = () => {
       >
         <div className="max-w-4xl mx-auto print-container">
           <div className="p-8 print:p-0 avoid-break invoice-container">
-            {/* Top Header - QR code removed */}
+            {/* Top Header */}
             <div className="header-border avoid-break">
               <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                 {/* Center - Invoice Title and Details */}
@@ -360,6 +373,9 @@ const Invoice = () => {
                     <th className="text-center text-xs md:text-sm quantity-column">
                       QTY
                     </th>
+                    <th className="text-center text-xs md:text-sm weight-column">
+                      WEIGHT (kg)
+                    </th>
                     <th className="text-right text-xs md:text-sm price-column">
                       UNIT PRICE
                     </th>
@@ -369,10 +385,10 @@ const Invoice = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {invoiceData.items && invoiceData.items.length > 0 ? (
-                    invoiceData.items.map((item, index) => (
+                  {itemsWithTotal.length > 0 ? (
+                    itemsWithTotal.map((item, index) => (
                       <React.Fragment key={item._id || index}>
-                        {index > 0 && index % 10 === 0 && (
+                        {index > 0 && index % 8 === 0 && (
                           <tr className="page-break"></tr>
                         )}
 
@@ -381,20 +397,18 @@ const Invoice = () => {
                             <div className="font-semibold text-gray-900">
                               {item.title}
                             </div>
-                            {item.weight && (
-                              <div className="text-xs text-gray-500 mt-1">
-                                Weight: {item.weight}kg
-                              </div>
-                            )}
                           </td>
                           <td className="text-center text-gray-700 font-medium text-xs md:text-sm quantity-column">
                             {item.quantity}
+                          </td>
+                          <td className="text-center text-gray-700 font-medium text-xs md:text-sm weight-column">
+                            {item.weight || 1}
                           </td>
                           <td className="text-right text-gray-700 text-xs md:text-sm price-column">
                             ${item.price.toFixed(2)}
                           </td>
                           <td className="text-right font-bold text-gray-900 text-xs md:text-sm amount-column">
-                            ${(item.price * item.quantity).toFixed(2)}
+                            ${item.totalPrice.toFixed(2)}
                           </td>
                         </tr>
                       </React.Fragment>
@@ -402,7 +416,7 @@ const Invoice = () => {
                   ) : (
                     <tr>
                       <td
-                        colSpan="4"
+                        colSpan="5"
                         className="py-8 px-4 text-center text-gray-500"
                       >
                         No items found
