@@ -38,7 +38,7 @@
 }
 
 /* Hide Clerk UserButton popup/modal */
-.cl-userButtonPopoverCard,
+/* .cl-userButtonPopoverCard,
 .cl-userButtonPopover,
 [data-clerk-user-button-popup],
 [data-clerk-portal] {
@@ -46,15 +46,15 @@
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
-}
+} */
 
 /* Alternative: Hide all Clerk modals */
-.cl-modal,
+/* .cl-modal,
 .cl-modalBackdrop {
   display: none !important;
-}
+} */
 
 /* More specific targeting */
-div[data-clerk-user-button] > div > div:last-child {
+/* div[data-clerk-user-button] > div > div:last-child {
   display: none !important;
-}
+} */
