@@ -13,13 +13,13 @@ const SignOutWatcher = ({ children, onSignOut }) => {
 
     // Method 1: Track sign-in state changes
     if (wasSignedIn.current && !isSignedIn) {
-      console.log("Sign out detected via isSignedIn change");
+      // console.log("Sign out detected via isSignedIn change");
       handleSignOut();
     }
 
     // Method 2: Track userId changes (more reliable)
     if (previousUserId.current && !userId && wasSignedIn.current) {
-      console.log("Sign out detected via userId change");
+      // console.log("Sign out detected via userId change");
       handleSignOut();
     }
 

@@ -25,12 +25,13 @@ const PaypalCartPayment = ({
     shapes: "rect",
     layout: "vertical",
   };
-  console.log("---- TOTAL ITEMS ARRAY ---", totalItemsArray);
-  console.log("---- PRODUCT PRICE ---", productPrice);
-  console.log("---- SHIPPINH MODE  ---", sha);
-  console.log("---- PRODUCT PRICE ---", products[0]?.price);
-  console.log("--- QUANTITY---", quantity);
-  console.log("--- USER SELECTED WEIGHT ---", userSelectedWeight);
+  // DEBUG CONSOLE LOG BELOW : - 
+  // console.log("---- TOTAL ITEMS ARRAY ---", totalItemsArray);
+  // console.log("---- PRODUCT PRICE ---", productPrice);
+  // console.log("---- SHIPPINH MODE  ---", sha);
+  // console.log("---- PRODUCT PRICE ---", products[0]?.price);
+  // console.log("--- QUANTITY---", quantity);
+  // console.log("--- USER SELECTED WEIGHT ---", userSelectedWeight);
 
   const onCreateOrder = async () => {
     try {
@@ -38,7 +39,8 @@ const PaypalCartPayment = ({
         `${import.meta.env.VITE_BACKEND_URL}/api/paypal/create-order`,
         { price: productPrice.toFixed(2) }
       );
-      console.log(response);
+      // DEBUG CONSOLE LOG BELOW : - 
+      // console.log(response);
       setPaypalOid(response.data.orderId);
       return response.data.orderId;
     } catch (error) {
@@ -46,16 +48,17 @@ const PaypalCartPayment = ({
     }
   };
   const onApprove = async () => {
-    console.log("CREATING ORDER FOR THE FOLLOWING:", uid);
-    console.log("CREATING ORDER FOR THE FOLLOWING:", num);
-    console.log("CREATING ORDER FOR THE FOLLOWING:", sha);
-    console.log("CREATING ORDER FOR THE FOLLOWING:", productPrice);
-    console.log("CREATING ORDER FOR THE FOLLOWING:", dmode);
-    console.log("CREATING ORDER FOR THE FOLLOWING:", products[0]?._id);
-    console.log("CREATING ORDER FOR THE FOLLOWING:", products[0]?.price);
-    console.log("CREATING ORDER FOR THE FOLLOWING:", userSelectedWeight);
-    console.log("CREATING ORDER FOR THE FOLLOWING:", quantity);
-    console.log("CREATING ORDER FOR THE FOLLOWING:", paypalOid);
+    // DEBUG CONSOLE LOG BELOW : - 
+    // console.log("CREATING ORDER FOR THE FOLLOWING:", uid);
+    // console.log("CREATING ORDER FOR THE FOLLOWING:", num);
+    // console.log("CREATING ORDER FOR THE FOLLOWING:", sha);
+    // console.log("CREATING ORDER FOR THE FOLLOWING:", productPrice);
+    // console.log("CREATING ORDER FOR THE FOLLOWING:", dmode);
+    // console.log("CREATING ORDER FOR THE FOLLOWING:", products[0]?._id);
+    // console.log("CREATING ORDER FOR THE FOLLOWING:", products[0]?.price);
+    // console.log("CREATING ORDER FOR THE FOLLOWING:", userSelectedWeight);
+    // console.log("CREATING ORDER FOR THE FOLLOWING:", quantity);
+    // console.log("CREATING ORDER FOR THE FOLLOWING:", paypalOid);
 
     try {
       const expectedDeliveryDate = new Date();
@@ -75,8 +78,8 @@ const PaypalCartPayment = ({
           paypalOid: paypalOid,
         }
       );
-
-      console.log(response.data);
+      // DEBUG CONSOLE LOG BELOW : - 
+      // console.log(response.data);
       const newOrderId = response.data.orderId.slice(-8).toUpperCase();
       setOrderId(newOrderId);
       navigate(`/complete-payment/${newOrderId}`);
@@ -89,7 +92,8 @@ const PaypalCartPayment = ({
     console.error(`Payment Error`);
     // window.location.href = "/payment-cancel";
   };
-  console.log("products", products);
+  // DEBUG CONSOLE LOG BELOW : - 
+  // console.log("products", products);
   return (
     <>
       <PayPalScriptProvider options={initialOptions}>

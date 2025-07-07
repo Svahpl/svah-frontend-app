@@ -370,8 +370,11 @@ const WishlistPage = () => {
           >
             Cart
           </li>
-          <li className="mx-2 cursor-pointer lg:underline lg:text-blue-500 mt-1 font-bold">
-            Wishlist
+          <li
+            onClick={() => Navigate("/my-account/orders")}
+            className="mx-2 cursor-pointer lg:underline lg:text-blue-500 mt-1"
+          >
+            Orders
           </li>
           {/* <li className="mx-2 lg:underline lg:text-blue-500 mt-1">Buy Again</li> */}
         </ul>

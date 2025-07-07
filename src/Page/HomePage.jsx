@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   Slideshow,
   CategorySection,
@@ -51,17 +52,19 @@ const HomePage = () => {
           timeout: 10000, // 10 second timeout
         }
       );
-
-      console.log("MongoDB user mapping response:", res?.data);
+      // DEBUG CONSOLE LOG BELOW : -
+      // console.log("MongoDB user mapping response:", res?.data);
 
       // Check if we actually got a user ID before storing
       const mongoUserId = res?.data?.user?.[0]?._id;
       if (mongoUserId) {
-        console.log("MongoDB user ID found:", mongoUserId);
+        // DEBUG CONSOLE LOG BELOW : -
+        // console.log("MongoDB user ID found:", mongoUserId);
         storeUser(mongoUserId);
         return mongoUserId;
       } else {
-        console.warn("No MongoDB user ID found in response:", res?.data);
+        // DEBUG CONSOLE LOG BELOW : -
+        // console.warn("No MongoDB user ID found in response:", res?.data);
         return null;
       }
     } catch (error) {
@@ -89,8 +92,8 @@ const HomePage = () => {
 
       try {
         setUserDataSent(true); // Prevent duplicate calls
-
-        console.log("Starting user data sync...");
+        // DEBUG CONSOLE LOG BELOW : -
+        // console.log("Starting user data sync...");
 
         // Signup API call with better error handling
         const signupResponse = await axios.post(
@@ -109,7 +112,8 @@ const HomePage = () => {
             },
           }
         );
-        console.log("Signup response:", signupResponse.data);
+        // DEBUG CONSOLE LOG BELOW : -
+        // console.log("Signup response:", signupResponse.data);
 
         // Protected API call with the same backend URL
         try {
@@ -122,7 +126,8 @@ const HomePage = () => {
               timeout: 10000,
             }
           );
-          console.log("Protected response:", protectedResponse.data);
+          // DEBUG CONSOLE LOG BELOW : -
+          // console.log("Protected response:", protectedResponse.data);
         } catch (protectedError) {
           console.warn(
             "Protected endpoint failed (non-critical):",

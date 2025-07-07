@@ -12,6 +12,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import PaypalCartPayment from "./PaypalCartPayment";
+import "../CartPaymentModal.css";
 
 const CartPaymentModal = ({
   showPaymentModal,
@@ -78,7 +79,8 @@ const CartPaymentModal = ({
       const res = await axios.get(`https://open.er-api.com/v6/latest/USD`);
       const inr = res.data.rates.INR;
       setDollar(inr);
-      console.log("Current dollar rate in INR:", inr);
+      // DEBUG CONSOLE LOG BELOW : -
+      // console.log("Current dollar rate in INR:", inr);
     } catch (error) {
       console.error(`Error fetching current dollar price in INR: ${error}`);
       setDollar(83.5);
@@ -95,7 +97,8 @@ const CartPaymentModal = ({
           air: aircharge,
           ship: shipcharge,
         });
-        console.log("Fetched delivery charges:", aircharge, shipcharge);
+        // DEBUG CONSOLE LOG BELOW : -
+        // console.log("Fetched delivery charges:", aircharge, shipcharge);
       }
     } catch (error) {
       console.error("Error fetching delivery charges:", error);
@@ -390,7 +393,8 @@ const CartPaymentModal = ({
                           Quantity
                         </span>
                         <div className="flex items-center space-x-3">
-                          <button
+                          {/* CART MINUS BUTTON */}
+                          {/* <button
                             onClick={() =>
                               handleQuantityChange(item._id, item.quantity - 1)
                             }
@@ -398,18 +402,19 @@ const CartPaymentModal = ({
                             disabled={item.quantity <= 1}
                           >
                             <Minus className="w-4 h-4 text-gray-600" />
-                          </button>
+                          </button> */}
                           <span className="text-lg font-semibold text-gray-900 min-w-[2rem] text-center">
                             {item.quantity}
                           </span>
-                          <button
+                          {/* CART PLUS BUTTON */}
+                          {/* <button
                             onClick={() =>
                               handleQuantityChange(item._id, item.quantity + 1)
                             }
                             className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition"
                           >
                             <Plus className="w-4 h-4 text-gray-600" />
-                          </button>
+                          </button> */}
                         </div>
                       </div>
                     </div>
@@ -939,70 +944,6 @@ const CartPaymentModal = ({
           </div>
         </div>
       </div>
-
-      <style jsx global>{`
-        /* For WebKit browsers (Chrome, Safari, Edge) */
-        ::-webkit-scrollbar {
-          width: 1px;
-          height: 1px;
-        }
-
-        ::-webkit-scrollbar-track {
-          background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-          background-color: rgba(0, 0, 0, 0.2);
-        }
-
-        /* For Firefox */
-        * {
-          scrollbar-width: thin;
-          scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-        }
-        [data-tooltip] {
-          position: relative;
-        }
-
-        [data-tooltip]:hover::after {
-          content: attr(data-tooltip);
-          position: absolute;
-          bottom: 100%;
-          left: 50%;
-          transform: translateX(-50%);
-          background: #333;
-          color: white;
-          padding: 4px 8px;
-          border-radius: 4px;
-          font-size: 12px;
-          white-space: nowrap;
-          margin-bottom: 5px;
-        }
-
-        [data-tooltip]:hover::before {
-          content: "";
-          position: absolute;
-          bottom: calc(100% - 5px);
-          left: 50%;
-          transform: translateX(-50%);
-          border-width: 5px;
-          border-style: solid;
-          border-color: #333 transparent transparent transparent;
-        }
-
-        @keyframes spin {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-
-        .animate-spin {
-          animation: spin 1s linear infinite;
-        }
-      `}</style>
     </>
   );
 };

@@ -16,11 +16,17 @@ import {
   useAuth,
   useUser,
 } from "@clerk/clerk-react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { useUpdateCartCounter } from "../hooks/useUpdateCartCounter";
 
 const Header = () => {
+  useEffect(() => {
+    AOS.init();
+    AOS.refresh();
+  }, []);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -59,7 +65,8 @@ const Header = () => {
           `${import.meta.env.VITE_BACKEND_URL}/api/product/get-all`
         );
         const data = await res.json();
-        console.log("DEBUG PRODUCT API RESPONSE", data);
+        // DEBUG CONSOLE LOG BELOW : -
+        // console.log("DEBUG PRODUCT API RESPONSE", data);
         if (data.products) {
           setLocalProducts(data.products);
           // Update context if setter is available
@@ -191,10 +198,12 @@ const Header = () => {
               {searchResults.map((product) => (
                 <div
                   key={product._id}
-                  onClick={() => handleProductClick(product._id)}
                   className="p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-50 last:border-b-0 transition-colors"
                 >
-                  <div className="flex items-center space-x-3">
+                  <div
+                    onClick={() => handleProductClick(product._id)}
+                    className="flex items-center space-x-3"
+                  >
                     <img
                       src={product.images[0]}
                       alt={product.title}
@@ -533,7 +542,10 @@ const Header = () => {
 
         {/* Mobile Navigation - Improved */}
         {menuOpen && (
-          <div className="sm:hidden mt-2 bg-white border-t border-primary-100/50 rounded-b-lg shadow-lg py-4 space-y-3">
+          <div
+            data-aos="slide-right"
+            className="sm:hidden mt-2 bg-white border-t border-primary-100/50 rounded-b-lg shadow-lg py-4 space-y-3"
+          >
             <nav className="flex flex-col space-y-1 px-4">
               <Link
                 to="/"

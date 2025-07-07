@@ -6,8 +6,13 @@ import { X } from "lucide-react";
 import axios from "axios";
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
+import { useSearchParams } from "react-router-dom";
 
 const CategoryProducts = () => {
+  const [searchParams] = useSearchParams();
+  const browseCategory = searchParams.get("category");
+  const browseSubcategory = searchParams.get("subcategory");
+  console.log("category", browseCategory, browseSubcategory);
   const [price, setPrice] = useState(1000);
   const [dummyProducts, setDummyProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]); // ✅ All products from API
@@ -22,7 +27,7 @@ const CategoryProducts = () => {
       const res = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/product/get-all`
       );
-      // DEBUG CONSOLE LOG BELOW : - 
+      // DEBUG CONSOLE LOG BELOW : -
       // console.log("DEBUG PRODUCT API RESPONSE", res.data);
       setAllProducts(res.data.products); // ✅ save all products
       setDummyProducts(res.data.products);

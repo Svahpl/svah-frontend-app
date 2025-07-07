@@ -27,7 +27,8 @@ const CartPage = () => {
   const userId = localStorage.getItem("uid");
   // fetch user cart from API endpoint
   const getCart = async () => {
-    console.log(userId);
+    // DEBUG CONSOLE LOG BELOW : - 
+    // console.log(userId);
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/cart/getcart/${userId}`
@@ -152,7 +153,8 @@ const CartPage = () => {
   useEffect(() => {
     calculateTotalItems();
     calculateTotalPrice();
-    console.log(userCartItems);
+    // DEBUG CONSOLE LOG BELOW : - 
+    // console.log(userCartItems);
   }, [userCartItems]);
 
   return (
@@ -222,7 +224,8 @@ const CartPage = () => {
             {/* Cart Product Items */}
             {userCartItems?.length > 0 ? (
               userCartItems.map((item, index) => {
-                console.log("Parent Comp ID", item);
+                // DEBUG CONSOLE LOG BELOW : - 
+                // console.log("Parent Comp ID", item);
                 return (
                   <CartProduct
                     key={index}

@@ -51,7 +51,8 @@ const CartProduct = ({
   );
 
   useEffect(() => {
-    console.log("totalItemsArray", totalItemsArray);
+    // DEBUG CONSOLE LOG BELOW : - 
+    // console.log("totalItemsArray", totalItemsArray);
   }, []);
 
   return (

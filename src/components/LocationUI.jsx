@@ -21,7 +21,8 @@ const LocationUI = () => {
       const longitude = position.coords.longitude;
       setUserLatitude(latitude);
       setUserLongitude(longitude);
-      console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+      // DEBUG CONSOLE LOG BELOW : - 
+      // console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
     }
 
     function error() {
