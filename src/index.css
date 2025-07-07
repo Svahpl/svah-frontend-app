@@ -37,6 +37,21 @@
   }
 }
 
+html,
+body {
+  height: auto;
+  overflow: hidden;
+  /* important for Lenis */
+}
+
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
 /* Hide Clerk UserButton popup/modal */
 .cl-userButtonPopoverCard,
 .cl-userButtonPopover,
