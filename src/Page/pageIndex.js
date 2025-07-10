@@ -7,7 +7,6 @@ import WishlistPage from "./WishlistPage";
 import MyOrdersPage from "./MyOrdersPage";
 import Invoice from "./Invoice";
 import Logout from "./Logout";
-import CategoryBrowsingProducts from "./CategoryBrowsingProducts";
 export {
   HomePage,
   Logout,
@@ -18,5 +17,4 @@ export {
   WishlistPage,
   MyOrdersPage,
   Invoice,
-  CategoryBrowsingProducts
 };

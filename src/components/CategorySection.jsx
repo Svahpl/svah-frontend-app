@@ -26,11 +26,7 @@ const CategorySection = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {category.subcategories.map((subcategory) => (
                   <div
-                    onClick={() => {
-                      console.log("category", category);
-                      console.log("subcategory", subcategory);
-                      navigate(`/category-products?category=${category.name}&subcategory=${subcategory.name}`);
-                    }}
+                    onClick={() => {navigate("/view-products")}}
                     key={subcategory.id}
                     className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:transform hover:scale-[1.02] group"
                   >

@@ -423,7 +423,7 @@ Thank you for shopping with Natural Store!
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="flex-grow bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+      <div className="flex-grow">
         <div className="bg-white shadow-sm border-b border-green-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="text-center">

@@ -22,8 +22,7 @@ const CategoryProducts = () => {
       const res = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/product/get-all`
       );
-      // DEBUG CONSOLE LOG BELOW : - 
-      // console.log("DEBUG PRODUCT API RESPONSE", res.data);
+      console.log("DEBUG PRODUCT API RESPONSE", res.data);
       setAllProducts(res.data.products); // ✅ save all products
       setDummyProducts(res.data.products);
     } catch (error) {
@@ -36,8 +35,8 @@ const CategoryProducts = () => {
   };
 
   useEffect(() => {
-    getAllProducts();
     window.scrollTo({ top: 0, behavior: "smooth" });
+    getAllProducts();
   }, []);
 
   const executeWithLoading = (filterFunction) => {
@@ -184,7 +183,7 @@ const CategoryProducts = () => {
                 }}
                 className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-black disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200"
               />
-              <p className="text-sm mt-1 text-gray-400">Up to ${price}</p>
+              <p className="text-sm mt-1 text-gray-400">Up to ₹{price}</p>
             </div>
 
             {/* Customer Rating Filter */}
