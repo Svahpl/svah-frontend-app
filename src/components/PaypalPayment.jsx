@@ -82,7 +82,7 @@ const PaypalPayment = ({
       );
 
       console.log(response.data);
-      const newOrderId = response.data.orderId.slice(-8).toUpperCase();
+      const newOrderId = response.data.orderId;
       setOrderId(newOrderId);
       navigate(`/complete-payment/${newOrderId}`);
     } catch (error) {
