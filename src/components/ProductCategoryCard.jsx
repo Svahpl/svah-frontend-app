@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useUpdateCartCounter } from "../hooks/useUpdateCartCounter";
+import { formatCurrency } from "../utils/formatCurrency";
 
 const ProductCategoryCard = ({ product }) => {
   useEffect(() => {
@@ -97,11 +98,7 @@ const ProductCategoryCard = ({ product }) => {
           </div>
 
           <div className="text-xl font-bold text-green-800">
-            {Number(price)?.toLocaleString("en-US", {
-              minimumFractionDigits: 2,
-              style: "currency",
-              currency: "USD",
-            })}
+            {formatCurrency(price)}
           </div>
         </div>
 

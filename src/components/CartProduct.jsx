@@ -1,5 +1,6 @@
 import { Package, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { formatCurrency } from "../utils/formatCurrency";
 
 const CartProduct = ({
   product,
@@ -76,11 +77,7 @@ const CartProduct = ({
                 <h5 className="text-gray-900">
                   {/* <sup className="text-sm">$</sup> */}
                   <span className="font-bold">
-                    {product.price.toLocaleString("en-US", {
-                      minimumFractionDigits: 2,
-                      style: "currency",
-                      currency: "USD",
-                    })}
+                    {formatCurrency(product.price)}
                   </span>
                   <sup className="text-sm">00</sup>
                 </h5>

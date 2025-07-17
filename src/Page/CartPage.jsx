@@ -11,6 +11,7 @@ import { useAppContext } from "../context/AppContext";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { formatCurrency } from "../utils/formatCurrency";
 
 const CartPage = () => {
   UseTitle("Your Cart");
@@ -190,11 +191,7 @@ const CartPage = () => {
               </div>
               <div>
                 <span className="font-bold text-lg">
-                  {Number(subtotalPrice)?.toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    style: "currency",
-                    currency: "USD",
-                  })}
+                  {formatCurrency(subtotalPrice)}
                 </span>
               </div>
             </div>
@@ -259,11 +256,7 @@ const CartPage = () => {
                 <h3 className="text-lg font-normal mb-2">
                   Subtotal ({subtotalItems} items) :{" "}
                   <span className="font-bold">
-                    {Number(subtotalPrice)?.toLocaleString("en-US", {
-                      minimumFractionDigits: 2,
-                      style: "currency",
-                      currency: "USD",
-                    })}
+                    {formatCurrency(subtotalPrice)}
                   </span>
                 </h3>
               </div>
