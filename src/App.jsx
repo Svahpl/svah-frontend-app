@@ -24,11 +24,15 @@ import {
   Logout,
 } from "./Page/pageIndex";
 import ProductScreen from "./Page/ProductScreen";
-import { AddressManager } from "./components/compIndex";
+import {
+  AddressManager,
+  Error500Page,
+  ScrollToTop,
+} from "./components/compIndex";
 import PaypalPayment from "./components/PaypalPayment";
 import PaymentSuccess from "./components/PaymentSuccess";
 import { Toaster } from "react-hot-toast";
-import Lenis from '@studio-freight/lenis';
+import Lenis from "@studio-freight/lenis";
 
 function App() {
   useEffect(() => {
@@ -41,7 +45,7 @@ function App() {
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.3,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smooth: true,
     });
 
@@ -71,6 +75,7 @@ function App() {
             style: { fontSize: "17px", background: "#166434", color: "white" },
           }}
         />
+        <ScrollToTop />
         <CyberCrimeWarning />
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -90,7 +95,6 @@ function App() {
           <Route path="/paypal-test" element={<PaypalPayment />} />
           <Route path="/complete-payment/:id" element={<PaymentSuccess />} />
           {/* ----------------- END OF PAYMENT ROUTES ------------ */}
-
           <Route path="/shipping-policy" element={<ShippingPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -105,6 +109,7 @@ function App() {
               </>
             }
           />
+          <Route path="/server-error" element={<Error500Page />}></Route>
         </Routes>
       </div>
     </Router>

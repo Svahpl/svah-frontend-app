@@ -51,7 +51,7 @@ const CartProduct = ({
   );
 
   useEffect(() => {
-    // DEBUG CONSOLE LOG BELOW : - 
+    // DEBUG CONSOLE LOG BELOW : -
     // console.log("totalItemsArray", totalItemsArray);
   }, []);
 
@@ -74,9 +74,13 @@ const CartProduct = ({
               {/* Pricing */}
               <div className="ml-4 text-xl mt-3">
                 <h5 className="text-gray-900">
-                  <sup className="text-sm">$</sup>
+                  {/* <sup className="text-sm">$</sup> */}
                   <span className="font-bold">
-                    {product.price.toLocaleString()}
+                    {product.price.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      style: "currency",
+                      currency: "USD",
+                    })}
                   </span>
                   <sup className="text-sm">00</sup>
                 </h5>

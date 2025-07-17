@@ -10,8 +10,11 @@ import ProductCategoryCard from "./ProductCategoryCard";
 import ScreenLoaders from "./ScreenLoaders";
 import CartPaymentModal from "./CartPaymentModal";
 import SignOutWatcher from "./SignOutWatcher";
+import ScrollToTop from "./ScrollToTop";
+import Error500Page from "./Error500Page";
 export {
   UseTitle,
+  ScrollToTop,
   AddressManager,
   Slideshow,
   CategorySection,
@@ -22,5 +25,6 @@ export {
   ProductCategoryCard,
   ScreenLoaders,
   CartPaymentModal,
-  SignOutWatcher
+  SignOutWatcher,
+  Error500Page,
 };

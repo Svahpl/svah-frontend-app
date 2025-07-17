@@ -77,6 +77,12 @@ const ProductScreen = () => {
     }
   };
 
+  useEffect(() => {
+    if (product) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [product]);
+
   // Fetch comments for the product
   useEffect(() => {
     isItemInWishlist();
@@ -395,7 +401,12 @@ const ProductScreen = () => {
 
             <div className="flex items-center mb-6">
               <span className="text-3xl font-bold text-gray-900">
-                ${product.price} <span className="text-xs">/kg</span>
+                {Number(product.price)?.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  style: "currency",
+                  currency: "USD",
+                })}{" "}
+                <span className="text-xs">/kg</span>
               </span>
               <span className="ml-3 text-green-600 text-sm font-medium">
                 {product.quantity > 0 ? "In Stock" : "Out of stock"}
@@ -672,7 +683,12 @@ const ProductScreen = () => {
 
                 <div className="flex items-center mb-8">
                   <span className="text-4xl font-bold text-gray-900">
-                    ${product.price} <span className="text-xs">/kg</span>
+                    {Number(product.price)?.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      style: "currency",
+                      currency: "USD",
+                    })}
+                    <span className="text-xs">/kg</span>
                   </span>
                   <span className="ml-4 text-green-600 font-medium text-lg">
                     {product.quantity > 0 ? "In Stock" : "Out of stock"}

@@ -97,7 +97,11 @@ const ProductCategoryCard = ({ product }) => {
           </div>
 
           <div className="text-xl font-bold text-green-800">
-            ${price.toFixed(2)}
+            {Number(price)?.toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+              style: "currency",
+              currency: "USD",
+            })}
           </div>
         </div>
 

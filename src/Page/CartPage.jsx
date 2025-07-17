@@ -27,7 +27,7 @@ const CartPage = () => {
   const userId = localStorage.getItem("uid");
   // fetch user cart from API endpoint
   const getCart = async () => {
-    // DEBUG CONSOLE LOG BELOW : - 
+    // DEBUG CONSOLE LOG BELOW : -
     // console.log(userId);
     try {
       const res = await axios.get(
@@ -153,7 +153,7 @@ const CartPage = () => {
   useEffect(() => {
     calculateTotalItems();
     calculateTotalPrice();
-    // DEBUG CONSOLE LOG BELOW : - 
+    // DEBUG CONSOLE LOG BELOW : -
     // console.log(userCartItems);
   }, [userCartItems]);
 
@@ -189,7 +189,13 @@ const CartPage = () => {
                 </h5>
               </div>
               <div>
-                <span className="font-bold text-lg">${subtotalPrice}</span>
+                <span className="font-bold text-lg">
+                  {Number(subtotalPrice)?.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    style: "currency",
+                    currency: "USD",
+                  })}
+                </span>
               </div>
             </div>
 
@@ -224,7 +230,7 @@ const CartPage = () => {
             {/* Cart Product Items */}
             {userCartItems?.length > 0 ? (
               userCartItems.map((item, index) => {
-                // DEBUG CONSOLE LOG BELOW : - 
+                // DEBUG CONSOLE LOG BELOW : -
                 // console.log("Parent Comp ID", item);
                 return (
                   <CartProduct
@@ -252,7 +258,13 @@ const CartPage = () => {
               <div className="mb-4">
                 <h3 className="text-lg font-normal mb-2">
                   Subtotal ({subtotalItems} items) :{" "}
-                  <span className="font-bold">${subtotalPrice}</span>
+                  <span className="font-bold">
+                    {Number(subtotalPrice)?.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      style: "currency",
+                      currency: "USD",
+                    })}
+                  </span>
                 </h3>
               </div>
 
