@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import Select from 'react-select';
-import { countries } from '../data/countries';
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import Select from "react-select";
+import { countries } from "../data/countries";
 
 const ContactSection = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -38,17 +38,21 @@ const ContactSection = () => {
 
   const handleCountryChange = (option) => {
     setSelectedCountry(option);
-    setValue('country', option?.value || '');
+    setValue("country", option?.value || "");
     if (option) {
-      clearErrors('country');
-    } 
+      clearErrors("country");
+    }
   };
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
     try {
-      if (!selectedCountry || !selectedCountry.value || !selectedCountry.phoneCode) {
-        throw new Error('Please select a valid country');
+      if (
+        !selectedCountry ||
+        !selectedCountry.value ||
+        !selectedCountry.phoneCode
+      ) {
+        throw new Error("Please select a valid country");
       }
 
       const payload = {
@@ -61,27 +65,28 @@ const ContactSection = () => {
         code: selectedCountry.phoneCode,
         number: formData.mobileNumber,
         additionalMessage: formData.message || undefined,
-        ...(formType === 'sales'
+        ...(formType === "sales"
           ? { SalesDetails: formData.requirements }
           : { requirements: formData.requirements }),
       };
-      
-      const endpoint = formType === 'sales'
-        ? `${import.meta.env.VITE_BACKEND_URL}/api/form/salesform`
-        : `${import.meta.env.VITE_BACKEND_URL}/api/form/requirementform`;
+
+      const endpoint =
+        formType === "sales"
+          ? `${import.meta.env.VITE_BACKEND_URL}/api/form/salesform`
+          : `${import.meta.env.VITE_BACKEND_URL}/api/form/requirementform`;
 
       const response = await fetch(endpoint, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Submission failed');
+        throw new Error(errorData.message || "Submission failed");
       }
 
       setIsSubmitted(true);
@@ -93,67 +98,132 @@ const ContactSection = () => {
     }
   };
 
-  const InputField = ({ id, label, type = 'text', required = true, validation = {} }) => (
+  const InputField = ({
+    id,
+    label,
+    type = "text",
+    required = true,
+    validation = {},
+  }) => (
     <div className="mb-4">
-      <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
+      <label
+        htmlFor={id}
+        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+      >
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       <input
         id={id}
         type={type}
-        className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 ${
-          errors[id] ? 'border-red-500' : 'border-gray-300'
+        className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+          errors[id] ? "border-red-500" : "border-gray-300 dark:border-gray-600"
         }`}
         {...register(id, {
           required: required && `${label} is required`,
           ...validation,
         })}
       />
-      {errors[id] && <p className="mt-1 text-sm text-red-600">{errors[id].message}</p>}
+      {errors[id] && (
+        <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+          {errors[id].message}
+        </p>
+      )}
     </div>
   );
 
   const TextAreaField = ({ id, label, rows = 3, required = true }) => (
     <div className="mb-4">
-      <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
+      <label
+        htmlFor={id}
+        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+      >
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       <textarea
         id={id}
         rows={rows}
-        className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 ${
-          errors[id] ? 'border-red-500' : 'border-gray-300'
+        className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+          errors[id] ? "border-red-500" : "border-gray-300 dark:border-gray-600"
         }`}
         {...register(id, { required: required && `${label} is required` })}
       />
-      {errors[id] && <p className="mt-1 text-sm text-red-600">{errors[id].message}</p>}
+      {errors[id] && (
+        <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+          {errors[id].message}
+        </p>
+      )}
     </div>
   );
 
+  // Dark mode styles for react-select
+  const selectStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      backgroundColor: "rgb(55 65 81)", // dark:bg-gray-700
+      borderColor: state.isFocused ? "rgb(16 185 129)" : "rgb(75 85 99)", // emerald-500 : gray-600
+      color: "white",
+      "&:hover": {
+        borderColor: "rgb(16 185 129)",
+      },
+      boxShadow: state.isFocused ? "0 0 0 1px rgb(16 185 129)" : "none",
+    }),
+    menu: (provided) => ({
+      ...provided,
+      backgroundColor: "rgb(55 65 81)", // dark:bg-gray-700
+      border: "1px solid rgb(75 85 99)", // dark:border-gray-600
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected
+        ? "rgb(16 185 129)"
+        : state.isFocused
+        ? "rgb(75 85 99)"
+        : "transparent",
+      color: "white",
+      "&:hover": {
+        backgroundColor: "rgb(75 85 99)",
+      },
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: "white",
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: "rgb(156 163 175)", // text-gray-400
+    }),
+    input: (provided) => ({
+      ...provided,
+      color: "white",
+    }),
+  };
+
   return (
-    <section className="py-12 bg-gray-50 relative">
+    <section className="py-12 bg-gray-50 dark:bg-gray-900 relative">
       {/* Success Modal */}
       {isSubmitted && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full animate-fadeIn">
+        <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-black dark:bg-opacity-70 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full animate-fadeIn">
             <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
-                <svg 
-                  className="w-8 h-8 text-emerald-600" 
-                  fill="none" 
-                  stroke="currentColor" 
+              <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center mb-4">
+                <svg
+                  className="w-8 h-8 text-emerald-600 dark:text-emerald-400"
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth="2" 
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Thank you!</h3>
-              <p className="text-gray-600 mb-6">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Thank you!
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
                 One of our representatives will get back to you within 24 hours.
               </p>
               <button
@@ -171,11 +241,11 @@ const ContactSection = () => {
         <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
           <button
             type="button"
-            onClick={() => handleButtonClick('requirements')}
-            className={`px-6 py-3 rounded-md font-medium flex items-center gap-2 ${
-              formType === 'requirements'
-                ? 'bg-emerald-600 text-white'
-                : 'bg-white text-emerald-600 border border-emerald-600'
+            onClick={() => handleButtonClick("requirements")}
+            className={`px-6 py-3 rounded-md font-medium flex items-center gap-2 transition-colors ${
+              formType === "requirements"
+                ? "bg-emerald-600 text-white"
+                : "bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 border border-emerald-600 dark:border-emerald-400"
             }`}
           >
             Drop us a message for requirement
@@ -183,21 +253,25 @@ const ContactSection = () => {
 
           <button
             type="button"
-            onClick={() => handleButtonClick('sales')}
-            className={`px-6 py-3 rounded-md font-medium flex items-center gap-2 ${
-              formType === 'sales'
-                ? 'bg-emerald-600 text-white'
-                : 'bg-white text-emerald-600 border border-emerald-600'
+            onClick={() => handleButtonClick("sales")}
+            className={`px-6 py-3 rounded-md font-medium flex items-center gap-2 transition-colors ${
+              formType === "sales"
+                ? "bg-emerald-600 text-white"
+                : "bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 border border-emerald-600 dark:border-emerald-400"
             }`}
           >
             Drop us a message for sale
           </button>
         </div>
 
-        <div className={`transition-all duration-300 ${
-          isFormVisible ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
-        }`}>
-          <div className="bg-white p-6 rounded-lg shadow-md">
+        <div
+          className={`transition-all duration-300 ${
+            isFormVisible
+              ? "max-h-[2000px] opacity-100"
+              : "max-h-0 opacity-0 overflow-hidden"
+          }`}
+        >
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <InputField id="fullName" label="Enter full name" />
@@ -209,24 +283,39 @@ const ContactSection = () => {
                   validation={{
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: 'Invalid email address',
+                      message: "Invalid email address",
                     },
                   }}
                 />
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Select country <span className="text-red-500">*</span>
                   </label>
-                  <Select
-                    options={countries}
-                    value={selectedCountry}
-                    onChange={handleCountryChange}
-                    placeholder="Select country"
-                    isSearchable
-                    classNamePrefix="select"
-                  />
+                  <div className="dark:hidden">
+                    <Select
+                      options={countries}
+                      value={selectedCountry}
+                      onChange={handleCountryChange}
+                      placeholder="Select country"
+                      isSearchable
+                      classNamePrefix="select"
+                    />
+                  </div>
+                  <div className="hidden dark:block">
+                    <Select
+                      options={countries}
+                      value={selectedCountry}
+                      onChange={handleCountryChange}
+                      placeholder="Select country"
+                      isSearchable
+                      classNamePrefix="select"
+                      styles={selectStyles}
+                    />
+                  </div>
                   {!selectedCountry && errors.country && (
-                    <p className="mt-1 text-sm text-red-600">Country is required</p>
+                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                      Country is required
+                    </p>
                   )}
                 </div>
               </div>
@@ -245,57 +334,61 @@ const ContactSection = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Enter mobile number <span className="text-red-500">*</span>
                   </label>
                   <div className="flex gap-2">
                     <input
                       type="text"
-                      value={selectedCountry?.phoneCode || ''}
+                      value={selectedCountry?.phoneCode || ""}
                       readOnly
-                      className="w-1/4 px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100"
+                      className="w-1/4 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-gray-100 dark:bg-gray-600 dark:text-white"
                     />
                     <input
                       type="number"
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 ${
-                        errors.mobileNumber ? 'border-red-500' : 'border-gray-300'
+                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+                        errors.mobileNumber
+                          ? "border-red-500"
+                          : "border-gray-300 dark:border-gray-600"
                       }`}
-                      {...register('mobileNumber', {
-                        required: 'Phone number is required',
+                      {...register("mobileNumber", {
+                        required: "Phone number is required",
                         pattern: {
                           value: /^\d{7,15}$/,
-                          message: 'Invalid phone number format',
+                          message: "Invalid phone number format",
                         },
                       })}
                     />
                   </div>
                   {errors.mobileNumber && (
-                    <p className="mt-1 text-sm text-red-600">{errors.mobileNumber.message}</p>
+                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                      {errors.mobileNumber.message}
+                    </p>
                   )}
                 </div>
               </div>
 
               <TextAreaField
                 id="requirements"
-                label={formType === 'sales' ? 'Please provide your sales details' : 'Please describe your requirements'}
+                label={
+                  formType === "sales"
+                    ? "Please provide your sales details"
+                    : "Please describe your requirements"
+                }
                 rows={4}
               />
 
-              <TextAreaField
-                id="message"
-                label="Message"
-                required={false}
-              />
+              <TextAreaField id="message" label="Message" required={false} />
 
               <div className="mt-6">
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className={`w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-white font-medium bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 ${
-                    isLoading ? 'opacity-70 cursor-not-allowed' : ''
+                  className={`w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-white font-medium bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 dark:focus:ring-offset-gray-800 transition-colors ${
+                    isLoading ? "opacity-70 cursor-not-allowed" : ""
                   }`}
                 >
-                  {isLoading ? 'Submitting...' : 'Submit'}
+                  {isLoading ? "Submitting..." : "Submit"}
                 </button>
               </div>
             </form>
